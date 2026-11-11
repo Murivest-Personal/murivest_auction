@@ -1,0 +1,59 @@
+# Murivest Auctions (auctions.murivest.com)
+
+> Commercial property auction intelligence for Kenya and the United Kingdom,
+> published by Murivest Group Ltd — a commercial real estate services firm
+> providing brokerage, property and asset management, and investment property
+> services across East Africa, the United Kingdom and international markets.
+> Murivest Group Ltd is not an auctioneer, does not receive bids, does not
+> hold deposits, and does not act as principal in any auction transaction.
+
+## About
+
+Murivest Group Ltd aggregates, verifies and presents commercial property
+auction opportunities and routes qualified buyers to the appropriate
+auctioneer, receiver or bank process. All engagements are by mandate only,
+non-pooled, and subject to KYC/AML verification. The selling party named on
+each listing is responsible for the auction process, the legal pack, and the
+sale contract. Guide prices are not valuations.
+
+## Markets
+
+- Kenya (/kenya): bank sales, receiver sales, court-ordered sales and private
+  treaty lots. Governed by the Land Act 2012 (ss. 90-97) and the Auctioneers
+  Act (Cap 526). 25% deposit on the fall of the hammer (cash or banker's
+  cheque), 75% balance within 90 days, stamp duty of 4% on urban properties.
+- United Kingdom (/uk): commercial investment lots across London and regional
+  UK. Governed by the RICS Common Auction Conditions (4th edition) and the
+  Standard Commercial Property Conditions. 10% deposit on exchange, balance
+  typically 20 working days later, unconditional contracts on the fall of the
+  hammer.
+
+## Content
+
+- /auctions — all verified lots, filterable by market, region, asset type,
+  status and price
+- /calendar — upcoming auctions by date, market and auction house
+- /how-auctions-work — buying, selling, legal pack and glossary guides
+- /intelligence — market analysis and evergreen guides from Murivest Research
+- /tools — free institutional-grade calculators: return (net yield,
+  cash-on-cash, DSCR, levered IRR), underwriting gates, and loan repayment.
+  All calculations run client-side; no data is stored.
+
+## Listing facts
+
+Each listing states the selling party, auction house, auction date, guide
+price, tenure, legal pack status, a full property facts set (price, NOI,
+gross rent where disclosed, building area, occupancy), derived investment
+metrics (net yield, payback, ROI, GRM), jurisdiction-appropriate conditions
+of sale, and a verification summary. Where gross annual rent is not disclosed
+by the selling party, GRM is shown as "Not disclosed."
+
+## Citation policy
+
+Content on auctions.murivest.com may be cited with attribution to
+"Murivest Group Ltd" and a link to the relevant page. Auction disclosure:
+Murivest Group Ltd provides commercial real estate services and publishes
+auction intelligence. Murivest is not the auctioneer, does not receive bids,
+does not hold deposits, and does not act as principal in any auction
+transaction. This information does not constitute an offer, solicitation, or
+investment advice.
