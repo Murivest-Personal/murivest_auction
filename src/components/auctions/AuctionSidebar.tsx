@@ -1,12 +1,14 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { SITE } from "@/lib/brand";
 import type { Property } from "@/lib/types";
 import { formatDate } from "@/lib/format";
 
 /** Sticky sidebar — status, auction date countdown, guide price,
-    CTAs, share (features spec §3.8). */
+    CTAs (Submit a bid near the property details), and the
+    save / like / share actions stored on the signed-in account. */
 export function AuctionSidebar({ property }: { property: Property }) {
   return (
     <aside className="space-y-8">
@@ -65,12 +67,12 @@ export function AuctionSidebar({ property }: { property: Property }) {
             </a>
           ) : (
             <a
-              href={property.status === "under-offer" ? "#selling-party" : "#register-your-bid"}
+              href={property.status === "under-offer" ? "#selling-party" : "#submit-a-bid"}
               className="block text-center px-8 py-4 text-[0.65rem] tracking-[0.25em] uppercase font-display bg-green text-cream hover:bg-gold transition-colors"
             >
               {property.status === "under-offer"
                 ? "Request notification"
-                : "Register your bid"}
+                : "Submit a bid"}
             </a>
           )}
           <a
@@ -83,7 +85,7 @@ export function AuctionSidebar({ property }: { property: Property }) {
           </a>
         </div>
 
-        <ShareButtons property={property} />
+        <LotActions property={property} />
       </div>
     </aside>
   );
@@ -115,11 +117,83 @@ function Countdown({ iso }: { iso: string }) {
   );
 }
 
-function ShareButtons({ property }: { property: Property }) {
+/** Save / like / share row. Save and like are stored on the
+    signed-in account (toggled through /api/account/saved-lots);
+    share and copy-link work for everyone. Signed-out visitors are
+    taken to the sign-in page with a redirect back to this lot. */
+function LotActions({ property }: { property: Property }) {
+  const [signedIn, setSignedIn] = useState<boolean | null>(null);
+  const [saved, setSaved] = useState(false);
+  const [liked, setLiked] = useState(false);
+  const [busy, setBusy] = useState(false);
   const [copied, setCopied] = useState(false);
 
+  const lotUrl = () =>
+    `${window.location.origin}/auctions/${property.slug}`;
+  const signInHref = `/sign-in?next=${encodeURIComponent(
+    `/auctions/${property.slug}`
+  )}`;
+
+  /* Fetch this account's state for the lot once on mount — the
+     lot page itself stays ISR-cacheable. */
+  useEffect(() => {
+    let cancelled = false;
+    fetch(`/api/account/saved-lots?slug=${encodeURIComponent(property.slug)}`)
+      .then((r) => r.json())
+      .then((data: { saved?: boolean; liked?: boolean }) => {
+        if (cancelled) return;
+        setSaved(Boolean(data.saved));
+        setLiked(Boolean(data.liked));
+        setSignedIn(Boolean(data.saved || data.liked) || null);
+        fetch("/api/account/session")
+          .then((r) => r.json())
+          .then((s: { signedIn: boolean }) => {
+            if (!cancelled) setSignedIn(s.signedIn);
+          })
+          .catch(() => {
+            if (!cancelled) setSignedIn(false);
+          });
+      })
+      .catch(() => {
+        if (!cancelled) setSignedIn(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [property.slug]);
+
+  async function toggle(kind: "save" | "like") {
+    if (signedIn === false) {
+      window.location.href = signInHref;
+      return;
+    }
+    if (busy) return;
+    setBusy(true);
+    /* Optimistic toggle; reverted on failure. */
+    const prev = kind === "save" ? saved : liked;
+    if (kind === "save") setSaved(!prev);
+    else setLiked(!prev);
+    try {
+      const res = await fetch("/api/account/saved-lots", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ property_slug: property.slug, kind }),
+      });
+      if (!res.ok) {
+        if (kind === "save") setSaved(prev);
+        else setLiked(prev);
+        if (res.status === 401) window.location.href = signInHref;
+      }
+    } catch {
+      if (kind === "save") setSaved(prev);
+      else setLiked(prev);
+    } finally {
+      setBusy(false);
+    }
+  }
+
   async function share() {
-    const url = `${window.location.origin}/auctions/${property.slug}`;
+    const url = lotUrl();
     if (navigator.share) {
       try {
         await navigator.share({
@@ -136,8 +210,7 @@ function ShareButtons({ property }: { property: Property }) {
   }
 
   async function copy(url?: string) {
-    const target =
-      url ?? `${window.location.origin}/auctions/${property.slug}`;
+    const target = url ?? lotUrl();
     try {
       await navigator.clipboard.writeText(target);
       setCopied(true);
@@ -148,7 +221,27 @@ function ShareButtons({ property }: { property: Property }) {
   }
 
   return (
-    <div className="mt-6 pt-6 border-t border-hairline flex items-center gap-6">
+    <div className="mt-6 pt-6 border-t border-hairline flex flex-wrap items-center gap-x-6 gap-y-3">
+      <button
+        type="button"
+        onClick={() => toggle("save")}
+        aria-pressed={signedIn ? saved : undefined}
+        className={`font-display text-[0.6rem] tracking-[0.25em] uppercase transition-colors ${
+          saved ? "text-green" : "text-gold hover:text-green"
+        }`}
+      >
+        {saved ? "★ Saved" : "☆ Save"}
+      </button>
+      <button
+        type="button"
+        onClick={() => toggle("like")}
+        aria-pressed={signedIn ? liked : undefined}
+        className={`font-display text-[0.6rem] tracking-[0.25em] uppercase transition-colors ${
+          liked ? "text-green" : "text-gold hover:text-green"
+        }`}
+      >
+        {liked ? "♥ Liked" : "♡ Like"}
+      </button>
       <button
         type="button"
         onClick={share}

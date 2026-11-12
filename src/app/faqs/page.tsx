@@ -45,7 +45,7 @@ const GROUPS: { title: string; faqs: { question: string; answer: string }[] }[] 
       {
         question: "How does Murivest earn its brokerage fee?",
         answer:
-          "Through a buyer engagement. Murivest charges the successful buyer a brokerage fee of 2% of the final purchase price, payable after the buyer has paid the deposit required under the lot's conditions of sale. The terms are accepted explicitly at bid registration and recorded in the database.",
+          "Through a buyer engagement. Murivest charges the successful buyer a brokerage fee of 2% of the final purchase price, payable after the buyer has paid the deposit required under the lot's conditions of sale. The terms are accepted explicitly when you submit a bid and are recorded in the database.",
       },
       {
         question: "Is the 2% brokerage fee paid by the bank?",
@@ -58,9 +58,9 @@ const GROUPS: { title: string; faqs: { question: string; answer: string }[] }[] 
           "No. The deposit — its amount, deadline, payment method and recipient — is set by each lot's conditions of sale and paid to the selling party under those conditions. The 2% fee is a separate obligation to Murivest, payable after the deposit. Auctioneer charges, where allocated to the purchaser by the conditions, are separate again.",
       },
       {
-        question: "Is an inquiry or bid registration a binding bid?",
+        question: "Is an inquiry or submitted bid a binding bid?",
         answer:
-          "No. Bid registrations submitted through this website are expressions of buyer intent. Murivest routes them to the authorised sale channel and supports the acquisition. Formal bids are made under the auction conditions at the auction.",
+          "No. Bids submitted from registered accounts on this website are expressions of buyer intent. Murivest routes them to the authorised sale channel and supports the acquisition. Formal bids are made under the auction conditions at the auction.",
       },
       {
         question: "Are auction deposits refundable?",
@@ -115,7 +115,7 @@ const GROUPS: { title: string; faqs: { question: string; answer: string }[] }[] 
       {
         question: "How do I register my interest in a lot?",
         answer:
-          "Use the register-your-interest form on any listing, or the bid registration form. Registered bidders can also receive auction and off-market alerts through the Murivest client portal at portal.murivest.com.",
+          "Use the register-your-interest form on any listing, or submit a bid from the lot page with a registered account. Account holders can also receive auction and off-market alerts — set your alert preferences from your account profile.",
       },
       {
         question: "Can I purchase a commercial building through auction?",

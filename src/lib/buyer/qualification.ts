@@ -1,14 +1,15 @@
 /* ============================================================
    Buyer classification ladder — the 8 stages of buyer
    qualification. Order matters: index increases with progress.
-   Data room (vault) access requires "qualified-buyer" or above,
-   plus a per-property access grant and an accepted NDA.
+   Detailed transaction documentation is released to qualified
+   buyers on request, under appropriate confidentiality and
+   mandate arrangements.
    ============================================================ */
 
 export interface ClassificationDef {
   value: string;
   label: string;
-  /** One-line explanation shown to the buyer in the portal. */
+  /** One-line explanation shown to the buyer on their profile. */
   description: string;
   /** What Murivest is doing at this stage. */
   action: string;
@@ -19,7 +20,7 @@ export const BUYER_CLASSIFICATIONS: ClassificationDef[] = [
     value: "unqualified-lead",
     label: "Unqualified lead",
     description:
-      "An enquiry captured before registration, or a registration that does not meet Murivest's baseline requirements. No data room access.",
+      "An enquiry captured before registration, or a registration that does not meet Murivest's baseline requirements.",
     action: "Capture requirements and re-engage when circumstances change.",
   },
   {
@@ -54,8 +55,8 @@ export const BUYER_CLASSIFICATIONS: ClassificationDef[] = [
     value: "qualified-buyer",
     label: "Qualified buyer",
     description:
-      "KYC and funding are verified. You can be authorised to access property data rooms under a confidentiality agreement.",
-    action: "Ready for per-property authorisation and NDA release.",
+      "KYC and funding are verified. Detailed transaction documentation can be released to you on a lot, under appropriate confidentiality and mandate arrangements.",
+    action: "Ready for documentation release and lot-level support.",
   },
   {
     value: "mandated-buyer",
@@ -75,9 +76,6 @@ export const BUYER_CLASSIFICATIONS: ClassificationDef[] = [
 
 export const DEFAULT_CLASSIFICATION = "registration-pending";
 
-/** Minimum classification required for data room access. */
-export const VAULT_MIN_CLASSIFICATION = "qualified-buyer";
-
 export function classificationIndex(value: string): number {
   return BUYER_CLASSIFICATIONS.findIndex((c) => c.value === value);
 }
@@ -95,13 +93,4 @@ export function classificationLabel(value: string): string {
 
 export function isValidClassification(value: string): boolean {
   return classificationIndex(value) >= 0;
-}
-
-/** True when the classification permits data room access (subject
-    to a per-property grant and NDA). */
-export function canAccessVault(value: string): boolean {
-  return (
-    classificationIndex(value) >=
-    classificationIndex(VAULT_MIN_CLASSIFICATION)
-  );
 }

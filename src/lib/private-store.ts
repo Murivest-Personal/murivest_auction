@@ -1,13 +1,13 @@
 /* ============================================================
-   Private file store — proof of funds and confidential data room
-   documents. Files live OUTSIDE public/ and .next/, are never
-   served statically, and can only be read through authenticated
-   API routes that check permissions and write access logs.
+   Private file store — proof of funds and other confidential
+   client documents. Files live OUTSIDE public/ and .next/, are
+   never served statically, and can only be read through
+   authenticated API routes that check permissions and write
+   access logs.
 
    Base directory: PRIVATE_STORE_DIR (default .private-store/).
    Layout:
      buyers/<buyerId>/pof/<uuid>-<name>.pdf
-     vault/<propertySlug>/<documentId>/v<n>-<uuid>-<name>.pdf
    ============================================================ */
 
 import { createHash } from "crypto";
@@ -65,15 +65,6 @@ export function privateFileKeyForPof(
   return `buyers/${sanitizeComponent(buyerId)}/pof/${randomUUID()}-${sanitizeComponent(fileName)}`;
 }
 
-export function privateFileKeyForVaultDocument(
-  propertySlug: string,
-  documentId: string,
-  version: number,
-  fileName: string
-): string {
-  return `vault/${sanitizeComponent(propertySlug)}/${sanitizeComponent(documentId)}/v${version}-${randomUUID()}-${sanitizeComponent(fileName)}`;
-}
-
 /** Accept only PDFs (and images for proof of funds). */
 export function isAllowedPofMime(mime: string): boolean {
   return [
@@ -82,8 +73,4 @@ export function isAllowedPofMime(mime: string): boolean {
     "image/jpeg",
     "image/webp",
   ].includes(mime);
-}
-
-export function isAllowedVaultMime(mime: string): boolean {
-  return mime === "application/pdf";
 }

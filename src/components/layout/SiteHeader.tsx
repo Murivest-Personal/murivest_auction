@@ -51,8 +51,8 @@ const NAV: NavItem[] = [
     children: [
       { label: "Buyer representation & the 2% fee", href: "/buyer-fees" },
       { label: "Buyer registration & qualification", href: "/buyers" },
-      { label: "Buyer portal sign-in", href: "/buyers/sign-in" },
-      { label: "Auction alerts — the portal", href: "https://portal.murivest.com" },
+      { label: "Create your account", href: "/register" },
+      { label: "Sign in", href: "/sign-in" },
       { label: "Tools & calculators", href: "/tools" },
     ],
   },
@@ -135,6 +135,9 @@ export function SiteHeader() {
                   ) : null}
                 </li>
               ))}
+              <li>
+                <HeaderAccountLink className="inline-flex items-center justify-center px-6 py-2.5 text-[0.6rem] tracking-[0.22em] uppercase font-display text-green border border-green hover:bg-green hover:text-cream transition-colors whitespace-nowrap" />
+              </li>
               <li>
                 <Link
                   href="/contact"
@@ -235,6 +238,9 @@ export function SiteHeader() {
               </li>
             ))}
             <li>
+              <HeaderAccountLink className="block text-center px-8 py-3 text-[0.65rem] tracking-[0.22em] uppercase font-display bg-green text-cream" />
+            </li>
+            <li>
               <Link
                 href="/contact"
                 onClick={closeMenu}
@@ -247,5 +253,36 @@ export function SiteHeader() {
         </nav>
       ) : null}
     </header>
+  );
+}
+
+/* Account link — part of the public website, not a separate
+   portal. Probes the session on mount (cookie read via a tiny
+   API) so pages stay statically renderable; shows "Account" when
+   signed in, "Sign in" otherwise. */
+function HeaderAccountLink({ className }: { className?: string }) {
+  const [state, setState] = useState<
+    { signedIn: boolean; name?: string } | null
+  >(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/account/session")
+      .then((r) => r.json())
+      .then((data: { signedIn: boolean; name?: string }) => {
+        if (!cancelled) setState(data);
+      })
+      .catch(() => {
+        if (!cancelled) setState({ signedIn: false });
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  return (
+    <Link href={state?.signedIn ? "/account" : "/sign-in"} className={className}>
+      {state?.signedIn ? "Account" : "Sign in"}
+    </Link>
   );
 }

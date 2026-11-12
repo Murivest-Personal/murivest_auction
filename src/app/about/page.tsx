@@ -37,7 +37,7 @@ export default function AboutPage() {
               operating across East Africa, the United Kingdom and
               international markets. The firm provides brokerage, property and
               asset management, and investment property services — including
-              this auction intelligence portal, which aggregates verified
+              this auction intelligence website, which aggregates verified
               commercial auction listings across Kenya and the UK and routes
               qualified buyers to the selling party.
             </p>

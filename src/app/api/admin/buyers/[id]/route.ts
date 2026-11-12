@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { isAdminAuthenticated } from "@/lib/buyer/session";
 import { classificationLabel, isValidClassification } from "@/lib/buyer/qualification";
-import { logVaultAction } from "@/lib/vault/service";
+import { logAuditAction } from "@/lib/audit";
 
 export const runtime = "nodejs";
 
@@ -38,7 +38,7 @@ export async function PATCH(
       data: { classification, classificationNote: note },
     });
 
-    await logVaultAction({
+    await logAuditAction({
       buyerId: id,
       action: "classification_changed",
       details: `${buyer.fullName}: ${classificationLabel(buyer.classification)} → ${classificationLabel(classification)}${note ? ` — ${note}` : ""}`,

@@ -90,7 +90,7 @@ export const article: Article = {
     { type: "h2", text: "Using this glossary" },
     {
       type: "p",
-      text: "Murivest Group Ltd publishes verified auction intelligence across both markets, including glossary-level detail on every commercial property it lists by mandate. Murivest is not the auctioneer, does not receive bids and does not hold deposits: a registration of interest submitted through the Murivest portal is routed to the selling party, and formal bidder registration takes place with the auctioneer. All engagements are by mandate only and subject to KYC and AML verification. Where a term in a specific catalogue is used differently from the usage described here, the definitions in the conditions of sale for that auction prevail.",
+      text: "Murivest Group Ltd publishes verified auction intelligence across both markets, including glossary-level detail on every commercial property it lists by mandate. Murivest is not the auctioneer, does not receive bids and does not hold deposits: a bid submitted through a Murivest account is routed to the selling party, and formal bidder registration takes place with the auctioneer. All engagements are by mandate only and subject to KYC and AML verification. Where a term in a specific catalogue is used differently from the usage described here, the definitions in the conditions of sale for that auction prevail.",
     },
   ],
   faqs: [

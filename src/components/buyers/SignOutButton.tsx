@@ -15,7 +15,7 @@ export function SignOutButton() {
         setBusy(true);
         try {
           await fetch("/api/buyers/sign-out", { method: "POST" });
-          router.push("/buyers");
+          router.push("/");
           router.refresh();
         } finally {
           setBusy(false);

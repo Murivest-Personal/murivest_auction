@@ -46,11 +46,11 @@ export default function PrivacyPage() {
                 Data we collect
               </h2>
               <p className="text-[1rem] leading-[1.9] text-ink mb-4">
-                The portal collects personal data only where you provide it:
+                The website collects personal data only where you provide it:
               </p>
               <ul className="space-y-3">
                 {[
-                  "Bid registrations — name, email address, phone number, intended bid amount and the lot the registration relates to.",
+                  "Bids — your registered account details (already provided at registration), the intended bid amount, and the lot the bid relates to. Account registration itself captures the ten qualification data points described at sign-up, including identification and, where provided, proof of funds held in a private store.",
                   "Public comments — the name you choose to publish, your email address (for moderation only, never displayed), and the comment text.",
                   "Technical metadata — a salted, one-way hash of your IP address, used solely for rate limiting and abuse prevention. Raw IP addresses are never stored.",
                 ].map((item) => (
@@ -69,9 +69,11 @@ export default function PrivacyPage() {
                 Why we collect it
               </h2>
               <p className="text-[1rem] leading-[1.9] text-ink mb-4">
-                Bid registrations are collected to route your registration of
-                intent to the selling party named on the listing and to
-                contact you about it. Comments are collected to publish
+                Bids are collected to route your registration of intent to
+                the selling party named on the listing and to contact you
+                about it. Account data is collected to verify buyers and
+                operate your account — saved lots, bids, alerts and
+                verification status. Comments are collected to publish
                 moderated public discussion of a lot. Hashed IP metadata is
                 collected to enforce the published rate limits and to detect
                 abuse.
@@ -88,7 +90,7 @@ export default function PrivacyPage() {
                 Calculators and analytics
               </h2>
               <p className="text-[1rem] leading-[1.9] text-ink">
-                The calculators on this portal run entirely in your browser.
+                The calculators on this website run entirely in your browser.
                 Nothing entered into them is transmitted to, or stored by,
                 Murivest or any third party.
               </p>
@@ -99,9 +101,9 @@ export default function PrivacyPage() {
                 Storage, sharing and retention
               </h2>
               <p className="text-[1rem] leading-[1.9] text-ink mb-4">
-                Bid registrations and comments are stored in the firm&rsquo;s
+                Accounts, bids and comments are stored in the firm&rsquo;s
                 data infrastructure, accessible to the Murivest deal team for
-                triage, routing and moderation. Registrations are shared with
+                triage, routing and moderation. Bids are shared with
                 the selling party named on the relevant listing — that is
                 their purpose. Email addresses are never displayed publicly
                 and are never sold.
@@ -118,7 +120,7 @@ export default function PrivacyPage() {
                 Cookies
               </h2>
               <p className="text-[1rem] leading-[1.9] text-ink">
-                The portal sets only the technical cookies required to deliver
+                The website sets only the technical cookies required to deliver
                 the site. No advertising or third-party tracking cookies are
                 set by Murivest.
               </p>
@@ -129,7 +131,7 @@ export default function PrivacyPage() {
                 Your rights
               </h2>
               <p className="text-[1rem] leading-[1.9] text-ink mb-4">
-                You may request access to the personal data the portal holds
+                You may request access to the personal data the website holds
                 about you, ask for its correction or deletion, and object to
                 its processing. To exercise any of these rights, write to{" "}
                 <a
@@ -153,7 +155,7 @@ export default function PrivacyPage() {
               <p className="text-[1rem] leading-[1.9] text-ink">
                 Murivest may update this policy from time to time. Material
                 changes will be reflected on this page. Continued use of the
-                portal after a change constitutes acceptance of the updated
+                website after a change constitutes acceptance of the updated
                 policy.
               </p>
             </section>

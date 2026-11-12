@@ -20,6 +20,7 @@ import {
 } from "@/lib/sanity/queries";
 import { sanityConfigured, getSanity } from "@/lib/sanity/client";
 import { toPropertyImage } from "@/lib/sanity/image";
+import { DEV_MOCK_LOTS } from "@/lib/sanity/dev-mock";
 import { MARKET_HUBS } from "@/data/markets";
 import { ARTICLES } from "@/content/articles";
 import type {
@@ -39,6 +40,13 @@ function warnUnconfiguredOnce() {
         "Set the Sanity environment variables to publish listings."
     );
   }
+}
+
+/* DEV-ONLY: SANITY_DEV_MOCK=1 + no Sanity config serves the two
+   mock lots in lib/sanity/dev-mock for local flow testing. Never
+   active in production (env-gated, off by default). */
+function usingDevMock(): boolean {
+  return !sanityConfigured() && process.env.SANITY_DEV_MOCK === "1";
 }
 
 /* ---------- Sanity → normalised Property ---------- */
@@ -215,6 +223,12 @@ export async function getProperties(
 }
 
 async function getAllProperties(): Promise<Property[]> {
+  if (usingDevMock()) {
+    return sortProperties(
+      DEV_MOCK_LOTS.map((d) => normaliseProperty(d as unknown as Record<string, unknown>))
+        .filter((p): p is Property => Boolean(p))
+    );
+  }
   if (!sanityConfigured()) {
     warnUnconfiguredOnce();
     return [];
@@ -234,6 +248,12 @@ async function getAllProperties(): Promise<Property[]> {
 export async function getPropertyBySlug(
   slug: string
 ): Promise<Property | null> {
+  if (usingDevMock()) {
+    const hit = DEV_MOCK_LOTS.find((d) => d.slug === slug);
+    return hit
+      ? normaliseProperty(hit as unknown as Record<string, unknown>)
+      : null;
+  }
   if (!sanityConfigured()) {
     warnUnconfiguredOnce();
     return null;
@@ -249,6 +269,15 @@ export async function getPropertyBySlug(
 }
 
 export async function getRelatedProperties(property: Property): Promise<PropertyCardData[]> {
+  if (usingDevMock()) {
+    return DEV_MOCK_LOTS.filter(
+      (d) => d.slug !== property.slug && d.market === property.market
+    )
+      .map((d) => normaliseProperty(d as unknown as Record<string, unknown>))
+      .filter((p): p is Property => Boolean(p))
+      .slice(0, 3)
+      .map((p) => toCard(p));
+  }
   if (!sanityConfigured()) {
     warnUnconfiguredOnce();
     return [];
@@ -280,6 +309,13 @@ export async function getAllSlugs(): Promise<string[]> {
 export async function getFeaturedProperties(
   count = 6
 ): Promise<PropertyCardData[]> {
+  if (usingDevMock()) {
+    return DEV_MOCK_LOTS.filter((d) => d.featured)
+      .slice(0, count)
+      .map((d) => normaliseProperty(d as unknown as Record<string, unknown>))
+      .filter((p): p is Property => Boolean(p))
+      .map((p) => toCard(p));
+  }
   if (!sanityConfigured()) {
     warnUnconfiguredOnce();
     return [];

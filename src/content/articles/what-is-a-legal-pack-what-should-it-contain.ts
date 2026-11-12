@@ -75,10 +75,10 @@ export const article: Article = {
       type: "p",
       text: "The gaps most often encountered are late-returned searches, leases absent from the tenancy file and consents that were never documented. None is fatal in itself; each is a fact to be established before bidding rather than after it. Whatever remains unestablished at the fall of the hammer belongs to the buyer.",
     },
-    { type: "h2", text: "Legal packs on the Murivest portal" },
+    { type: "h2", text: "Legal packs on the Murivest website" },
     {
       type: "p",
-      text: "Murivest Group Ltd lists commercial properties for auction by mandate and publishes verified auction intelligence alongside each listing. Murivest is not the auctioneer: it does not receive bids and does not hold deposits, and requests for legal packs or for missing documents are routed to the selling party. Engagements are by mandate only and subject to KYC and AML verification. A bidder using the Murivest portal should treat it as the route to the selling party, and the auctioneer's published pack — as amended — as the authoritative source for the terms of sale.",
+      text: "Murivest Group Ltd lists commercial properties for auction by mandate and publishes verified auction intelligence alongside each listing. Murivest is not the auctioneer: it does not receive bids and does not hold deposits, and requests for legal packs or for missing documents are routed to the selling party. Engagements are by mandate only and subject to KYC and AML verification. A bidder using the Murivest website should treat it as the route to the selling party, and the auctioneer's published pack — as amended — as the authoritative source for the terms of sale.",
     },
   ],
   faqs: [

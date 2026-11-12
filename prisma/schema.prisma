@@ -1,7 +1,6 @@
 // Prisma schema — LOCAL development/demo store for
 // auctions.murivest.com. Mirrors the Supabase tables in
-// /supabase/migrations (auction_bids, auction_inquiries,
-// property_comments). In production with SUPABASE_URL +
+// /supabase/migrations. In production with SUPABASE_URL +
 // SUPABASE_SERVICE_ROLE_KEY configured, the API routes call the
 // Postgres RPCs instead and this store is bypassed.
 
@@ -30,40 +29,6 @@ model Post {
   authorId  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-}
-
-/// Guest bid registrations (mirrors public.auction_bids).
-/// consent_fee + consent_terms + timestamps + consent text
-/// versions are stored with every record (user requirement:
-/// the buyer accepts the 2% fee and the T&Cs, all in the DB).
-model AuctionBid {
-  id                String   @id @default(uuid())
-  propertySanityId  String
-  propertySlug      String
-  propertyTitle     String
-  propertyMarket    String
-  bidderName        String
-  bidderEmail       String
-  bidderPhone       String
-  bidAmount         Float
-  bidCurrency       String   @default("KES")
-  consentTerms      Boolean
-  consentFee        Boolean
-  termsConsentAt    DateTime?
-  feeConsentAt      DateTime?
-  depositAcknowledged Boolean @default(true)
-  termsVersion      String?
-  feeTermsVersion   String?
-  status            String   @default("pending")
-  ipHash            String?
-  userAgent         String?
-  referrer          String?
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
-
-  @@index([propertySanityId])
-  @@index([bidderEmail, createdAt])
-  @@index([status, createdAt])
 }
 
 /// Buyer inquiries (mirrors public.auction_inquiries).
@@ -115,18 +80,20 @@ model PropertyComment {
 }
 
 /* ============================================================
-   Buyer qualification system + confidential document vault
-   (mirrors the Supabase tables in 0014_buyer_qualification_vault.sql)
+   Client accounts — registration & qualification, saved lots,
+   account bids, notification settings, audit trail.
+   (replaces the former buyer portal / data room store)
    ============================================================ */
 
-/// Buyer registrations — the 10-point qualification capture.
-/// Classification follows the 8-stage ladder in lib/buyer/qualification.
-/// Proof-of-funds files are stored OUTSIDE public/ (lib/private-store)
-/// and are only ever streamed through authenticated routes.
+/// Client account registrations — the 10-point qualification
+/// capture. Classification follows the 8-stage ladder in
+/// lib/buyer/qualification. Proof-of-funds files are stored
+/// OUTSIDE public/ (lib/private-store) and are only ever streamed
+/// through authenticated routes.
 model BuyerRegistration {
   id                String   @id @default(uuid())
   /// Sha-256 of the access code shown once at registration. The
-  /// buyer signs in with email + access code.
+  /// client signs in with email + access code.
   accessCodeHash    String
   buyerType         String   // individual | company | family_office | institutional
   fullName          String
@@ -167,105 +134,74 @@ model BuyerRegistration {
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
 
+  /* Notification settings (account profile) */
+  notifyNewLots     Boolean  @default(true)
+  notifyOffMarket   Boolean  @default(true)
+  notifyBidUpdates  Boolean  @default(true)
+
   @@index([classification, updatedAt])
   @@index([email])
 }
 
-/// NDA acceptances — one per buyer per property, with timestamp
-/// and the terms version the buyer accepted.
-model NdaAcceptance {
-  id            String   @id @default(uuid())
-  buyerId       String
-  propertySlug  String
-  termsVersion  String
-  acceptedAt    DateTime @default(now())
-  ipHash        String?
-  userAgent     String?
-
-  @@unique([buyerId, propertySlug])
-  @@index([propertySlug, acceptedAt])
-}
-
-/// Confidential data room documents (metadata only — file bytes live
-/// in the private store / private storage bucket, keyed by version).
-model VaultDocument {
-  id            String   @id @default(uuid())
-  propertySlug  String
-  title         String
-  category      String   // legal_pack | title | tenancy | searches | valuation | addendum | report | other
-  allowDownload Boolean  @default(true)
-  notes         String?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-
-  @@index([propertySlug])
-}
-
-/// Immutable versions: every upload appends a row. The current
-/// version is the newest one not superseded; expired versions are
-/// blocked for buyers until replaced.
-model VaultDocumentVersion {
-  id           String    @id @default(uuid())
-  documentId   String
-  version      Int
-  fileName     String
-  storedPath   String    // private store key — never a public URL
-  fileSize     Int
-  mimeType     String    @default("application/pdf")
-  sha256       String?
-  uploadedBy   String
-  uploadedAt   DateTime  @default(now())
-  notes        String?
-  expiresAt    DateTime?
-  supersededAt DateTime?
-
-  @@index([documentId, version])
-}
-
-/// Per-property authorisation. A qualified, NDA-signed buyer still
-/// needs an active grant for each property individually.
-model VaultAccessGrant {
-  id            String    @id @default(uuid())
-  buyerId       String
-  propertySlug  String
-  grantedAt     DateTime  @default(now())
-  grantedBy     String
-  expiresAt     DateTime?
-  revokedAt     DateTime?
-  revokedReason String?
-
-  @@index([propertySlug])
-  @@index([buyerId])
-}
-
-/// Buyer-visible notifications — addenda and new versions for
-/// properties the buyer has access to.
-model VaultNotification {
-  id           String    @id @default(uuid())
+/// Lots saved or liked by a signed-in account. kind is "save"
+/// (bookmark) or "like". Share needs no row — it is a client-side
+/// action on the lot page.
+model SavedLot {
+  id           String   @id @default(uuid())
   buyerId      String
   propertySlug String
-  documentId   String?
-  title        String
-  message      String
-  createdAt    DateTime  @default(now())
-  readAt       DateTime?
+  kind         String   // save | like
+  createdAt    DateTime @default(now())
 
-  @@index([buyerId, readAt])
+  @@unique([buyerId, propertySlug, kind])
+  @@index([buyerId, kind, createdAt])
 }
 
-/// Full audit trail: nda_accepted, access_requested, view, download,
-/// grant, revoke, version_published, pof_viewed, denied.
-model VaultAccessLog {
+/// Bids submitted from property pages — exclusive to registered
+/// (signed-in) accounts. Consents are stored with timestamps and
+/// text versions, exactly as with the former guest registrations.
+model BuyerBid {
+  id                String   @id @default(uuid())
+  reference         String   @unique
+  buyerId           String
+  propertySanityId  String?
+  propertySlug      String
+  propertyTitle     String
+  propertyMarket    String
+  bidAmount         Float
+  bidCurrency       String   @default("KES")
+  consentTerms      Boolean  @default(false)
+  consentFee        Boolean  @default(false)
+  termsConsentAt    DateTime?
+  feeConsentAt      DateTime?
+  termsVersion      String?
+  feeTermsVersion   String?
+  /// submitted | acknowledged | routed | declined | withdrawn | superseded
+  status            String   @default("submitted")
+  statusNote        String?
+  ipHash            String?
+  userAgent         String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@index([buyerId, createdAt])
+  @@index([propertySlug, createdAt])
+  @@index([status, createdAt])
+}
+
+/// Generic audit trail for the back office: bid_submitted,
+/// bid_status_changed, pof_viewed, classification_changed,
+/// account_setting_changed.
+model AuditLog {
   id           String   @id @default(uuid())
   buyerId      String?
   propertySlug String?
-  documentId   String?
-  versionId    String?
+  bidId        String?
   action       String
   details      String?
   ipHash       String?
   createdAt    DateTime @default(now())
 
-  @@index([propertySlug, createdAt])
+  @@index([createdAt])
   @@index([buyerId, createdAt])
 }

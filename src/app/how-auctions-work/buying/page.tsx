@@ -150,7 +150,7 @@ export default function BuyingPage() {
                 Set your limit from the numbers, not the room: the net yield
                 against your target, the debt the income will service, and the
                 total cost including duties, premiums and fees. The calculators
-                on this portal do exactly this arithmetic.
+                on this website do exactly this arithmetic.
               </p>
             </div>
 
@@ -159,7 +159,7 @@ export default function BuyingPage() {
                 Registering through Murivest
               </h2>
               <p className="text-[1rem] leading-[1.9] text-ink">
-                Every Murivest listing carries a bid registration form. A
+                Every Murivest listing carries a bid submission form — sign in to your account, enter the amount, accept the terms. A
                 registration captures your intent and amount and routes it to
                 the selling party named on the listing — it is not a binding
                 bid, and Murivest is not the auctioneer, does not receive bids

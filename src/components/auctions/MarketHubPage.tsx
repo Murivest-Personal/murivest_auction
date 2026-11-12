@@ -140,7 +140,7 @@ export async function MarketHubPage({
               <div className="border-t border-sand pt-8">
                 <p className="text-[0.95rem] text-charcoal">
                   {allLots.length === 0
-                    ? "No lots are currently published in this market. Verified lots are published here as they clear the Murivest four-check standard — register at the client portal for auction alerts."
+                    ? "No lots are currently published in this market. Verified lots are published here as they clear the Murivest four-check standard — create your account for auction alerts."
                     : "No lots match the current filters in this market. Clear the filters or"}{" "}
                   {allLots.length > 0 ? (
                     <>

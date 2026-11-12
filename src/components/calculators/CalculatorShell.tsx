@@ -145,7 +145,7 @@ export function CalculatorShell({
           </div>
 
           <div className="mt-12 flex flex-col sm:flex-row gap-6">
-            <ArrowLink href="/auctions">Register your bid</ArrowLink>
+            <ArrowLink href="/auctions">Submit a bid</ArrowLink>
             <a
               href={`mailto:${SITE.officeEmail}?subject=${encodeURIComponent(
                 "Legal pack request"

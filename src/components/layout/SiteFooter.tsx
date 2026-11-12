@@ -24,7 +24,8 @@ const COLUMNS: { title: string; links: FooterLink[] }[] = [
     links: [
       { label: "Buyer representation & fees", href: "/buyer-fees" },
       { label: "Buyer registration & qualification", href: "/buyers" },
-      { label: "Buyer portal sign-in", href: "/buyers/sign-in" },
+      { label: "Create your account", href: "/register" },
+      { label: "Sign in", href: "/sign-in" },
       { label: "Tools & calculators", href: "/tools" },
       { label: "FAQs", href: "/faqs" },
     ],
@@ -118,7 +119,8 @@ export function SiteFooter() {
           </nav>
         </div>
 
-        {/* Auction alerts — portal registration CTA */}
+        {/* Auction alerts — account registration CTA (the account
+            lives on this website) */}
         <div className="border border-[color:var(--mv-on-dark-faint)]/40 p-8 mb-16 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
           <div>
             <p className="font-display text-[0.55rem] tracking-[0.3em] uppercase text-[color:var(--mv-on-dark-faint)] mb-3">
@@ -128,19 +130,17 @@ export function SiteFooter() {
               Be notified of auction and off-market properties.
             </p>
             <p className="text-[0.85rem] leading-[1.7] text-[color:var(--mv-on-dark)] max-w-[38rem]">
-              Registered buyers receive auction dates, new lots and off-market
-              opportunities through the Murivest client portal.
+              Account holders receive auction dates, new lots and off-market
+              opportunities — and can save lots, submit bids and follow their
+              verification status — all on this website.
             </p>
           </div>
-          <a
-            href={SITE.portalUrl}
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            href="/register"
             className="inline-flex items-center justify-center gap-3 whitespace-nowrap px-8 py-4 text-[0.65rem] tracking-[0.25em] uppercase font-display border border-cream text-cream hover:bg-cream hover:text-green transition-colors"
           >
-            Register at portal.murivest.com
-            <span aria-hidden="true">↗</span>
-          </a>
+            Create your account
+          </Link>
         </div>
 
         {/* Auction disclosure — locked copy, verbatim (§5.13) */}

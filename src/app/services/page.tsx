@@ -16,7 +16,7 @@ const SERVICES = [
   {
     title: "Brokerage",
     intro:
-      "Brokerage at Murivest is the disciplined execution of disposals and acquisitions under mandate. The firm acts for owners, investors and occupiers across office, industrial, retail, hospitality, mixed-use and land, in both markets the auction portal covers.",
+      "Brokerage at Murivest is the disciplined execution of disposals and acquisitions under mandate. The firm acts for owners, investors and occupiers across office, industrial, retail, hospitality, mixed-use and land, in both markets the auction website covers.",
     points: [
       "Dispositions and acquisitions under exclusive mandate, with institutional reporting throughout.",
       "Auction intelligence and auction-route advisory — sourcing, screening and bid strategy for buyers, and reserve and pack preparation for sellers.",
@@ -36,9 +36,9 @@ const SERVICES = [
   {
     title: "Investment property services",
     intro:
-      "For investors, Murivest provides the full acquisition and holding discipline: sourcing, screening, transaction management and the analytical tooling this portal publishes.",
+      "For investors, Murivest provides the full acquisition and holding discipline: sourcing, screening, transaction management and the analytical tooling this website publishes.",
     points: [
-      "Sourcing and screening against mandate criteria, including the underwriting gates used on this portal.",
+      "Sourcing and screening against mandate criteria, including the underwriting gates used on this website.",
       "Transaction management through legal pack review, funding coordination and completion.",
       "Portfolio reporting on yield, coverage and exit assumptions, on the same definitions this site publishes.",
     ],

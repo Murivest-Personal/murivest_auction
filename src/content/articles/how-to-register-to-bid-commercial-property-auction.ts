@@ -13,7 +13,7 @@ export const article: Article = {
   body: [
     {
       type: "p",
-      text: "Registering to bid is the administrative process by which an intending buyer becomes a qualified participant in a commercial property auction, entitled to bid in the room and, if successful, to contract on the fall of the hammer. The registration itself is deliberately undemanding; it is the preparation that surrounds it — funding, identification and legal review — that determines whether a bid is prudent. This guide describes the steps in both the Kenyan and UK markets, the deposit mechanics that apply on the day, and how registrations of intent submitted through the Murivest portal are handled.",
+      text: "Registering to bid is the administrative process by which an intending buyer becomes a qualified participant in a commercial property auction, entitled to bid in the room and, if successful, to contract on the fall of the hammer. The registration itself is deliberately undemanding; it is the preparation that surrounds it — funding, identification and legal review — that determines whether a bid is prudent. This guide describes the steps in both the Kenyan and UK markets, the deposit mechanics that apply on the day, and how bids submitted through a Murivest account on this website are handled.",
     },
     { type: "h2", text: "Preparing before the auction" },
     {
@@ -70,10 +70,10 @@ export const article: Article = {
         "Bid limit — a maximum figure is written down before entering the room, set against the completion timetable rather than the guide price alone.",
       ],
     },
-    { type: "h2", text: "Registering interest through the Murivest portal" },
+    { type: "h2", text: "Submitting a bid through a Murivest account" },
     {
       type: "p",
-      text: "Murivest Group Ltd operates a commercial property auction portal, but Murivest is not the auctioneer. A registration of intent submitted through the portal is routed to the selling party; Murivest does not receive bids, does not conduct the auction and does not hold deposits. Formal bidder registration — the step that produces a bidder number and the right to contract — takes place with the auctioneer on the day, on the auctioneer's terms and subject to the auctioneer's own verification.",
+      text: "Bidding on this website is exclusive to registered accounts: create your account, then use the Submit a bid button on any lot page. Murivest is not the auctioneer. A bid submitted through your account is routed to the selling party; Murivest does not conduct the auction and does not hold deposits. Formal bidder registration — the step that produces a bidder number and the right to contract — takes place with the auctioneer on the day, on the auctioneer's terms and subject to the auctioneer's own verification.",
     },
     {
       type: "p",
@@ -81,7 +81,7 @@ export const article: Article = {
     },
     {
       type: "p",
-      text: "A registration of intent is most useful when it conveys what the selling party needs to know: the lots of interest, whether legal review has begun and the channel through which follow-up should be directed. Registrations are handled in accordance with Murivest's verification procedures, and the selling party or the auctioneer remains the counterparty for all auction matters. The portal is a route to the room, not a substitute for it.",
+      text: "A submitted bid is most useful when it conveys what the selling party needs to know: the lot, the amount, and whether legal review has begun. Bids are handled in accordance with Murivest's verification procedures, and the selling party or the auctioneer remains the counterparty for all auction matters. The website is a route to the room, not a substitute for it.",
     },
   ],
   faqs: [
@@ -96,9 +96,9 @@ export const article: Article = {
         "In Kenya the deposit is twenty-five per cent of the hammer price, payable at the fall of the hammer in cash or by banker's cheque only. In the UK it is ten per cent, paid on exchange of contracts, which occurs at the fall of the hammer. The balance follows on the published timetable — ninety days in Kenya, typically twenty working days in the UK.",
     },
     {
-      question: "Does registering through the Murivest portal make me a registered bidder?",
+      question: "Does submitting a bid through my Murivest account make me a registered bidder?",
       answer:
-        "No. Murivest is not the auctioneer: a registration of intent submitted through the portal is routed to the selling party, and Murivest does not receive bids or hold deposits. Formal bidder registration, and the bidder number that comes with it, takes place with the auctioneer on the day.",
+        "No. Murivest is not the auctioneer: a bid submitted through your account is routed to the selling party, and Murivest does not conduct the auction or hold deposits. Formal bidder registration, and the bidder number that comes with it, takes place with the auctioneer on the day.",
     },
     {
       question: "Can I withdraw after the hammer falls?",

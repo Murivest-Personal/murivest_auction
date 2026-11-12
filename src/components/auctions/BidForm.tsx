@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
+import Link from "next/link";
 import {
   AUCTION_DISCLOSURE,
   BID_SUBLINE,
@@ -10,104 +11,88 @@ import {
 import type { Property } from "@/lib/types";
 
 type Status = "idle" | "submitting" | "success" | "error";
+type Session = { signedIn: boolean; name?: string } | null;
 
-/** Guest bid registration — no sign-in, no account, no session
-    (features spec §2). Posts to /api/bids, which calls the
-    service-role RPC. Honeypot + timing check on every submission.
-    The buyer must accept BOTH the Terms and the bold 2% buyer
-    brokerage fee (payable after the 10% deposit) — both consents
-    are recorded in the database with timestamps and text versions. */
+/** Account bid submission — bids are exclusive to registered
+    accounts and are submitted from the property page. Signed-out
+    visitors see the sign-in / register path (with a redirect back
+    to this lot); signed-in buyers only enter the amount and the
+    two consents — their details come from the account, so
+    submission is one screen. Sold and under-offer lots never
+    render a submission path (and the API rejects them again
+    server-side). */
 export function BidForm({ property }: { property: Property }) {
+  const [session, setSession] = useState<Session>(null);
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState("");
   const [reference, setReference] = useState("");
-  // Captured at first client render — the timing check rejects
-  // submissions faster than 1500ms after this point.
-  const [startedAt] = useState(() => Date.now());
   const [form, setForm] = useState({
-    bidder_name: "",
-    bidder_email: "",
-    bidder_phone: "",
     bid_amount: "",
     consent_terms: false,
     consent_fee: false,
-    hp_field: "",
   });
-  const amountRef = useRef<HTMLInputElement>(null);
 
   const currency =
     property.facts.currency ?? (property.market === "kenya" ? "KES" : "GBP");
 
-  /* Sold and under-offer lots accept no bid registrations — the
-     button is disabled here and the API rejects direct posts
-     server-side as well. */
   const bidClosed =
     property.status === "under-offer" || property.status === "sold";
 
-  const set = (key: keyof typeof form) => (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) =>
-    setForm((f) => ({
-      ...f,
-      [key]:
-        e.target.type === "checkbox"
-          ? e.target.checked
-          : e.target.value,
-    }));
+  const signInHref = `/sign-in?next=${encodeURIComponent(
+    `/auctions/${property.slug}#submit-a-bid`
+  )}`;
+  const registerHref = `/register`;
 
-  function validate(): string | null {
-    if (form.bidder_name.trim().length < 2 || form.bidder_name.trim().length > 120)
-      return "Please provide your full name.";
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.bidder_email.trim()))
-      return "Please provide a valid email address.";
-    if (!/^[+0-9\-() ]{7,20}$/.test(form.bidder_phone.trim()))
-      return "Please provide a valid phone number.";
-    const amount = Number(form.bid_amount);
-    if (!Number.isFinite(amount) || amount <= 0 || amount > 99_999_999_999)
-      return "Please provide a bid amount greater than zero.";
-    if (!form.consent_terms)
-      return "You must accept the Terms and Privacy Policy.";
-    if (!form.consent_fee)
-      return "You must accept the 2% buyer brokerage fee to register your bid.";
-    return null;
-  }
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/account/session")
+      .then((r) => r.json())
+      .then((data: { signedIn: boolean; name?: string }) => {
+        if (!cancelled) setSession(data);
+      })
+      .catch(() => {
+        if (!cancelled) setSession({ signedIn: false });
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (bidClosed) return; // sold / under-offer lots never submit
-    const validationError = validate();
-    if (validationError) {
-      setError(validationError);
+    if (bidClosed) return;
+    const amount = Number(form.bid_amount);
+    if (!Number.isFinite(amount) || amount <= 0 || amount > 99_999_999_999) {
+      setError("Please provide a bid amount greater than zero.");
+      setStatus("error");
+      return;
+    }
+    if (!form.consent_terms) {
+      setError("You must accept the Terms and Privacy Policy.");
+      setStatus("error");
+      return;
+    }
+    if (!form.consent_fee) {
+      setError("You must accept the 2% buyer brokerage fee to submit your bid.");
       setStatus("error");
       return;
     }
     setError("");
     setStatus("submitting");
     try {
-      const res = await fetch("/api/bids", {
+      const res = await fetch("/api/account/bids", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          property_sanity_id: property._id,
           property_slug: property.slug,
-          property_title: property.title,
-          property_market: property.market,
-          bidder_name: form.bidder_name,
-          bidder_email: form.bidder_email,
-          bidder_phone: form.bidder_phone,
-          bid_amount: Number(form.bid_amount),
-          bid_currency: currency,
+          bid_amount: amount,
           consent_terms: form.consent_terms,
           consent_fee: form.consent_fee,
-          hp_field: form.hp_field,
-          form_started_at: startedAt,
         }),
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
-        setError(
-          data.error ?? "Unable to submit bid. Please try again."
-        );
+        setError(data.error ?? "Unable to submit bid. Please try again.");
         setStatus("error");
         return;
       }
@@ -119,6 +104,7 @@ export function BidForm({ property }: { property: Property }) {
     }
   }
 
+  /* ---------- Success ---------- */
   if (status === "success") {
     return (
       <div
@@ -126,38 +112,121 @@ export function BidForm({ property }: { property: Property }) {
         className="border border-hairline bg-white p-8 md:p-10 max-w-[42rem] mx-auto text-center"
       >
         <span className="block font-display text-[0.6rem] tracking-[0.3em] uppercase text-gold mb-4">
-          Registration received
+          Bid received
         </span>
         <p className="font-serif text-2xl font-light text-green mb-4">
-          Thank you.
+          Thank you, {session?.name ?? "your bid is in"}.
         </p>
         <p className="text-[0.95rem] leading-[1.8] text-ink mb-4">
-          Your bid registration has been received and will be reviewed by the
-          Murivest team. Your acceptance of the buyer brokerage terms has been
-          recorded. You will receive confirmation by email.
+          Your bid has been recorded against your account and will be reviewed
+          by the Murivest deal team, then routed to the authorised sale channel.
+          Your acceptance of the buyer brokerage terms has been recorded with a
+          timestamp. You will receive confirmation by email.
         </p>
         {reference ? (
-          <p className="text-[0.6rem] tracking-[0.25em] uppercase text-charcoal font-display">
+          <p className="text-[0.6rem] tracking-[0.25em] uppercase text-charcoal font-display mb-6">
             Reference {reference}
           </p>
         ) : null}
+        <Link
+          href="/account#bids"
+          className="inline-flex items-center justify-center px-8 py-3 text-[0.65rem] tracking-[0.22em] uppercase font-display text-green border border-green hover:bg-green hover:text-cream transition-colors"
+        >
+          View your bids
+        </Link>
       </div>
     );
   }
 
+  /* ---------- Closed lots ---------- */
+  if (bidClosed) {
+    return (
+      <div className="border border-hairline bg-white p-8 md:p-10 max-w-[42rem] mx-auto text-center">
+        <h2 className="font-serif text-2xl md:text-3xl font-light text-green mb-3">
+          {property.status === "sold"
+            ? "This lot has been sold."
+            : "This lot is under offer."}
+        </h2>
+        <p className="text-[0.9rem] leading-[1.8] text-ink mb-6">
+          {property.status === "sold"
+            ? "The transaction has completed and bidding is closed."
+            : "Bidding is paused while the current offer is being processed. Registered accounts can be notified should the transaction not proceed."}
+        </p>
+        <Link
+          href={`/${property.market}`}
+          className="inline-flex items-center justify-center px-8 py-3 text-[0.65rem] tracking-[0.22em] uppercase font-display bg-green text-cream hover:bg-gold transition-colors"
+        >
+          View similar lots
+        </Link>
+      </div>
+    );
+  }
+
+  /* ---------- Signed out: the account gate ---------- */
+  if (session && !session.signedIn) {
+    return (
+      <div className="border border-hairline bg-white p-8 md:p-10 max-w-[42rem] mx-auto text-center">
+        <h2 className="font-serif text-2xl md:text-3xl font-light text-green mb-3">
+          Submit a bid
+        </h2>
+        <p className="text-[0.9rem] leading-[1.8] text-ink mb-8">
+          Bidding is exclusive to registered accounts. Sign in with your access
+          code — or create your account, it takes four steps — and return here
+          to submit your bid on this lot.
+        </p>
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <Link
+            href={signInHref}
+            className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-4 text-[0.65rem] tracking-[0.25em] uppercase font-display bg-green text-cream hover:bg-gold transition-colors"
+          >
+            Sign in to bid
+          </Link>
+          <Link
+            href={registerHref}
+            className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-4 text-[0.65rem] tracking-[0.25em] uppercase font-display text-green border border-green hover:bg-green hover:text-cream transition-colors"
+          >
+            Create your account
+          </Link>
+        </div>
+        <p className="text-[0.75rem] leading-[1.7] text-charcoal mt-6">
+          {BID_SUBLINE}
+        </p>
+      </div>
+    );
+  }
+
+  /* ---------- Signed in: the submission form ---------- */
   return (
     <form
       onSubmit={onSubmit}
       className="max-w-[42rem] mx-auto"
       noValidate
-      aria-label={bidClosed ? "Bid registration closed" : "Register your bid"}
+      aria-label="Submit a bid"
     >
       <div className="border border-hairline bg-white p-6 md:p-10">
         <h2 className="font-serif text-2xl md:text-3xl font-light text-green mb-3">
-          Register your bid
+          Submit a bid
         </h2>
-        <p className="text-[0.85rem] leading-[1.8] text-ink mb-8">
+        <p className="text-[0.85rem] leading-[1.8] text-ink mb-6">
           {BID_SUBLINE}
+        </p>
+
+        <p className="mb-6 text-[0.6rem] tracking-[0.25em] uppercase text-charcoal font-display">
+          {session ? (
+            <>
+              Bidding as{" "}
+              <span className="text-green">{session.name ?? "registered account"}</span>
+              {" · "}
+              <Link
+                href="/account"
+                className="text-green underline underline-offset-4 hover:text-gold transition-colors"
+              >
+                your account
+              </Link>
+            </>
+          ) : (
+            "Loading your account…"
+          )}
         </p>
 
         {property.guidePrice ? (
@@ -166,98 +235,39 @@ export function BidForm({ property }: { property: Property }) {
           </p>
         ) : null}
 
-        {bidClosed ? (
-          <p
-            role="alert"
-            className="border border-hairline bg-cream p-4 text-[0.85rem] text-charcoal mb-6"
-          >
-            {property.status === "sold"
-              ? "This lot has been sold. Bid registration is closed."
-              : "This lot is currently under offer. Bid registration is paused. Register to be notified should the transaction not proceed."}
-          </p>
-        ) : null}
+        <label className="block max-w-[16rem]">
+          <span className="block text-[0.6rem] tracking-[0.28em] uppercase text-charcoal mb-3 font-display">
+            Bid amount ({currency})
+          </span>
+          <input
+            type="number"
+            value={form.bid_amount}
+            onChange={(e) =>
+              setForm((f) => ({ ...f, bid_amount: e.target.value }))
+            }
+            required
+            min={1}
+            step={1000}
+            inputMode="numeric"
+            disabled={status === "submitting" || !session?.signedIn}
+            className="w-full bg-transparent border-0 border-b border-sand focus:border-green outline-none py-3 text-base text-green placeholder:text-charcoal/50 transition-colors disabled:opacity-50"
+          />
+        </label>
 
-        <div className="grid gap-8 sm:grid-cols-2">
-          <label className="block">
-            <span className="block text-[0.6rem] tracking-[0.28em] uppercase text-charcoal mb-3 font-display">
-              Full name
-            </span>
-            <input
-              type="text"
-              value={form.bidder_name}
-              onChange={set("bidder_name")}
-              required
-              minLength={2}
-              maxLength={120}
-              autoComplete="name"
-              className="w-full bg-transparent border-0 border-b border-sand focus:border-green outline-none py-3 text-base text-green placeholder:text-charcoal/50 transition-colors"
-            />
-          </label>
-          <label className="block">
-            <span className="block text-[0.6rem] tracking-[0.28em] uppercase text-charcoal mb-3 font-display">
-              Email address
-            </span>
-            <input
-              type="email"
-              value={form.bidder_email}
-              onChange={set("bidder_email")}
-              required
-              autoComplete="email"
-              className="w-full bg-transparent border-0 border-b border-sand focus:border-green outline-none py-3 text-base text-green placeholder:text-charcoal/50 transition-colors"
-            />
-          </label>
-          <label className="block">
-            <span className="block text-[0.6rem] tracking-[0.28em] uppercase text-charcoal mb-3 font-display">
-              Phone
-            </span>
-            <input
-              type="tel"
-              value={form.bidder_phone}
-              onChange={set("bidder_phone")}
-              required
-              autoComplete="tel"
-              placeholder="+254 …"
-              className="w-full bg-transparent border-0 border-b border-sand focus:border-green outline-none py-3 text-base text-green placeholder:text-charcoal/50 transition-colors"
-            />
-          </label>
-          <label className="block">
-            <span className="block text-[0.6rem] tracking-[0.28em] uppercase text-charcoal mb-3 font-display">
-              Bid amount ({currency})
-            </span>
-            <input
-              ref={amountRef}
-              type="number"
-              value={form.bid_amount}
-              onChange={set("bid_amount")}
-              required
-              min={1}
-              step={1000}
-              inputMode="numeric"
-              className="w-full bg-transparent border-0 border-b border-sand focus:border-green outline-none py-3 text-base text-green placeholder:text-charcoal/50 transition-colors"
-            />
-          </label>
-        </div>
-
-        {/* Honeypot — invisible to humans */}
-        <div className="absolute -left-[9999px]" aria-hidden="true">
-          <label>
-            Leave this field empty
-            <input
-              type="text"
-              tabIndex={-1}
-              autoComplete="off"
-              value={form.hp_field}
-              onChange={set("hp_field")}
-            />
-          </label>
-        </div>
+        <p className="text-[0.75rem] leading-[1.7] text-charcoal mt-4">
+          Your name, contact details and qualification file are taken from your
+          account — nothing to re-enter. The Murivest team reviews each bid and
+          routes it to the authorised sale channel.
+        </p>
 
         {/* Consent 1 — Terms & Privacy */}
         <label className="flex items-start gap-4 mt-8 cursor-pointer">
           <input
             type="checkbox"
             checked={form.consent_terms}
-            onChange={set("consent_terms")}
+            onChange={(e) =>
+              setForm((f) => ({ ...f, consent_terms: e.target.checked }))
+            }
             required
             className="mt-1 accent-[#1C2B1E] w-4 h-4"
           />
@@ -267,14 +277,16 @@ export function BidForm({ property }: { property: Property }) {
         </label>
 
         {/* Consent 2 — the 2% buyer brokerage fee. BOLD, boxed,
-            gold-ruled. The acceptance is stored in the database
-            with a timestamp and consent-text version. */}
+            gold-ruled. Stored with a timestamp and consent-text
+            version. */}
         <div className="border border-green bg-cream p-5 mt-5">
           <label className="flex items-start gap-4 cursor-pointer">
             <input
               type="checkbox"
               checked={form.consent_fee}
-              onChange={set("consent_fee")}
+              onChange={(e) =>
+                setForm((f) => ({ ...f, consent_fee: e.target.checked }))
+              }
               required
               className="mt-1 accent-[#8B6C2A] w-4 h-4"
             />
@@ -301,16 +313,10 @@ export function BidForm({ property }: { property: Property }) {
 
         <button
           type="submit"
-          disabled={status === "submitting" || bidClosed}
+          disabled={status === "submitting" || !session?.signedIn}
           className="w-full mt-8 px-8 py-4 text-[0.65rem] tracking-[0.25em] uppercase font-display bg-green text-cream hover:bg-gold transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
         >
-          {status === "submitting"
-            ? "Submitting"
-            : property.status === "sold"
-              ? "Bid registration closed"
-              : property.status === "under-offer"
-                ? "Bid registration paused"
-                : "Submit bid registration"}
+          {status === "submitting" ? "Submitting" : "Submit bid"}
         </button>
       </div>
 

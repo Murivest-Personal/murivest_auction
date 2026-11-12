@@ -2,17 +2,10 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { db } from "@/lib/db";
 import { isAdminAuthenticated, usingDefaultAdminPasscode } from "@/lib/buyer/session";
-import {
-  classificationLabel,
-  canAccessVault,
-} from "@/lib/buyer/qualification";
-import { getDocumentsForProperty } from "@/lib/vault/service";
-import { getProperties } from "@/lib/content";
+import { classificationLabel } from "@/lib/buyer/qualification";
 import { AdminGate, AdminSignOutButton } from "@/components/admin/AdminGate";
 import { BuyerClassificationControls } from "@/components/admin/BuyerClassificationControls";
-import { DocumentManager } from "@/components/admin/DocumentManager";
-import { GrantPanel } from "@/components/admin/GrantPanel";
-import { NewDocumentForm } from "@/components/admin/NewDocumentForm";
+import { BidStatusControls } from "@/components/admin/BidStatusControls";
 import { Container } from "@/components/ui/Container";
 import { formatCurrency, formatDate } from "@/lib/format";
 
@@ -23,12 +16,12 @@ export const metadata: Metadata = {
 
 export const dynamic = "force-dynamic";
 
-type Search = Promise<{ tab?: string; property?: string }>;
+type Search = Promise<{ tab?: string }>;
 
 const TABS = [
   { key: "buyers", label: "Buyers & qualification" },
-  { key: "data-rooms", label: "Data rooms" },
-  { key: "logs", label: "Access logs" },
+  { key: "bids", label: "Account bids" },
+  { key: "logs", label: "Audit log" },
 ];
 
 export default async function BackOfficePage({
@@ -46,8 +39,8 @@ export default async function BackOfficePage({
     );
   }
 
-  const { tab = "buyers", property } = await searchParams;
-  const activeTab = TABS.some((t) => t.key === tab) ? tab : "buyers";
+  const { tab } = await searchParams;
+  const activeTab = TABS.some((t) => t.key === tab) ? (tab as string) : "buyers";
 
   const buyers = await db.buyerRegistration.findMany({
     orderBy: { updatedAt: "desc" },
@@ -97,9 +90,7 @@ export default async function BackOfficePage({
         </nav>
 
         {activeTab === "buyers" ? <BuyersTab buyers={buyers} /> : null}
-        {activeTab === "data-rooms" ? (
-          <DataRoomsTab buyers={buyers} selectedSlug={property ?? null} />
-        ) : null}
+        {activeTab === "bids" ? <BidsTab buyers={buyers} /> : null}
         {activeTab === "logs" ? <LogsTab /> : null}
       </div>
     </Container>
@@ -113,16 +104,24 @@ type BuyerRow = Awaited<
 >[number];
 
 async function BuyersTab({ buyers }: { buyers: BuyerRow[] }) {
+  /* Counts of bids + saved lots per buyer, for at-a-glance state. */
+  const [bidCounts, savedCounts] = await Promise.all([
+    db.buyerBid.groupBy({ by: ["buyerId"], _count: { id: true } }),
+    db.savedLot.groupBy({ by: ["buyerId"], _count: { id: true } }),
+  ]);
+  const bidsBy = new Map(bidCounts.map((c) => [c.buyerId, c._count.id]));
+  const savesBy = new Map(savedCounts.map((c) => [c.buyerId, c._count.id]));
+
   return (
     <section aria-label="Buyers and qualification">
       <p className="text-[0.85rem] leading-[1.8] text-charcoal mb-8">
-        {buyers.length} registered buyer{buyers.length === 1 ? "" : "s"}.
+        {buyers.length} registered account{buyers.length === 1 ? "" : "s"}.
         Classification changes are audit-logged. Proof-of-funds files open from
         the private store; every view is logged.
       </p>
       {buyers.length === 0 ? (
         <p className="border border-hairline bg-white p-6 text-[0.9rem] text-charcoal">
-          No buyer registrations yet.
+          No accounts registered yet.
         </p>
       ) : (
         <div className="space-y-4">
@@ -135,11 +134,11 @@ async function BuyersTab({ buyers }: { buyers: BuyerRow[] }) {
                     <span className="font-display text-[0.55rem] tracking-[0.2em] uppercase text-gold">
                       {classificationLabel(b.classification)}
                     </span>
-                    {canAccessVault(b.classification) ? (
-                      <span className="font-display text-[0.5rem] tracking-[0.2em] uppercase text-green border border-green px-2 py-0.5">
-                        Vault eligible
-                      </span>
-                    ) : null}
+                    <span className="font-display text-[0.5rem] tracking-[0.2em] uppercase text-charcoal">
+                      {bidsBy.get(b.id) ?? 0} bid
+                      {(bidsBy.get(b.id) ?? 0) === 1 ? "" : "s"} ·{" "}
+                      {savesBy.get(b.id) ?? 0} saved/liked
+                    </span>
                   </div>
                   <dl className="grid grid-cols-2 gap-x-6 gap-y-2 text-[0.8rem]">
                     <div>
@@ -163,8 +162,8 @@ async function BuyersTab({ buyers }: { buyers: BuyerRow[] }) {
                         Budget
                       </dt>
                       <dd className="text-green">
-                        {formatCurrency(b.budgetMin, b.budgetCurrency)} –{" "}
-                        {formatCurrency(b.budgetMax, b.budgetCurrency)}
+                        {formatCurrency(b.budgetMin ?? 0, b.budgetCurrency)} –{" "}
+                        {formatCurrency(b.budgetMax ?? 0, b.budgetCurrency)}
                       </dd>
                     </div>
                     <div>
@@ -190,6 +189,20 @@ async function BuyersTab({ buyers }: { buyers: BuyerRow[] }) {
                       </dt>
                       <dd className="text-green break-words">
                         {(JSON.parse(b.assetClasses) as string[]).join(", ")}
+                      </dd>
+                    </div>
+                    <div>
+                      <dt className="font-display text-[0.5rem] tracking-[0.2em] uppercase text-charcoal">
+                        Alerts
+                      </dt>
+                      <dd className="text-green">
+                        {[
+                          b.notifyNewLots ? "new lots" : null,
+                          b.notifyOffMarket ? "off-market" : null,
+                          b.notifyBidUpdates ? "bid updates" : null,
+                        ]
+                          .filter(Boolean)
+                          .join(" · ") || "none"}
                       </dd>
                     </div>
                     {b.purchasingEntityName ? (
@@ -263,188 +276,98 @@ async function BuyersTab({ buyers }: { buyers: BuyerRow[] }) {
   );
 }
 
-/* ================= Data rooms tab ================= */
+/* ================= Bids tab ================= */
 
-async function DataRoomsTab({
-  buyers,
-  selectedSlug,
-}: {
-  buyers: BuyerRow[];
-  selectedSlug: string | null;
-}) {
-  const [documents, grants, ndas, requests, lots] = await Promise.all([
-    db.vaultDocument.findMany({ orderBy: { createdAt: "desc" } }),
-    db.vaultAccessGrant.findMany({ orderBy: { grantedAt: "desc" } }),
-    db.ndaAcceptance.findMany(),
-    db.vaultAccessLog.findMany({
-      where: { action: "access_requested" },
-      orderBy: { createdAt: "desc" },
-      take: 50,
-    }),
-    getProperties({ market: "all" }).catch(() => []),
-  ]);
+const BID_STATUS_LABEL: Record<string, string> = {
+  submitted: "Submitted",
+  acknowledged: "Acknowledged",
+  routed: "Routed to selling party",
+  superseded: "Superseded",
+  declined: "Declined",
+  withdrawn: "Withdrawn",
+};
 
+async function BidsTab({ buyers }: { buyers: BuyerRow[] }) {
+  const bids = await db.buyerBid.findMany({
+    orderBy: { createdAt: "desc" },
+    take: 100,
+  });
   const buyerById = new Map(buyers.map((b) => [b.id, b]));
-  const ndaKey = (buyerId: string, slug: string) => `${buyerId}:${slug}`;
-  const ndaMap = new Map(ndas.map((n) => [ndaKey(n.buyerId, n.propertySlug), n]));
-
-  const slugSet = new Set<string>(documents.map((d) => d.propertySlug));
-  if (selectedSlug) slugSet.add(selectedSlug);
-  const slugs = [...slugSet];
-
-  /* Pending requests per slug (no active grant since the request). */
-  const pendingBySlug = new Map<string, { buyer: string; classification: string; at: string }[]>();
-  for (const r of requests) {
-    const active = grants.find(
-      (g) =>
-        g.buyerId === r.buyerId &&
-        g.propertySlug === r.propertySlug &&
-        g.revokedAt === null &&
-        g.grantedAt > r.createdAt
-    );
-    if (active) continue;
-    const list = pendingBySlug.get(r.propertySlug) ?? [];
-    const b = buyerById.get(r.buyerId);
-    list.push({
-      buyer: b ? `${b.fullName} (${b.email})` : r.buyerId,
-      classification: b ? classificationLabel(b.classification) : "—",
-      at: r.createdAt.toISOString(),
-    });
-    pendingBySlug.set(r.propertySlug, list);
-  }
-
-  const selected = selectedSlug && slugs.includes(selectedSlug) ? selectedSlug : null;
-  const selectedDocuments = selected
-    ? await getDocumentsForProperty(selected)
-    : null;
-
-  const grantRows = selected
-    ? grants
-        .filter((g) => g.propertySlug === selected)
-        .map((g) => {
-          const b = buyerById.get(g.buyerId);
-          const nda = ndaMap.get(ndaKey(g.buyerId, selected));
-          return {
-            id: g.id,
-            buyerId: g.buyerId,
-            buyerName: b?.fullName ?? g.buyerId,
-            buyerEmail: b?.email ?? "",
-            classification: b?.classification ?? "",
-            classificationLabel: b ? classificationLabel(b.classification) : "—",
-            grantedAt: g.grantedAt.toISOString(),
-            revokedAt: g.revokedAt ? g.revokedAt.toISOString() : null,
-            revokedReason: g.revokedReason,
-            ndaAcceptedAt: nda ? nda.acceptedAt.toISOString() : null,
-          };
-        })
-    : [];
 
   return (
-    <section aria-label="Data rooms">
-      {/* Property list */}
-      <div className="mb-10">
-        <p className="text-[0.85rem] leading-[1.8] text-charcoal mb-4">
-          Each lot has its own data room with separate permissions. Existing
-          data rooms:{slugs.length > 0 ? "" : " none yet."}
+    <section aria-label="Account bids">
+      <p className="text-[0.85rem] leading-[1.8] text-charcoal mb-8">
+        Bids submitted by registered accounts from property pages — most recent
+        {bids.length === 100 ? " 100" : ` ${bids.length}`}. Status changes are
+        audit-logged. Consents (terms + the 2% fee) were recorded with
+        timestamps at submission.
+      </p>
+      {bids.length === 0 ? (
+        <p className="border border-hairline bg-white p-6 text-[0.9rem] text-charcoal">
+          No bids submitted yet. Bidding is exclusive to registered accounts on
+          the website.
         </p>
-        {slugs.length > 0 ? (
-          <ul className="flex flex-wrap gap-3 mb-6">
-            {slugs.map((s) => (
-              <li key={s}>
-                <Link
-                  href={`/back-office?tab=data-rooms&property=${s}`}
-                  aria-current={selected === s ? "page" : undefined}
-                  className={`inline-block font-display text-[0.6rem] tracking-[0.2em] uppercase px-4 py-2 border transition-colors ${
-                    selected === s
-                      ? "border-green bg-green text-cream"
-                      : "border-hairline text-green hover:border-green"
-                  }`}
-                >
-                  {s}
-                  {pendingBySlug.get(s)?.length ? (
-                    <span className="ml-2 text-gold">
-                      {pendingBySlug.get(s)!.length} request
-                      {pendingBySlug.get(s)!.length === 1 ? "" : "s"}
-                    </span>
-                  ) : null}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        ) : null}
-        {lots.length > 0 ? (
-          <p className="text-[0.8rem] text-charcoal">
-            Published Sanity lots:{" "}
-            {lots
-              .slice(0, 8)
-              .map((l) => l.slug)
-              .join(" · ")}
-          </p>
-        ) : (
-          <p className="text-[0.8rem] text-charcoal">
-            No Sanity lots are published (or Sanity is not configured). You can
-            still create a data room by entering the lot slug directly — it
-            will activate when the lot is published.
-          </p>
-        )}
-      </div>
-
-      <NewDocumentForm defaultSlug={selected ?? undefined} />
-
-      {selected && selectedDocuments ? (
-        <div className="mt-12 space-y-10">
-          <div>
-            <h2 className="font-serif text-2xl font-light text-green mb-2">
-              {selected}
-            </h2>
-            <p className="text-[0.8rem] text-charcoal mb-6">
-              {selectedDocuments.length} document
-              {selectedDocuments.length === 1 ? "" : "s"} in this data room.
-            </p>
-
-            {/* Pending access requests */}
-            {pendingBySlug.get(selected)?.length ? (
-              <div className="border border-gold bg-cream p-5 mb-8">
-                <p className="font-display text-[0.55rem] tracking-[0.25em] uppercase text-gold mb-3">
-                  Access requests awaiting authorisation
-                </p>
-                <ul className="space-y-1.5 text-[0.85rem] text-ink">
-                  {pendingBySlug.get(selected)!.map((r, i) => (
-                    <li key={i}>
-                      {r.buyer} — {r.classification} — requested{" "}
-                      {formatDate(r.at)}
-                    </li>
-                  ))}
-                </ul>
-                <p className="text-[0.75rem] text-charcoal mt-3">
-                  Grant access to these buyers in the authorisation panel below.
-                </p>
-              </div>
-            ) : null}
-
-            <DocumentManager
-              propertySlug={selected}
-              documents={selectedDocuments}
-            />
-          </div>
-
-          <GrantPanel
-            propertySlug={selected}
-            buyers={buyers.map((b) => ({
-              id: b.id,
-              fullName: b.fullName,
-              classification: b.classification,
-              classificationLabel: classificationLabel(b.classification),
-              qualified: canAccessVault(b.classification),
-            }))}
-            grants={grantRows}
-          />
-        </div>
       ) : (
-        <p className="border border-hairline bg-white p-6 mt-10 text-[0.85rem] text-charcoal">
-          Select a data room above (or create one) to manage documents,
-          download permissions and per-property buyer authorisations.
-        </p>
+        <div className="border border-hairline bg-white overflow-x-auto">
+          <table className="w-full text-[0.8rem]">
+            <thead>
+              <tr className="border-b border-hairline text-left">
+                {["When", "Buyer", "Lot", "Amount", "Status", "Manage"].map(
+                  (h) => (
+                    <th
+                      key={h}
+                      className="p-3 font-display text-[0.5rem] tracking-[0.2em] uppercase text-gold align-top"
+                    >
+                      {h}
+                    </th>
+                  )
+                )}
+              </tr>
+            </thead>
+            <tbody>
+              {bids.map((bid) => {
+                const b = buyerById.get(bid.buyerId);
+                return (
+                  <tr key={bid.id} className="border-b border-hairline align-top">
+                    <td className="p-3 text-charcoal whitespace-nowrap">
+                      {formatDate(bid.createdAt.toISOString())}
+                      <span className="block font-display text-[0.5rem] tracking-[0.15em] uppercase text-gold mt-1">
+                        {bid.reference}
+                      </span>
+                    </td>
+                    <td className="p-3 text-green whitespace-nowrap">
+                      {b ? b.fullName : "—"}
+                      <span className="block text-charcoal text-[0.7rem]">
+                        {b ? `${b.email} · ${classificationLabel(b.classification)}` : ""}
+                      </span>
+                    </td>
+                    <td className="p-3 text-green">
+                      <Link
+                        href={`/auctions/${bid.propertySlug}`}
+                        className="underline underline-offset-4 hover:text-gold transition-colors"
+                      >
+                        {bid.propertyTitle}
+                      </Link>
+                    </td>
+                    <td className="p-3 text-green whitespace-nowrap">
+                      {formatCurrency(bid.bidAmount, bid.bidCurrency)}
+                    </td>
+                    <td className="p-3 text-charcoal whitespace-nowrap">
+                      {BID_STATUS_LABEL[bid.status] ?? bid.status}
+                    </td>
+                    <td className="p-3">
+                      <BidStatusControls
+                        bidId={bid.id}
+                        current={bid.status}
+                        note={bid.statusNote}
+                      />
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
       )}
     </section>
   );
@@ -453,22 +376,15 @@ async function DataRoomsTab({
 /* ================= Logs tab ================= */
 
 const ACTION_LABELS: Record<string, string> = {
-  nda_accepted: "NDA accepted",
-  access_requested: "Access requested",
-  view: "Document viewed",
-  download: "Document downloaded",
-  download_denied: "Download denied",
-  view_denied: "View denied",
-  grant: "Access granted",
-  revoke: "Access revoked",
-  version_published: "Version published",
-  document_created: "Document setting changed",
+  bid_submitted: "Bid submitted",
+  bid_status_changed: "Bid status changed",
   pof_viewed: "Proof of funds viewed",
   classification_changed: "Classification changed",
+  account_setting_changed: "Account setting changed",
 };
 
 async function LogsTab() {
-  const logs = await db.vaultAccessLog.findMany({
+  const logs = await db.auditLog.findMany({
     orderBy: { createdAt: "desc" },
     take: 80,
   });
@@ -478,11 +394,11 @@ async function LogsTab() {
   const buyerById = new Map(buyers.map((b) => [b.id, b]));
 
   return (
-    <section aria-label="Access logs">
+    <section aria-label="Audit log">
       <p className="text-[0.85rem] leading-[1.8] text-charcoal mb-8">
-        The last {logs.length} audit events: NDA acceptances, document views
-        and downloads (including denials), grants, revocations, published
-        versions, proof-of-funds views and classification changes.
+        The last {logs.length} audit events: bid submissions and status changes,
+        proof-of-funds views, classification changes and account setting
+        changes.
       </p>
       {logs.length === 0 ? (
         <p className="border border-hairline bg-white p-6 text-[0.9rem] text-charcoal">

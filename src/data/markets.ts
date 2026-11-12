@@ -41,7 +41,7 @@ export const MARKET_HUBS: Record<"kenya" | "uk", MarketHub> = {
       {
         heading: "Upcoming auctions by county",
         paragraphs: [
-          "Auction activity in Kenya concentrates in Nairobi County, with Mombasa, Kisumu and Nakuru forming the secondary markets. Lots range from CBD office buildings and storefront retail to industrial units along the Mombasa Road corridor. The calendar below groups verified Murivest lots by auction date and county; the selling party and sale authority for each lot are disclosed as the auction notice and conditions of sale require, with full documentation released to qualified buyers through confidential data rooms.",
+          "Auction activity in Kenya concentrates in Nairobi County, with Mombasa, Kisumu and Nakuru forming the secondary markets. Lots range from CBD office buildings and storefront retail to industrial units along the Mombasa Road corridor. The calendar below groups verified Murivest lots by auction date and county; the selling party and sale authority for each lot are disclosed as the auction notice and conditions of sale require, with full documentation released to qualified buyers on request under appropriate confidentiality and mandate arrangements.",
         ],
       },
     ],

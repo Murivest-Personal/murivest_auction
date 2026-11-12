@@ -82,8 +82,8 @@ export default async function AllLotsPage({
             Each listing states the auction mechanism and the legal pack
             position; the selling party and sale authority are disclosed as
             the auction notice and conditions of sale require, with full
-            documentation released to qualified buyers through confidential
-            data rooms. {lots.length}{" "}
+            documentation released to qualified buyers on request under
+            appropriate confidentiality and mandate arrangements. {lots.length}{" "}
             {lots.length === 1 ? "lot" : "lots"} currently listed.
           </p>
         </Container>
@@ -95,7 +95,7 @@ export default async function AllLotsPage({
             <div className="border-t border-sand pt-8">
               <p className="text-[0.95rem] text-charcoal">
                 {allLots.length === 0
-                  ? "No lots are currently published on the portal. Verified lots are published here as they clear the Murivest four-check standard — register at the client portal for auction alerts."
+                  ? "No lots are currently published. Verified lots are published here as they clear the Murivest four-check standard — create your account for auction alerts."
                   : "No lots match the current filters. Clear the filters or browse the market hubs below."}
               </p>
             </div>

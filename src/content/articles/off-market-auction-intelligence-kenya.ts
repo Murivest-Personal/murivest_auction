@@ -81,14 +81,14 @@ export const article: Article = {
     },
     {
       type: "p",
-      text: "Buyers can register for auction and off-market alerts at portal.murivest.com, and verified intelligence is routed to registered buyers as it clears verification. Murivest represents buyers under separate mandate, is not the auctioneer, and subjects every engagement to KYC and AML verification.",
+      text: "Buyers can create an account on this website for auction and off-market alerts, and verified intelligence is routed to account holders as it clears verification. Murivest represents buyers under separate mandate, is not the auctioneer, and subjects every engagement to KYC and AML verification.",
     },
   ],
   faqs: [
     {
       question: "How do buyers hear about lots early?",
       answer:
-        "By monitoring the public and authorised channels daily — statutory notices, gazette and press publications, court and receivership records — usually through a specialist desk, or by registering for verified alerts at portal.murivest.com. The information is open; the discipline of collection is what most buyers lack.",
+        "By monitoring the public and authorised channels daily — statutory notices, gazette and press publications, court and receivership records — usually through a specialist desk, or by creating an account for verified alerts on this website. The information is open; the discipline of collection is what most buyers lack.",
     },
     {
       question: "Are off-market sales lawful?",
@@ -103,7 +103,7 @@ export const article: Article = {
     {
       question: "How do I register for auction alerts?",
       answer:
-        "Register at portal.murivest.com. Verified auction and off-market intelligence is routed to registered buyers once each lot clears verification. Pursuing any lot is by separate mandate, subject to KYC and AML verification.",
+        "Create your account on this website. Verified auction and off-market intelligence is routed to account holders once each lot clears verification. Pursuing any lot is by separate mandate, subject to KYC and AML verification.",
     },
   ],
   sources: [

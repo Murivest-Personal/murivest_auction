@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import Link from "next/link";
 
@@ -9,10 +9,13 @@ const inputCls =
 const labelCls =
   "block text-[0.6rem] tracking-[0.28em] uppercase text-charcoal mb-3 font-display";
 
-/** Buyer portal sign-in — email + the access code issued at
-    registration. Sets the httpOnly session cookie. */
+/** Website account sign-in — email + the access code issued at
+    registration. Sets the httpOnly session cookie and continues to
+    the profile (or back to the page that asked for the account,
+    via ?next=). */
 export function BuyerSignInForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [status, setStatus] = useState<"idle" | "submitting" | "error">("idle");
   const [error, setError] = useState("");
   const [form, setForm] = useState({ email: "", access_code: "" });
@@ -40,7 +43,12 @@ export function BuyerSignInForm() {
         setStatus("error");
         return;
       }
-      router.push("/buyers/portal");
+      const next = searchParams.get("next");
+      const target =
+        next && next.startsWith("/") && !next.startsWith("//")
+          ? next
+          : "/account";
+      router.push(target);
       router.refresh();
     } catch {
       setError("Sign-in failed. Please try again.");
@@ -49,15 +57,15 @@ export function BuyerSignInForm() {
   }
 
   return (
-    <form onSubmit={onSubmit} noValidate aria-label="Buyer portal sign-in" className="max-w-md">
+    <form onSubmit={onSubmit} noValidate aria-label="Account sign-in" className="max-w-md">
       <div className="border border-hairline bg-white p-6 md:p-10">
         <h2 className="font-serif text-2xl font-light text-green mb-3">
-          Sign in to the buyer portal
+          Sign in to your account
         </h2>
         <p className="text-[0.85rem] leading-[1.8] text-ink mb-8">
           Use the email address you registered with and the access code issued
-          when you registered. Your portal shows your qualification status and
-          the data rooms you are authorised to enter.
+          when you created your account. Your profile shows your verification
+          status, saved lots, bids and alert settings.
         </p>
 
         <div className="space-y-8">
@@ -112,12 +120,12 @@ export function BuyerSignInForm() {
           >
             office@murivest.com
           </a>
-          . Not registered yet?{" "}
+          . No account yet?{" "}
           <Link
-            href="/buyers/register"
+            href="/register"
             className="text-green underline underline-offset-4 hover:text-gold transition-colors"
           >
-            Register as a buyer
+            Create your account
           </Link>
           .
         </p>

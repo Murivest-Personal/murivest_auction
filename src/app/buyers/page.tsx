@@ -6,13 +6,14 @@ import { ClassificationLadder } from "@/components/buyers/ClassificationLadder";
 export const metadata = buildMetadata({
   title: "Buyer registration & qualification | Murivest Group Ltd",
   description:
-    "Register as a buyer with Murivest. Qualification covers identity and beneficial ownership (KYC), funding verification and per-property authorisation into confidential data rooms. Buyer-side representation for commercial property auctions in Kenya and the UK.",
+    "Create a Murivest account. Qualification covers identity and beneficial ownership (KYC) and funding verification. Save lots, submit bids from property pages and follow your verification status on your profile. Buyer-side representation for commercial property auctions in Kenya and the UK.",
   path: "/buyers",
 });
 
-/* Landing page for the buyer registration & qualification system.
-   Explains the ladder, what is captured, and how confidential
-   documentation is released (NDA + per-property authorisation). */
+/* Landing page for the account registration & qualification
+   system. Explains the ladder and what is captured; the account
+   itself — saved lots, bids, verification, settings — lives on
+   this website at /account. */
 export default function BuyersLandingPage() {
   return (
     <>
@@ -27,26 +28,26 @@ export default function BuyersLandingPage() {
             </h1>
             <p className="text-[1.05rem] leading-[1.9] text-ink mb-10">
               Murivest qualifies buyers before introducing them to auction
-              opportunities. Registration captures who is buying, where they
+              opportunities. Your account captures who is buying, where they
               are tax-resident, what they are buying, and whether the capital
-              is real. Qualified buyers are then authorised — property by
-              property — into confidential data rooms under a confidentiality
-              agreement. This is how unqualified bidders are kept out of the
-              process, and how serious buyers stop losing auctions they could
-              not fund.
+              is real. Once qualified, detailed transaction documentation is
+              released to you on a lot, under appropriate confidentiality and
+              mandate arrangements. This is how unqualified bidders are kept
+              out of the process, and how serious buyers stop losing auctions
+              they could not fund.
             </p>
             <div className="flex flex-wrap gap-4">
               <Link
-                href="/buyers/register"
+                href="/register"
                 className="inline-flex items-center justify-center px-8 py-3.5 text-[0.65rem] tracking-[0.22em] uppercase font-display bg-green text-cream hover:bg-gold transition-colors"
               >
-                Register as a buyer
+                Create your account
               </Link>
               <Link
-                href="/buyers/sign-in"
+                href="/sign-in"
                 className="inline-flex items-center justify-center px-8 py-3.5 text-[0.65rem] tracking-[0.22em] uppercase font-display text-green border border-green hover:bg-green hover:text-cream transition-colors"
               >
-                Sign in to the portal
+                Sign in
               </Link>
             </div>
           </div>
@@ -107,14 +108,12 @@ export default function BuyersLandingPage() {
             <div className="border border-green bg-cream p-6 mt-8">
               <p className="text-[0.85rem] leading-[1.8] text-ink">
                 <span className="font-display text-[0.55rem] tracking-[0.3em] uppercase text-gold block mb-3">
-                  Confidential data rooms
+                  Your account on this website
                 </span>
-                From <strong>Qualified buyer</strong> upwards, you can be
-                authorised into a property&apos;s data room: legal packs, title
-                documents, tenancy schedules and addenda, each with version
-                history, upload dates, expiry control and download permissions.
-                Access is per property, under a timestamped confidentiality
-                agreement, and can be revoked at any time.
+                Your account is part of this website — there is no separate
+                portal. Save and like lots, submit bids from property pages,
+                follow your verification status and set your auction alerts,
+                all from your profile.
               </p>
             </div>
           </div>
@@ -132,12 +131,12 @@ export default function BuyersLandingPage() {
               A Kenyan investor assessing a UK auction lot — or a UK fund
               looking at Nairobi — faces different deposit rules, completion
               timetables, tax treatment and funding mechanics. Your
-              registration records your jurisdiction and funding position so
+              account records your jurisdiction and funding position so
               Murivest can underwrite the acquisition properly before you are
               in a competitive auction room.
             </p>
             <Link
-              href="/buyers/register"
+              href="/register"
               className="inline-flex items-center justify-center px-8 py-3.5 text-[0.65rem] tracking-[0.22em] uppercase font-display bg-green text-cream hover:bg-gold transition-colors"
             >
               Start your registration

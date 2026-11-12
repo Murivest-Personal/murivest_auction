@@ -26,7 +26,7 @@ export function SellingPartyBlock({ property }: { property: Property }) {
           terms.
         </p>
         <p className="text-[0.75rem] leading-[1.7] text-charcoal">
-          Bid registrations submitted through this website are routed by
+          Bids submitted from registered accounts on this website are routed by
           Murivest, as buyer-side brokerage, to the authorised sale channel.
           This is not a binding bid.
         </p>

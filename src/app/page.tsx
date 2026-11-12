@@ -90,7 +90,8 @@ export default async function HomePage() {
                 legal pack position; the selling party and sale authority are
                 disclosed as the auction notice and conditions of sale
                 require, with full documentation released to qualified buyers
-                through confidential data rooms.
+                on request under appropriate confidentiality and mandate
+                arrangements.
               </p>
               <div className="flex flex-wrap gap-4">
                 <ButtonLink href="/auctions">Browse current lots</ButtonLink>
@@ -179,20 +180,18 @@ export default async function HomePage() {
           {showcase.length === 0 ? (
             <div className="border border-hairline bg-cream p-8 md:p-12 max-w-[42rem]">
               <p className="text-[1.05rem] leading-[1.9] text-ink mb-4">
-                No lots are currently published on the portal.
+                No lots are currently published.
               </p>
               <p className="text-[0.95rem] leading-[1.8] text-ink">
                 Verified commercial auction lots across Kenya and the United
                 Kingdom are published here as they clear the Murivest
-                four-check standard. Register at the{" "}
-                <a
-                  href="https://portal.murivest.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                four-check standard.{" "}
+                <Link
+                  href="/register"
                   className="text-gold hover:text-green transition-colors"
                 >
-                  client portal
-                </a>{" "}
+                  Create your account
+                </Link>{" "}
                 to receive auction alerts before lots are published.
               </p>
             </div>
@@ -232,7 +231,7 @@ export default async function HomePage() {
               <p className="text-[1.05rem] leading-[1.9] text-ink mb-6">
                 A commercial property auction moves quickly, and the buyer&rsquo;s
                 protection is preparation. Before a lot is published on this
-                portal, the Murivest deal team applies the same verification
+                website, the Murivest deal team applies the same verification
                 standard the firm applies to its brokerage mandates — adapted to
                 the auction context.
               </p>
@@ -383,18 +382,16 @@ export default async function HomePage() {
                 Notified before the public notice
               </h3>
               <p className="text-[0.9rem] leading-[1.8] text-ink mb-6">
-                Registered buyers receive auction and off-market notifications
-                — new lots, auction dates and documentation — through the
-                Murivest client portal.
+                Registered account holders receive auction and off-market
+                notifications — new lots, auction dates and documentation —
+                through their account on this website.
               </p>
-              <a
-                href="https://portal.murivest.com"
-                target="_blank"
-                rel="noopener noreferrer"
+              <Link
+                href="/register"
                 className="text-[0.6rem] tracking-[0.3em] uppercase text-gold hover:text-green transition-colors font-display"
               >
-                Register at the portal ↗
-              </a>
+                Create your account →
+              </Link>
             </div>
           </div>
         </Container>
@@ -424,20 +421,18 @@ export default async function HomePage() {
               >
                 Submit a buyer mandate
               </Link>
-              <a
-                href="https://portal.murivest.com"
-                target="_blank"
-                rel="noopener noreferrer"
+              <Link
+                href="/register"
                 className="inline-flex items-center gap-3 font-display text-[0.65rem] tracking-[0.22em] uppercase text-cream/75 hover:text-gold transition-colors group"
               >
-                Register for auction alerts
+                Create your account
                 <span
                   aria-hidden="true"
                   className="w-7 h-7 border border-current flex items-center justify-center text-xs transition-colors group-hover:bg-gold group-hover:text-green"
                 >
-                  ↗
+                  →
                 </span>
-              </a>
+              </Link>
             </div>
           </div>
         </Container>

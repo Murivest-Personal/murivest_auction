@@ -39,7 +39,7 @@ const FAQS = [
   {
     question: "Is the fee payable if I register interest but do not buy?",
     answer:
-      "No. Registering interest, requesting a property brief, or submitting a bid registration does not by itself trigger the fee. The fee attaches to a successful acquisition under an accepted buyer engagement.",
+      "No. Registering interest, requesting a property brief, or submitting a bid does not by itself trigger the fee. The fee attaches to a successful acquisition under an accepted buyer engagement.",
   },
   {
     question: "Does Murivest receive the deposit or the balance of the purchase price?",
@@ -92,7 +92,7 @@ export default function BuyerFeesPage() {
             by the party it serves: a brokerage fee of 2% of the final
             purchase price, payable by the successful purchaser after the
             deposit required under the lot's conditions of sale. Stated
-            plainly, agreed explicitly, recorded with every bid registration.
+            plainly, agreed explicitly, recorded with every bid submitted.
           </p>
         </Container>
       </section>
@@ -212,7 +212,7 @@ export default function BuyerFeesPage() {
                 The 2% fee is the buyer&apos;s separate engagement of Murivest
                 — lot discovery, verification, diligence coordination, bidding
                 support and completion management. Accepted in writing with
-                every bid registration.
+                every bid submitted.
               </p>
             </div>
           </div>
@@ -234,7 +234,7 @@ export default function BuyerFeesPage() {
                 "Assessment of the auction process and sale authority",
                 "Coordination of title, rates and occupancy diligence",
                 "Inspection arrangements where access permits",
-                "Bid registration, strategy and execution support",
+                "Bid submission, strategy and execution support",
                 "Deposit, completion and documentation management",
               ].map((item) => (
                 <li

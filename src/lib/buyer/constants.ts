@@ -123,4 +123,4 @@ export const COUNTRIES = [
 export const BUYER_TERMS_VERSION = "buyer-registration-v1";
 
 export const BUYER_TERMS_TEXT =
-  "I confirm the information provided is accurate, I accept the Terms of Service and Privacy Policy, and I consent to Murivest verifying my identity, beneficial ownership and funding evidence as part of buyer qualification. I understand that data room access requires qualification, per-property authorisation and a confidentiality agreement.";
+  "I confirm the information provided is accurate, I accept the Terms of Service and Privacy Policy, and I consent to Murivest verifying my identity, beneficial ownership and funding evidence as part of buyer qualification. I understand that detailed transaction documentation is released to qualified buyers under appropriate confidentiality and mandate arrangements.";

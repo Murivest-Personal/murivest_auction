@@ -40,7 +40,7 @@ export function AdminGate() {
           Murivest back office
         </h1>
         <p className="text-[0.85rem] leading-[1.8] text-ink mb-8">
-          Buyer qualification and confidential document vault administration.
+          Buyer qualification, account bids and audit administration.
           Access is passcode-controlled and every action is audit-logged.
         </p>
         <label className="block mb-6">

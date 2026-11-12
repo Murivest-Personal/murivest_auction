@@ -207,7 +207,7 @@ export function BuyerRegisterForm() {
           Your status is <strong>Registration pending</strong>. The Murivest team
           will review your details and move you through identity verification
           (KYC) and funding verification. You can follow your status at any
-          time from the buyer portal.
+          time from your account profile on this website.
         </p>
         <div className="border border-green bg-cream p-6 mb-8">
           <span className="block font-display text-[0.55rem] tracking-[0.3em] uppercase text-gold mb-3">
@@ -218,16 +218,16 @@ export function BuyerRegisterForm() {
           </p>
           <p className="text-[0.75rem] leading-[1.7] text-charcoal mt-3">
             You will need this code together with your email address to sign in
-            to the buyer portal. In production this code is delivered by email;
-            in this environment it is shown here once only.
+            to your account on this website. In production this code is
+            delivered by email; in this environment it is shown here once only.
           </p>
         </div>
         <div className="flex flex-wrap gap-4">
           <Link
-            href="/buyers/portal"
+            href="/account"
             className="inline-flex items-center justify-center px-8 py-3 text-[0.65rem] tracking-[0.22em] uppercase font-display bg-green text-cream hover:bg-gold transition-colors"
           >
-            Open the buyer portal
+            Open your account
           </Link>
           <Link
             href="/auctions"

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createHash } from "crypto";
 import { db } from "@/lib/db";
 import { isAdminAuthenticated } from "@/lib/buyer/session";
-import { logVaultAction } from "@/lib/vault/service";
+import { logAuditAction } from "@/lib/audit";
 import { readPrivateFile } from "@/lib/private-store";
 
 export const runtime = "nodejs";
@@ -40,7 +40,7 @@ export async function GET(
 
     const ip =
       req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? null;
-    await logVaultAction({
+    await logAuditAction({
       buyerId: id,
       action: "pof_viewed",
       details: `${buyer.fullName} — ${buyer.pofFileName ?? "proof of funds"}`,

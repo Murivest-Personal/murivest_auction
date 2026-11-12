@@ -9,7 +9,7 @@ import { COMMENT_LEGAL } from "@/lib/legal";
 export const metadata = buildMetadata({
   title: "Terms of Service | Murivest Auctions",
   description:
-    "Terms of Service for auctions.murivest.com — the auction intelligence portal of Murivest Group Ltd. Murivest is not the auctioneer and does not receive bids or hold deposits.",
+    "Terms of Service for auctions.murivest.com — the auction intelligence website of Murivest Group Ltd. Murivest is not the auctioneer and does not receive binding bids or hold deposits.",
   path: "/terms",
 });
 
@@ -32,7 +32,7 @@ export default function TermsPage() {
           />
           <p className="max-w-[42rem] text-[1.05rem] leading-[1.9] text-ink">
             These terms govern the use of auctions.murivest.com, the auction
-            intelligence portal of Murivest Group Ltd. By accessing the portal
+            auction intelligence website of Murivest Group Ltd. By accessing the website
             or submitting any form on it, you accept these terms.
           </p>
         </Container>
@@ -47,7 +47,7 @@ export default function TermsPage() {
               </h2>
               <p className="text-[1rem] leading-[1.9] text-ink mb-4">
                 Murivest Group Ltd provides commercial real estate services
-                and publishes auction intelligence. The portal aggregates,
+                and publishes auction intelligence. The website aggregates,
                 verifies and presents auction opportunities, and routes
                 qualified buyers to the appropriate auctioneer, receiver or
                 bank process.
@@ -67,10 +67,11 @@ export default function TermsPage() {
                 Bid registrations
               </h2>
               <p className="text-[1rem] leading-[1.9] text-ink mb-4">
-                A bid registration submitted through this portal is a
-                registration of intent, not a binding bid. It captures the
+                Bidding is exclusive to registered accounts on this
+                website. A bid submitted from a property page is a
+                registration of intent, not a binding bid: it captures the
                 bidder&rsquo;s intent and amount and routes it to the selling
-                party named on the listing. Registration does not create an
+                party named on the listing. Submission does not create an
                 agency relationship between the bidder and Murivest, and does
                 not constitute participation in any auction.
               </p>
@@ -104,7 +105,7 @@ export default function TermsPage() {
                 Calculators
               </h2>
               <p className="text-[1rem] leading-[1.9] text-ink">
-                The calculators on this portal are arithmetic tools that run
+                The calculators on this website are arithmetic tools that run
                 in the browser. No data entered into them is transmitted or
                 stored. Calculator output is not a valuation, not advice, and
                 does not account for tax. The user is responsible for the
@@ -117,7 +118,7 @@ export default function TermsPage() {
                 User-generated content
               </h2>
               <p className="text-[1rem] leading-[1.9] text-ink mb-4">
-                The portal accepts public comments on property listings.
+                The website accepts public comments on property listings.
                 Comments are moderated before publication; nothing publishes
                 automatically. Email addresses are never displayed. Comments
                 are read-only once published — there are no replies,
@@ -141,7 +142,7 @@ export default function TermsPage() {
               <p className="text-[1rem] leading-[1.9] text-ink">
                 All engagements with Murivest Group Ltd are by mandate only,
                 non-pooled, and subject to KYC/AML verification. Use of this
-                portal does not itself create an engagement or a
+                website does not itself create an engagement or a
                 client relationship.
               </p>
             </section>
@@ -153,7 +154,7 @@ export default function TermsPage() {
               <p className="text-[1rem] leading-[1.9] text-ink">
                 To the fullest extent permitted by law, Murivest Group Ltd
                 accepts no liability for loss arising from reliance on
-                information published on this portal, including guide prices,
+                information published on this website, including guide prices,
                 yields, particulars and calculator output. Buyers must conduct
                 their own due diligence and take professional advice before
                 bidding or contracting.

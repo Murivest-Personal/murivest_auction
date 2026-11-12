@@ -1,11 +1,9 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import type { Metadata } from "next";
 import { db } from "@/lib/db";
 import { getBuyerSessionId } from "@/lib/buyer/session";
-import {
-  classificationDef,
-  canAccessVault,
-} from "@/lib/buyer/qualification";
+import { classificationDef } from "@/lib/buyer/qualification";
 import {
   BUYER_TYPES,
   ID_TYPES,
@@ -14,16 +12,18 @@ import {
   POF_TYPES,
 } from "@/lib/buyer/constants";
 import { ClassificationLadder } from "@/components/buyers/ClassificationLadder";
+import { AccountSettings } from "@/components/buyers/AccountSettings";
 import { SignOutButton } from "@/components/buyers/SignOutButton";
 import { Container } from "@/components/ui/Container";
-import { formatCurrency, formatDate } from "@/lib/format";
+import { formatCurrency, formatDate, marketLabel } from "@/lib/format";
 import { getPropertyBySlug } from "@/lib/content";
-import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Buyer portal | Murivest Group Ltd",
+  title: "Your account | Murivest Auctions",
   robots: { index: false, follow: false },
 };
+
+export const dynamic = "force-dynamic";
 
 type OptionList = readonly { value: string; label: string }[];
 function labelOf(list: OptionList, value: string | null) {
@@ -31,56 +31,97 @@ function labelOf(list: OptionList, value: string | null) {
   return list.find((i) => i.value === value)?.label ?? value;
 }
 
-export default async function BuyerPortalPage() {
+const BID_STATUS: Record<string, { label: string; note: string }> = {
+  submitted: {
+    label: "Submitted",
+    note: "Received and queued for review by the Murivest deal team.",
+  },
+  acknowledged: {
+    label: "Acknowledged",
+    note: "Reviewed by the team. Your bid is with the deal handler.",
+  },
+  routed: {
+    label: "Routed to selling party",
+    note: "Your bid has been routed to the authorised sale channel.",
+  },
+  superseded: {
+    label: "Superseded",
+    note: "You have submitted a newer bid on this lot.",
+  },
+  declined: {
+    label: "Declined",
+    note: "The bid was not taken forward. See the team note for details.",
+  },
+  withdrawn: {
+    label: "Withdrawn",
+    note: "The bid was withdrawn at your request.",
+  },
+};
+
+export default async function AccountPage() {
   const buyerId = await getBuyerSessionId();
-  if (!buyerId) redirect("/buyers/sign-in");
+  if (!buyerId) redirect("/sign-in");
 
   const buyer = await db.buyerRegistration.findUnique({
     where: { id: buyerId },
   });
-  if (!buyer) redirect("/buyers/sign-in");
+  if (!buyer) redirect("/sign-in");
 
-  const [notifications, grants, ndas, requests] = await Promise.all([
-    db.vaultNotification.findMany({
+  const [bids, savedLots] = await Promise.all([
+    db.buyerBid.findMany({
       where: { buyerId },
       orderBy: { createdAt: "desc" },
-      take: 15,
     }),
-    db.vaultAccessGrant.findMany({
+    db.savedLot.findMany({
       where: { buyerId },
-      orderBy: { grantedAt: "desc" },
-    }),
-    db.ndaAcceptance.findMany({ where: { buyerId } }),
-    db.vaultAccessLog.findMany({
-      where: { buyerId, action: "access_requested" },
       orderBy: { createdAt: "desc" },
-      take: 20,
     }),
   ]);
 
   const def = classificationDef(buyer.classification);
-  const qualified = canAccessVault(buyer.classification);
-  const unread = notifications.filter((n) => !n.readAt).length;
 
-  /* Resolve property titles from Sanity where possible. */
-  const grantSlugs = [...new Set(grants.map((g) => g.propertySlug))];
-  const titles = new Map<string, string>();
+  /* Resolve saved / liked lots to titles and links. */
+  const savedSlugs = [...new Set(savedLots.map((s) => s.propertySlug))];
+  const lotsBySlug = new Map<string, { title: string; market: string } | null>();
   await Promise.all(
-    grantSlugs.slice(0, 20).map(async (slug) => {
+    savedSlugs.slice(0, 30).map(async (slug) => {
       try {
         const p = await getPropertyBySlug(slug);
-        titles.set(slug, p?.title ?? slug);
+        lotsBySlug.set(
+          slug,
+          p ? { title: p.title, market: p.market } : null
+        );
       } catch {
-        titles.set(slug, slug);
+        lotsBySlug.set(slug, null);
       }
     })
   );
+  const savedRow = (slug: string) => {
+    const lot = lotsBySlug.get(slug);
+    return (
+      <Link
+        key={slug}
+        href={`/auctions/${slug}`}
+        className="block p-4 hover:bg-cream transition-colors"
+      >
+        <span className="font-body text-[0.9rem] text-green">
+          {lot ? lot.title : slug}
+        </span>
+        {lot ? (
+          <span className="block font-display text-[0.55rem] tracking-[0.2em] uppercase text-charcoal mt-1">
+            {marketLabel(lot.market)} market · View lot →
+          </span>
+        ) : (
+          <span className="block font-display text-[0.55rem] tracking-[0.2em] uppercase text-charcoal mt-1">
+            Lot no longer published
+          </span>
+        )}
+      </Link>
+    );
+  };
 
-  const activeGrants = grants.filter(
-    (g) => g.revokedAt === null && (!g.expiresAt || g.expiresAt.getTime() > Date.now())
-  );
-  const ndaBySlug = new Map(ndas.map((n) => [n.propertySlug, n]));
-  const requestSlugs = new Set(requests.map((r) => r.propertySlug));
+  const savedList = savedLots.filter((s) => s.kind === "save");
+  const likedList = savedLots.filter((s) => s.kind === "like");
 
   const owners: { name: string; share: number }[] = buyer.beneficialOwners
     ? (JSON.parse(buyer.beneficialOwners) as { name: string; share: number }[])
@@ -96,7 +137,7 @@ export default async function BuyerPortalPage() {
         <div className="flex flex-wrap items-start justify-between gap-6 mb-12">
           <div>
             <span className="block font-display text-[0.6rem] tracking-[0.3em] uppercase text-gold mb-3">
-              Buyer portal
+              Your account
             </span>
             <h1 className="font-serif text-3xl md:text-4xl font-light text-green leading-[1.15] mb-3">
               {buyer.fullName}
@@ -110,10 +151,10 @@ export default async function BuyerPortalPage() {
           <SignOutButton />
         </div>
 
-        {/* Status banner */}
-        <div className="border border-green bg-cream p-6 md:p-8 mb-14">
+        {/* Verification status banner */}
+        <div id="verification" className="border border-green bg-cream p-6 md:p-8 mb-14 scroll-mt-24">
           <span className="block font-display text-[0.55rem] tracking-[0.3em] uppercase text-gold mb-3">
-            Current status
+            Verification status
           </span>
           <p className="font-serif text-2xl font-light text-green mb-3">
             {def.label}
@@ -138,19 +179,19 @@ export default async function BuyerPortalPage() {
         </div>
 
         <div className="grid gap-14 lg:grid-cols-[1.15fr_1fr]">
-          {/* Left: profile + data rooms */}
+          {/* Left: bids + saved lots + settings */}
           <div className="space-y-14">
-            {/* Data rooms */}
-            <section aria-label="Data rooms">
+            {/* Bids */}
+            <section id="bids" aria-label="Your bids" className="scroll-mt-24">
               <h2 className="font-serif text-2xl font-light text-green mb-6">
-                Confidential data rooms
+                Your bids
               </h2>
-              {activeGrants.length === 0 ? (
+              {bids.length === 0 ? (
                 <div className="border border-hairline bg-white p-6">
                   <p className="text-[0.9rem] leading-[1.8] text-ink mb-4">
-                    {qualified
-                      ? "You have no active property authorisations yet. Open a lot and request data room access — authorisation is granted per property."
-                      : "Data room authorisation is available to Qualified buyers. Your qualification review is in progress."}
+                    You have not submitted any bids yet. Open a lot and use
+                    Submit a bid — bidding is exclusive to registered accounts,
+                    and your details are taken from this profile.
                   </p>
                   <Link
                     href="/auctions"
@@ -161,67 +202,110 @@ export default async function BuyerPortalPage() {
                 </div>
               ) : (
                 <ul className="border border-hairline divide-y divide-hairline bg-white">
-                  {activeGrants.map((g) => {
-                    const nda = ndaBySlug.get(g.propertySlug);
+                  {bids.map((b) => {
+                    const s = BID_STATUS[b.status] ?? {
+                      label: b.status,
+                      note: "",
+                    };
                     return (
-                      <li key={g.id} className="p-5">
-                        <p className="font-body text-[0.95rem] text-green mb-2">
-                          {titles.get(g.propertySlug) ?? g.propertySlug}
+                      <li key={b.id} className="p-5">
+                        <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 mb-2">
+                          <Link
+                            href={`/auctions/${b.propertySlug}`}
+                            className="font-body text-[0.95rem] text-green hover:text-gold transition-colors"
+                          >
+                            {b.propertyTitle}
+                          </Link>
+                          <span className="font-serif text-lg text-green">
+                            {formatCurrency(b.bidAmount, b.bidCurrency)}
+                          </span>
+                        </div>
+                        <p className="font-display text-[0.55rem] tracking-[0.2em] uppercase text-gold mb-2">
+                          {s.label} · {formatDate(b.createdAt.toISOString())} ·
+                          ref {b.reference}
                         </p>
-                        <p className="font-display text-[0.55rem] tracking-[0.2em] uppercase text-charcoal mb-4">
-                          Authorised {formatDate(g.grantedAt.toISOString())} ·{" "}
-                          {nda
-                            ? `NDA accepted ${formatDate(nda.acceptedAt.toISOString())}`
-                            : "NDA pending"}
+                        <p className="text-[0.8rem] leading-[1.7] text-charcoal">
+                          {b.statusNote ?? s.note}
                         </p>
-                        <Link
-                          href={`/buyers/data-room/${g.propertySlug}`}
-                          className="font-display text-[0.6rem] tracking-[0.22em] uppercase text-green border border-green px-5 py-2.5 inline-flex hover:bg-green hover:text-cream transition-colors"
-                        >
-                          {nda ? "Open data room" : "Review NDA & open"}
-                        </Link>
                       </li>
                     );
                   })}
                 </ul>
               )}
-              {/* Pending requests + revoked grants */}
-              {requestSlugs.size > 0 ? (
-                <div className="mt-6 border border-hairline bg-white p-5">
-                  <p className="font-display text-[0.55rem] tracking-[0.25em] uppercase text-charcoal mb-2">
-                    Access requests with the team
-                  </p>
-                  <p className="text-[0.85rem] text-ink">
-                    {[...requestSlugs]
-                      .filter(
-                        (s) => !activeGrants.some((g) => g.propertySlug === s)
-                      )
-                      .map((s) => titles.get(s) ?? s)
-                      .join(" · ") || "None pending"}
-                  </p>
-                </div>
-              ) : null}
-              {grants.some((g) => g.revokedAt !== null) ? (
-                <div className="mt-6 border border-hairline bg-white p-5">
-                  <p className="font-display text-[0.55rem] tracking-[0.25em] uppercase text-charcoal mb-2">
-                    Withdrawn authorisations
-                  </p>
-                  <p className="text-[0.85rem] text-ink">
-                    {grants
-                      .filter((g) => g.revokedAt !== null)
-                      .map(
-                        (g) =>
-                          `${titles.get(g.propertySlug) ?? g.propertySlug}${
-                            g.revokedReason ? ` — ${g.revokedReason}` : ""
-                          }`
-                      )
-                      .join(" · ")}
-                  </p>
-                </div>
-              ) : null}
             </section>
 
-            {/* Registration file */}
+            {/* Saved & liked lots */}
+            <section aria-label="Saved and liked lots">
+              <h2 className="font-serif text-2xl font-light text-green mb-6">
+                Saved &amp; liked lots
+              </h2>
+              {savedList.length === 0 && likedList.length === 0 ? (
+                <div className="border border-hairline bg-white p-6">
+                  <p className="text-[0.9rem] leading-[1.8] text-ink mb-4">
+                    Save or like lots from any property page — they are stored
+                    here on your account.
+                  </p>
+                  <Link
+                    href="/auctions"
+                    className="font-display text-[0.6rem] tracking-[0.22em] uppercase text-green underline underline-offset-4 hover:text-gold transition-colors"
+                  >
+                    Browse auction lots
+                  </Link>
+                </div>
+              ) : (
+                <div className="space-y-8">
+                  {savedList.length > 0 ? (
+                    <div>
+                      <p className="font-display text-[0.55rem] tracking-[0.25em] uppercase text-charcoal mb-3">
+                        Saved ({savedList.length})
+                      </p>
+                      <ul className="border border-hairline divide-y divide-hairline bg-white">
+                        {savedList.map((s) => savedRow(s.propertySlug))}
+                      </ul>
+                    </div>
+                  ) : null}
+                  {likedList.length > 0 ? (
+                    <div>
+                      <p className="font-display text-[0.55rem] tracking-[0.25em] uppercase text-charcoal mb-3">
+                        Liked ({likedList.length})
+                      </p>
+                      <ul className="border border-hairline divide-y divide-hairline bg-white">
+                        {likedList.map((s) => savedRow(s.propertySlug))}
+                      </ul>
+                    </div>
+                  ) : null}
+                </div>
+              )}
+            </section>
+
+            {/* Settings */}
+            <section id="settings" aria-label="Alert settings" className="scroll-mt-24">
+              <h2 className="font-serif text-2xl font-light text-green mb-6">
+                Settings
+              </h2>
+              <p className="text-[0.85rem] leading-[1.8] text-charcoal mb-5">
+                Choose what your account is notified about — new auction lots,
+                off-market opportunities and updates on the bids you submit.
+              </p>
+              <AccountSettings
+                initial={{
+                  notifyNewLots: buyer.notifyNewLots,
+                  notifyOffMarket: buyer.notifyOffMarket,
+                  notifyBidUpdates: buyer.notifyBidUpdates,
+                }}
+              />
+            </section>
+          </div>
+
+          {/* Right: ladder + registration file */}
+          <div className="space-y-14">
+            <section aria-label="Qualification ladder">
+              <h2 className="font-serif text-2xl font-light text-green mb-6">
+                Qualification ladder
+              </h2>
+              <ClassificationLadder current={buyer.classification} />
+            </section>
+
             <section aria-label="Registration file">
               <h2 className="font-serif text-2xl font-light text-green mb-6">
                 Your registration file
@@ -310,56 +394,6 @@ export default async function BuyerPortalPage() {
                 . Proof-of-funds files are stored in the private document store
                 and are not displayed on the website.
               </p>
-            </section>
-          </div>
-
-          {/* Right: ladder + notifications */}
-          <div className="space-y-14">
-            <section aria-label="Qualification ladder">
-              <h2 className="font-serif text-2xl font-light text-green mb-6">
-                Qualification ladder
-              </h2>
-              <ClassificationLadder current={buyer.classification} />
-            </section>
-
-            <section aria-label="Notifications">
-              <h2 className="font-serif text-2xl font-light text-green mb-6">
-                Notifications{" "}
-                {unread > 0 ? (
-                  <span className="font-display text-[0.55rem] tracking-[0.25em] uppercase text-gold align-middle">
-                    {unread} new
-                  </span>
-                ) : null}
-              </h2>
-              {notifications.length === 0 ? (
-                <p className="border border-hairline bg-white p-6 text-[0.85rem] leading-[1.7] text-charcoal">
-                  No notifications yet. Addenda and document updates for your
-                  authorised data rooms will appear here the moment they are
-                  published.
-                </p>
-              ) : (
-                <ul className="border border-hairline divide-y divide-hairline bg-white">
-                  {notifications.map((n) => (
-                    <li key={n.id} className={`p-4 ${!n.readAt ? "bg-cream" : ""}`}>
-                      <p className="text-[0.85rem] text-green mb-1">{n.title}</p>
-                      <p className="text-[0.8rem] leading-[1.7] text-ink mb-2">
-                        {n.message}
-                      </p>
-                      <div className="flex items-center justify-between gap-3">
-                        <span className="font-display text-[0.55rem] tracking-[0.2em] uppercase text-charcoal">
-                          {formatDate(n.createdAt.toISOString())}
-                        </span>
-                        <Link
-                          href={`/buyers/data-room/${n.propertySlug}`}
-                          className="font-display text-[0.55rem] tracking-[0.2em] uppercase text-green underline underline-offset-4 hover:text-gold transition-colors"
-                        >
-                          Open data room
-                        </Link>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              )}
             </section>
           </div>
         </div>

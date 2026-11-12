@@ -1,9 +1,9 @@
 /* ============================================================
-   Lightweight signed-cookie sessions for the buyer portal and the
+   Lightweight signed-cookie sessions for client accounts and the
    back office. No NextAuth dependency: tokens are
    `<id>.<expiry>.<hmac-sha256>` and verified server-side.
 
-   Buyer sessions: set at registration / sign-in (email + access
+   Client sessions: set at registration / sign-in (email + access
    code). Admin sessions: set after the back-office passcode.
    ============================================================ */
 

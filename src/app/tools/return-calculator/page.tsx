@@ -105,7 +105,7 @@ export default async function ReturnCalculatorPage() {
         {
           question: "What DSCR do lenders require?",
           answer:
-            "Commercial lenders commonly look for a debt service coverage ratio of at least 1.25x — twenty-five percent more net operating income than annual debt service. The underwriting screen on this portal uses the same 1.25x floor.",
+            "Commercial lenders commonly look for a debt service coverage ratio of at least 1.25x — twenty-five percent more net operating income than annual debt service. The underwriting screen on this website uses the same 1.25x floor.",
         },
         {
           question: "Is my data stored when I use this calculator?",

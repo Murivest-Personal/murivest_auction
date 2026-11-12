@@ -18,7 +18,6 @@ import { PropertyMap } from "@/components/auctions/PropertyMap";
 import { BidForm } from "@/components/auctions/BidForm";
 import { InquiryForm } from "@/components/auctions/InquiryForm";
 import { AuctionSidebar } from "@/components/auctions/AuctionSidebar";
-import { VaultGate } from "@/components/vault/VaultGate";
 import { UnderwritingGates } from "@/components/auctions/UnderwritingGates";
 import { CommentList } from "@/components/auctions/CommentList";
 import { CommentForm } from "@/components/auctions/CommentForm";
@@ -32,6 +31,7 @@ import {
 } from "@/lib/content";
 import { getApprovedComments } from "@/lib/comments";
 import { AUCTION_DISCLOSURE } from "@/lib/legal";
+import { SITE } from "@/lib/brand";
 import { formatCurrency, formatDate, marketLabel } from "@/lib/format";
 import type { Property } from "@/lib/types";
 
@@ -68,14 +68,14 @@ const LISTING_FAQS = [
       "No. Murivest Group Ltd provides commercial real estate services and publishes auction intelligence. Murivest is not the auctioneer, does not receive bids, does not hold deposits, and does not act as principal in any auction transaction. The selling party named on this listing is responsible for the auction process, the legal pack, and the sale contract.",
   },
   {
-    question: "Do I need to register to bid?",
+    question: "Do I need an account to bid?",
     answer:
-      "You do not need an account to register your interest through this portal — the form captures your name, email, phone and intended amount, and Murivest routes the registration to the selling party named on the listing. To bid at the auction itself you must register with the auctioneer under the auctioneer's own process.",
+      "Yes. Bidding is exclusive to registered accounts on this website — create your account or sign in, then use the Submit a bid button on this page. Your details are taken from your account, so submission is one screen. To bid at the auction itself you must also register with the auctioneer under the auctioneer's own process.",
   },
   {
-    question: "What happens after I submit my bid registration?",
+    question: "What happens after I submit my bid?",
     answer:
-      "Your registration is received by the Murivest deal team, reviewed, and routed to the selling party named on the listing together with the auctioneer where applicable. You will receive a confirmation by email. A registration is not a binding bid.",
+      "Your bid is recorded against your account, received by the Murivest deal team, reviewed, and routed to the selling party named on the listing together with the auctioneer where applicable. You can follow its status from your account profile, and you will receive a confirmation by email. A submission is not a binding bid.",
   },
 ];
 
@@ -231,20 +231,50 @@ export default async function PropertyDetailPage({ params }: Params) {
               )}
             </div>
 
-            {/* Documentation & data room — two-level property
-                information: public teaser, then qualified-buyer
-                access under NDA + per-property authorisation
-                (issue #2 / System 3). Client-fetches session state
-                so the ISR-cached page stays cacheable. */}
+            {/* Documentation — two-level property information: the
+                public teaser above, with the full pack released to
+                qualified buyers on request (no data room; the
+                account on this website is the route). */}
             <div className="mt-16 border-t border-hairline pt-10">
-              <section id="data-room" aria-label="Documentation and data room" className="scroll-mt-24">
+              <section id="documentation" aria-label="Documentation" className="scroll-mt-24">
                 <span className="block font-display text-[0.6rem] tracking-[0.3em] uppercase text-gold mb-4">
-                  Confidential — qualified buyers
+                  Documentation
                 </span>
                 <h2 className="font-serif text-2xl md:text-3xl font-light text-green mb-6">
-                  Documentation &amp; data room
+                  Documentation &amp; legal pack
                 </h2>
-                <VaultGate propertySlug={property.slug} variant="embedded" />
+                <div className="max-w-[42rem] space-y-5">
+                  <p className="text-[1.05rem] leading-[1.9] text-ink">
+                    The legal pack, title documents, tenancy schedule and any
+                    addenda for this lot are released to qualified buyers on
+                    request, under appropriate confidentiality and mandate
+                    arrangements. Request the pack from the Murivest team
+                    handling this lot — every request is reviewed against your
+                    account verification status.
+                  </p>
+                  <p className="text-[0.9rem] leading-[1.8] text-charcoal">
+                    Requests are processed from your account: qualified buyers
+                    receive the full documentation for the lots they are
+                    pursuing, together with the auction notice and conditions
+                    of sale as published by the selling party.
+                  </p>
+                  <div className="flex flex-wrap gap-4 pt-2">
+                    <a
+                      href={`mailto:${SITE.officeEmail}?subject=${encodeURIComponent(
+                        `Documentation request — ${property.referenceCode ?? property.title}`
+                      )}`}
+                      className="inline-flex items-center justify-center px-8 py-3 text-[0.65rem] tracking-[0.22em] uppercase font-display text-green border border-green hover:bg-green hover:text-cream transition-colors"
+                    >
+                      Request the documentation
+                    </a>
+                    <Link
+                      href="/account"
+                      className="inline-flex items-center justify-center px-8 py-3 text-[0.65rem] tracking-[0.22em] uppercase font-display text-green underline underline-offset-4 hover:text-gold transition-colors"
+                    >
+                      Your verification status
+                    </Link>
+                  </div>
+                </div>
               </section>
             </div>
 
@@ -301,42 +331,21 @@ export default async function PropertyDetailPage({ params }: Params) {
         </div>
       </Container>
 
-      {/* Bid registration block — centred, max 42rem. Sold lots
-          never render a bid form at all. */}
-      {property.status !== "sold" ? (
-        <section
-          id="register-your-bid"
-          className="scroll-mt-24 border-t border-hairline py-20 md:py-28"
-        >
-          <Container>
-            <BidForm property={property} />
-          </Container>
-        </section>
-      ) : (
-        <section className="border-t border-hairline py-16">
-          <Container>
-            <div className="max-w-[42rem] mx-auto text-center">
-              <h2 className="font-serif text-2xl font-light text-green mb-4">
-                This lot has been sold.
-              </h2>
-              <p className="text-[0.95rem] leading-[1.8] text-ink mb-8">
-                The transaction has completed. Registered bidders may request to
-                be notified of comparable lots as they are published.
-              </p>
-              <Link
-                href={`/${property.market}`}
-                className="inline-flex items-center justify-center px-8 py-3 text-[0.65rem] tracking-[0.22em] uppercase font-display bg-green text-cream hover:bg-gold transition-colors"
-              >
-                View similar lots
-              </Link>
-            </div>
-          </Container>
-        </section>
-      )}
+      {/* Bid submission — centred, max 42rem, exclusive to
+          registered accounts. The BidForm itself renders the
+          sign-in gate, the closed states (sold / under offer) and
+          the submission screen. */}
+      <section
+        id="submit-a-bid"
+        className="scroll-mt-24 border-t border-hairline py-20 md:py-28"
+      >
+        <Container>
+          <BidForm property={property} />
+        </Container>
+      </section>
 
-      {/* Register interest + auction alerts — buyer not ready to
-          name a number can request the brief; alerts live on the
-          client portal */}
+      {/* Register interest — a buyer not ready to name a number
+          can request the brief; alerts live on the account */}
       <section className="border-t border-hairline py-20 md:py-28 bg-white">
         <Container>
           <div className="grid gap-12 lg:grid-cols-2 max-w-[72rem] mx-auto">
@@ -378,15 +387,13 @@ export default async function PropertyDetailPage({ params }: Params) {
                   <p className="text-[0.85rem] leading-[1.7] text-ink">
                     <span className="text-green">Auction alerts:</span> be
                     notified of this and similar lots — including off-market
-                    opportunities — by registering at{" "}
-                    <a
-                      href="https://portal.murivest.com"
-                      target="_blank"
-                      rel="noopener noreferrer"
+                    opportunities — from{" "}
+                    <Link
+                      href="/register"
                       className="text-green underline underline-offset-4 hover:text-gold transition-colors"
                     >
-                      portal.murivest.com
-                    </a>
+                      your account on this website
+                    </Link>
                     .
                   </p>
                 </div>

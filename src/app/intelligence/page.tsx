@@ -7,7 +7,6 @@ import { getArticles } from "@/lib/content";
 import { formatDateShort, marketLabel } from "@/lib/format";
 import { CLUSTER_LABELS } from "@/lib/types";
 import type { Article, ArticleCluster } from "@/lib/types";
-import { SITE } from "@/lib/brand";
 
 export const revalidate = 300;
 
@@ -121,20 +120,18 @@ export default async function IntelligencePage() {
                 articles across {clusters.length} subject clusters, published
                 by the Murivest research desk.
               </p>
-              <a
-                href={SITE.portalUrl}
-                target="_blank"
-                rel="noopener noreferrer"
+              <Link
+                href="/register"
                 className="inline-flex items-center gap-3 font-display text-[0.6rem] tracking-[0.24em] uppercase text-green hover:text-gold transition-colors"
               >
-                Register for auction alerts
+                Create your account
                 <span
                   aria-hidden="true"
                   className="w-7 h-7 border border-current flex items-center justify-center text-xs"
                 >
-                  ↗
+                  →
                 </span>
-              </a>
+              </Link>
             </div>
           </div>
         </Container>
@@ -186,7 +183,7 @@ export default async function IntelligencePage() {
         </section>
       ))}
 
-      {/* Portal CTA */}
+      {/* Account CTA */}
       <section className="border-t border-hairline bg-green py-16 md:py-20">
         <Container>
           <div className="max-w-[46rem]">
@@ -197,19 +194,17 @@ export default async function IntelligencePage() {
               Hear about verified lots before the public notice.
             </h2>
             <p className="text-[0.95rem] leading-[1.8] text-[color:var(--mv-on-dark)] mb-8">
-              Registered buyers receive auction and off-market notifications
-              through the Murivest client portal — including early sight of
-              verified lots, auction dates and documentation as it becomes
-              available.
+              Registered account holders receive auction and off-market
+              notifications — including early sight of verified lots, auction
+              dates and documentation as it becomes available — through their
+              account on this website.
             </p>
-            <a
-              href={SITE.portalUrl}
-              target="_blank"
-              rel="noopener noreferrer"
+            <Link
+              href="/register"
               className="inline-flex items-center justify-center px-8 py-4 text-[0.65rem] tracking-[0.25em] uppercase font-display border border-cream text-cream hover:bg-cream hover:text-green transition-colors"
             >
-              Register at portal.murivest.com
-            </a>
+              Create your account
+            </Link>
           </div>
         </Container>
       </section>
