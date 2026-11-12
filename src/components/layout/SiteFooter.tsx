@@ -23,7 +23,8 @@ const COLUMNS: { title: string; links: FooterLink[] }[] = [
     title: "Buyer services",
     links: [
       { label: "Buyer representation & fees", href: "/buyer-fees" },
-      { label: "Auction alerts — the portal", href: "https://portal.murivest.com", external: true },
+      { label: "Buyer registration & qualification", href: "/buyers" },
+      { label: "Buyer portal sign-in", href: "/buyers/sign-in" },
       { label: "Tools & calculators", href: "/tools" },
       { label: "FAQs", href: "/faqs" },
     ],

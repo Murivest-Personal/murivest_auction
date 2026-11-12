@@ -109,6 +109,11 @@ function normaliseProperty(raw: Record<string, unknown>): Property | null {
             ? (cos.summaryPoints as string[])
             : [],
           depositPercent: cos.depositPercent as number | undefined,
+          depositDue: cos.depositDue ? String(cos.depositDue) : undefined,
+          depositPaymentMethod: cos.depositPaymentMethod
+            ? String(cos.depositPaymentMethod)
+            : undefined,
+          depositPayee: cos.depositPayee ? String(cos.depositPayee) : undefined,
           balanceDays: cos.balanceDays as number | undefined,
           buyersPremium: cos.buyersPremium as string | undefined,
           fullDocumentUrl: cos.fullDocumentUrl

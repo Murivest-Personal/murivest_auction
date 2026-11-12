@@ -2,6 +2,9 @@ User-agent: *
 Allow: /
 Disallow: /studio
 Disallow: /admin
+Disallow: /back-office
+Disallow: /buyers/portal
+Disallow: /buyers/data-room
 Disallow: /api
 
 Sitemap: https://auctions.murivest.com/sitemap.xml

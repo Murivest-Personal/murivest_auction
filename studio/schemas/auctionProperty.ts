@@ -179,7 +179,8 @@ export const auctionProperty = defineType({
         }),
       ],
     }),
-    /* ---------- Conditions of sale (addendum §3.1) ---------- */
+    /* ---------- Conditions of sale (addendum §3.1; issue #1 —
+       deposit terms are per lot, never hardcoded by market) ---------- */
     defineField({
       name: "conditionsOfSale",
       title: "Conditions of Sale",
@@ -197,8 +198,36 @@ export const auctionProperty = defineType({
           of: [{ type: "string" }],
           validation: (r) => r.min(4).max(12),
         }),
-        defineField({ name: "depositPercent", type: "number" }),
-        defineField({ name: "balanceDays", type: "number" }),
+        defineField({
+          name: "depositPercent",
+          title: "Deposit — percentage of purchase price",
+          type: "number",
+          description: "From this lot's actual conditions of sale. NEVER assume a market default.",
+          validation: (r) => r.min(0).max(100),
+        }),
+        defineField({
+          name: "depositDue",
+          title: "Deposit — payment deadline",
+          type: "string",
+          description: "e.g. 'On the fall of the hammer' / 'On exchange of contracts'.",
+        }),
+        defineField({
+          name: "depositPaymentMethod",
+          title: "Deposit — payment method",
+          type: "string",
+          description: "e.g. 'Cash or banker's cheque only' / 'Electronic transfer to the selling party's solicitors'.",
+        }),
+        defineField({
+          name: "depositPayee",
+          title: "Deposit — recipient (payee)",
+          type: "string",
+          description: "Who receives the deposit, e.g. 'The auctioneer as agent for the selling party' or the advocates' client account.",
+        }),
+        defineField({
+          name: "balanceDays",
+          title: "Balance due within (days)",
+          type: "number",
+        }),
         defineField({ name: "buyersPremium", type: "string" }),
         defineField({
           name: "fullDocument",

@@ -10,7 +10,7 @@ import { SITE } from "@/lib/brand";
 export const metadata = buildMetadata({
   title: "Buyer Fees — Transparent 2% Brokerage Terms | Murivest",
   description:
-    "Murivest charges the successful buyer a brokerage fee of 2% of the final purchase price, payable after the 10% deposit. Worked examples, what the fee covers, and how it differs from auction deposits.",
+    "Murivest charges the successful buyer a brokerage fee of 2% of the final purchase price, payable after the auction deposit required under each lot's conditions of sale. Worked examples, what the fee covers, and how it differs from auction deposits.",
   path: "/buyer-fees",
 });
 
@@ -29,10 +29,10 @@ const FAQS = [
   {
     question: "When does the 2% fee become payable?",
     answer:
-      "The fee becomes payable after the buyer has paid the 10% deposit of the purchase price required under the auction conditions. At the point of registering a bid through this website, the buyer accepts these fee terms explicitly, and the acceptance is recorded.",
+      "The fee becomes payable after the buyer has paid the deposit of the purchase price required under the conditions of sale for the lot. The deposit amount, deadline, payment method and recipient are set by each lot's conditions of sale. At the point of registering a bid through this website, the buyer accepts these fee terms explicitly, and the acceptance is recorded.",
   },
   {
-    question: "Is the brokerage fee part of the 10% deposit?",
+    question: "Is the brokerage fee part of the auction deposit?",
     answer:
       "No. The deposit is paid to the selling party under the auction conditions of sale. The brokerage fee is a separate obligation to Murivest, payable after the deposit. The auctioneer's charges, where the conditions allocate them to the purchaser, are separate again.",
   },
@@ -90,9 +90,9 @@ export default function BuyerFeesPage() {
           <p className="max-w-[42rem] text-[1.05rem] leading-[1.9] text-ink">
             Murivest acts for buyers, not sellers. The engagement is paid for
             by the party it serves: a brokerage fee of 2% of the final
-            purchase price, payable by the successful purchaser after the 10%
-            deposit. Stated plainly, agreed explicitly, recorded with every
-            bid registration.
+            purchase price, payable by the successful purchaser after the
+            deposit required under the lot's conditions of sale. Stated
+            plainly, agreed explicitly, recorded with every bid registration.
           </p>
         </Container>
       </section>
@@ -112,9 +112,11 @@ export default function BuyerFeesPage() {
             <div className="border-l-2 border-gold pl-6 py-1">
               <p className="text-[1rem] leading-[1.8] text-green">
                 <strong>
-                  The fee becomes payable after the buyer has paid the 10%
-                  deposit of the purchase price to the selling party under the
-                  auction conditions.
+                  The fee becomes payable after the buyer has paid the deposit
+                  of the purchase price to the selling party under the
+                  conditions of sale for the lot. The deposit amount, deadline,
+                  payment method and recipient are set by that lot's conditions
+                  of sale — never by Murivest.
                 </strong>
               </p>
             </div>
@@ -178,8 +180,10 @@ export default function BuyerFeesPage() {
                 Paid to the selling party
               </h3>
               <p className="text-[0.9rem] leading-[1.8] text-ink">
-                The 10% deposit of the purchase price, required under the
-                auction conditions, is paid to the selling party — never to
+                The deposit of the purchase price, in the amount and by the
+                method the lot&apos;s conditions of sale require — commonly 10%
+                under the UK&apos;s standard conditions, 25% under the standard
+                Kenyan conditions — is paid to the selling party, never to
                 Murivest. It binds the sale at the fall of the hammer.
               </p>
             </div>

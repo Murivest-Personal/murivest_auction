@@ -21,7 +21,7 @@ export const MARKET_HUBS: Record<"kenya" | "uk", MarketHub> = {
         heading: "How commercial property auctions work in Kenya",
         paragraphs: [
           "Kenyan commercial property auctions follow a statutory sequence. When a borrower defaults on a charge, the chargee must serve a 40-day notice of default, followed by a three-month statutory notice of sale, before the property can be offered at auction. The auctioneer then publishes the sale in the Kenya Gazette and newspapers, conducts a public auction, and declares the highest bidder above the reserve price the purchaser.",
-          "The successful bidder pays a 25% deposit immediately on the fall of the hammer — in cash or by banker's cheque only — and the balance of 75% within 90 days. Completion is not conditional on financing, and failure to complete within the period can result in forfeiture of the deposit and resale of the property. Buyers should treat the 90-day settlement period as strict and arrange funding before bidding.",
+          "Under the standard Kenyan conditions the successful bidder pays a deposit — commonly 25% of the purchase price — immediately on the fall of the hammer, in cash or by banker's cheque only, with the balance within 90 days. The deposit amount, payment deadline, payment method and recipient for each lot are set by that lot's conditions of sale, not by Murivest. Completion is not conditional on financing, and failure to complete within the period can result in forfeiture of the deposit and resale of the property. Buyers should treat the settlement period as strict and arrange funding before bidding.",
         ],
       },
       {
@@ -41,7 +41,7 @@ export const MARKET_HUBS: Record<"kenya" | "uk", MarketHub> = {
       {
         heading: "Upcoming auctions by county",
         paragraphs: [
-          "Auction activity in Kenya concentrates in Nairobi County, with Mombasa, Kisumu and Nakuru forming the secondary markets. Lots range from CBD office buildings and storefront retail to industrial units along the Mombasa Road corridor. The calendar below groups verified Murivest lots by auction date and county, with the selling party named on every listing.",
+          "Auction activity in Kenya concentrates in Nairobi County, with Mombasa, Kisumu and Nakuru forming the secondary markets. Lots range from CBD office buildings and storefront retail to industrial units along the Mombasa Road corridor. The calendar below groups verified Murivest lots by auction date and county; the selling party and sale authority for each lot are disclosed as the auction notice and conditions of sale require, with full documentation released to qualified buyers through confidential data rooms.",
         ],
       },
     ],
@@ -49,7 +49,7 @@ export const MARKET_HUBS: Record<"kenya" | "uk", MarketHub> = {
       {
         question: "What is a commercial property auction in Kenya?",
         answer:
-          "A public sale of land or buildings conducted under the Land Act 2012 and the Auctioneers Act (Cap 526), in which a chargee or receiver offers the property to the highest bidder above a reserve price. The successful bidder pays a 25% deposit on the fall of the hammer and the balance within 90 days.",
+          "A public sale of land or buildings conducted under the Land Act 2012 and the Auctioneers Act (Cap 526), in which a chargee or receiver offers the property to the highest bidder above a reserve price. The successful bidder pays the deposit set by the conditions of sale — commonly 25% on the fall of the hammer — and the balance within the period the conditions state.",
       },
       {
         question: "Can foreigners bid at Kenya property auctions?",
@@ -59,7 +59,7 @@ export const MARKET_HUBS: Record<"kenya" | "uk", MarketHub> = {
       {
         question: "What deposit is payable at a Kenyan commercial property auction?",
         answer:
-          "25% of the purchase price, payable immediately on the fall of the hammer directly to the auctioneer. Only cash or a banker's cheque is accepted at the auction itself. The remaining 75% is due within 90 days under the standard conditions of sale.",
+          "The deposit is set by the conditions of sale for each lot. Under the standard Kenyan conditions it is 25% of the purchase price, payable immediately on the fall of the hammer directly to the auctioneer, with only cash or a banker's cheque accepted at the auction itself and the balance due within 90 days. Always confirm the deposit amount, payment deadline, method and recipient in the conditions of sale for the specific lot before bidding.",
       },
       {
         question: "Is Murivest the auctioneer on these listings?",
@@ -88,7 +88,7 @@ export const MARKET_HUBS: Record<"kenya" | "uk", MarketHub> = {
       {
         heading: "Unconditional versus conditional auction contracts",
         paragraphs: [
-          "The UK commercial auction room trades almost exclusively on unconditional contracts: when the auctioneer knocks down the lot, buyer and seller are bound, a 10% deposit is paid, and completion follows on the date in the special conditions — typically 20 working days. There is no cooling-off period, and completion is not conditional on financing.",
+          "The UK commercial auction room trades almost exclusively on unconditional contracts: when the auctioneer knocks down the lot, buyer and seller are bound, the deposit set by the conditions — commonly 10% — is paid, and completion follows on the date in the special conditions — typically 20 working days. There is no cooling-off period, and completion is not conditional on financing.",
           "Conditional contracts, offered by some regional houses and the modern method of auction for residential stock, allow a window after the auction for the buyer to exchange and complete. Commercial buyers should establish which regime applies to a lot before bidding, because the deposit at risk and the funding timetable differ materially between the two.",
         ],
       },
@@ -117,7 +117,7 @@ export const MARKET_HUBS: Record<"kenya" | "uk", MarketHub> = {
       {
         question: "What is a commercial property auction in the UK?",
         answer:
-          "A public sale in which commercial lots are offered under the auction house's conditions — commonly the RICS Common Auction Conditions or the Standard Commercial Property Conditions. The contract binds buyer and seller on the fall of the hammer, with a 10% deposit paid on exchange and completion typically 20 working days later.",
+          "A public sale in which commercial lots are offered under the auction house's conditions — commonly the RICS Common Auction Conditions or the Standard Commercial Property Conditions. The contract binds buyer and seller on the fall of the hammer, with the deposit set by the conditions (commonly 10%) paid on exchange and completion typically 20 working days later. The deposit and timetable for any specific lot are set by that lot's conditions.",
       },
       {
         question: "Do I need a solicitor to buy at a UK property auction?",

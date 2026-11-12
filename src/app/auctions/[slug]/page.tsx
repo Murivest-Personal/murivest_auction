@@ -18,6 +18,7 @@ import { PropertyMap } from "@/components/auctions/PropertyMap";
 import { BidForm } from "@/components/auctions/BidForm";
 import { InquiryForm } from "@/components/auctions/InquiryForm";
 import { AuctionSidebar } from "@/components/auctions/AuctionSidebar";
+import { VaultGate } from "@/components/vault/VaultGate";
 import { UnderwritingGates } from "@/components/auctions/UnderwritingGates";
 import { CommentList } from "@/components/auctions/CommentList";
 import { CommentForm } from "@/components/auctions/CommentForm";
@@ -230,6 +231,23 @@ export default async function PropertyDetailPage({ params }: Params) {
               )}
             </div>
 
+            {/* Documentation & data room — two-level property
+                information: public teaser, then qualified-buyer
+                access under NDA + per-property authorisation
+                (issue #2 / System 3). Client-fetches session state
+                so the ISR-cached page stays cacheable. */}
+            <div className="mt-16 border-t border-hairline pt-10">
+              <section id="data-room" aria-label="Documentation and data room" className="scroll-mt-24">
+                <span className="block font-display text-[0.6rem] tracking-[0.3em] uppercase text-gold mb-4">
+                  Confidential — qualified buyers
+                </span>
+                <h2 className="font-serif text-2xl md:text-3xl font-light text-green mb-6">
+                  Documentation &amp; data room
+                </h2>
+                <VaultGate propertySlug={property.slug} variant="embedded" />
+              </section>
+            </div>
+
             <div className="mt-16 border-t border-hairline pt-10">
               <SellingPartyBlock property={property} />
             </div>
@@ -339,8 +357,14 @@ export default async function PropertyDetailPage({ params }: Params) {
                   <p className="text-[0.85rem] leading-[1.7] text-ink">
                     <span className="text-green">Buyer brokerage:</span>{" "}
                     Murivest charges the successful buyer a fee of{" "}
-                    <strong>2% of the final purchase price, payable after the
-                    10% deposit</strong>.{" "}
+                    <strong>
+                      2% of the final purchase price, payable after the{" "}
+                      {property.conditionsOfSale?.depositPercent != null
+                        ? `${property.conditionsOfSale.depositPercent}% deposit`
+                        : "deposit required under this lot's conditions of sale"}
+                    </strong>{" "}
+                    (the deposit, its deadline, method and recipient are set by
+                    this lot&rsquo;s conditions of sale).{" "}
                     <Link
                       href="/buyer-fees"
                       className="text-green underline underline-offset-4 hover:text-gold transition-colors"

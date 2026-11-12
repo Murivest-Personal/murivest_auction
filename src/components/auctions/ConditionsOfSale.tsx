@@ -17,19 +17,58 @@ export function ConditionsOfSale({ conditions }: { conditions: ConditionsType })
         Conditions of sale — summary
       </h2>
 
-      {conditions.depositPercent != null || conditions.balanceDays != null ? (
-        <p className="text-[0.55rem] tracking-[0.2em] uppercase text-charcoal mb-6">
-          {conditions.depositPercent != null
-            ? `${conditions.depositPercent}% deposit on the fall of the hammer`
-            : ""}
-          {conditions.depositPercent != null && conditions.balanceDays != null
-            ? " · "
-            : ""}
-          {conditions.balanceDays != null
-            ? `Balance within ${conditions.balanceDays} days`
-            : ""}
-          {conditions.buyersPremium ? ` · ${conditions.buyersPremium}` : ""}
-        </p>
+      {conditions.depositPercent != null ||
+      conditions.balanceDays != null ||
+      conditions.depositPaymentMethod ||
+      conditions.depositPayee ? (
+        <div className="border border-hairline bg-cream p-5 mb-6 max-w-[42rem]">
+          <p className="font-display text-[0.55rem] tracking-[0.25em] uppercase text-gold mb-3">
+            Deposit — set by this lot&rsquo;s conditions of sale
+          </p>
+          <ul className="space-y-1.5 text-[0.85rem] leading-[1.7] text-ink">
+            {conditions.depositPercent != null ? (
+              <li>
+                <span className="text-green">Amount:</span>{" "}
+                {conditions.depositPercent}% of the purchase price
+              </li>
+            ) : null}
+            {conditions.depositDue ? (
+              <li>
+                <span className="text-green">Deadline:</span>{" "}
+                {conditions.depositDue}
+              </li>
+            ) : conditions.depositPercent != null ? (
+              <li>
+                <span className="text-green">Deadline:</span> on the fall of
+                the hammer, unless the conditions state otherwise
+              </li>
+            ) : null}
+            {conditions.depositPaymentMethod ? (
+              <li>
+                <span className="text-green">Payment method:</span>{" "}
+                {conditions.depositPaymentMethod}
+              </li>
+            ) : null}
+            {conditions.depositPayee ? (
+              <li>
+                <span className="text-green">Recipient:</span>{" "}
+                {conditions.depositPayee}
+              </li>
+            ) : null}
+            {conditions.balanceDays != null ? (
+              <li>
+                <span className="text-green">Balance:</span> within{" "}
+                {conditions.balanceDays} days
+                {conditions.buyersPremium ? ` · ${conditions.buyersPremium}` : ""}
+              </li>
+            ) : null}
+          </ul>
+          <p className="text-[0.7rem] leading-[1.6] text-charcoal mt-3">
+            Deposit terms vary lot by lot. Murivest never sets deposit amounts,
+            deadlines, methods or recipients — they are taken from the
+            selling party&rsquo;s conditions of sale for this lot.
+          </p>
+        </div>
       ) : null}
 
       <ol className="max-w-[42rem] border-t border-hairline">

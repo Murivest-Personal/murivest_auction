@@ -86,8 +86,11 @@ export default async function HomePage() {
               <p className="text-[1.1rem] leading-[1.9] text-[color:var(--mv-on-dark)] mb-10 max-w-[36rem]">
                 Murivest Group Ltd aggregates verified commercial auction
                 opportunities across two markets and routes qualified buyers to
-                the selling party. Every listing names the selling party, the
-                auction mechanism and the legal pack status.
+                the sale. Each listing states the auction mechanism and the
+                legal pack position; the selling party and sale authority are
+                disclosed as the auction notice and conditions of sale
+                require, with full documentation released to qualified buyers
+                through confidential data rooms.
               </p>
               <div className="flex flex-wrap gap-4">
                 <ButtonLink href="/auctions">Browse current lots</ButtonLink>
@@ -122,14 +125,14 @@ export default async function HomePage() {
                 href: "/kenya",
                 positioning:
                   "Bank sales, receiver sales and private treaty lots across Nairobi, Mombasa, Kisumu and Nakuru.",
-                meta: "Land Act 2012 · Auctioneers Act · 25% deposit · 90-day completion",
+                meta: "Land Act 2012 · Auctioneers Act · deposits typically 25%, set per lot · 90-day completion",
               },
               {
                 name: "UK auctions",
                 href: "/uk",
                 positioning:
                   "Commercial investment lots across London and regional UK — office, industrial, retail, mixed-use and alternatives.",
-                meta: "Common Auction Conditions · 10% deposit · 20-working-day completion",
+                meta: "Common Auction Conditions · deposits typically 10%, set per lot · 20-working-day completion",
               },
             ].map((m) => (
               <Link

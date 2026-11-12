@@ -50,6 +50,8 @@ const NAV: NavItem[] = [
     href: "/buyer-fees",
     children: [
       { label: "Buyer representation & the 2% fee", href: "/buyer-fees" },
+      { label: "Buyer registration & qualification", href: "/buyers" },
+      { label: "Buyer portal sign-in", href: "/buyers/sign-in" },
       { label: "Auction alerts — the portal", href: "https://portal.murivest.com" },
       { label: "Tools & calculators", href: "/tools" },
     ],

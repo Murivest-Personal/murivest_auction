@@ -20,7 +20,7 @@ const GROUPS: { title: string; faqs: { question: string; answer: string }[] }[] 
       {
         question: "How do property auctions work in Kenya?",
         answer:
-          "A chargee — usually a bank — serves the statutory notices, instructs a licensed auctioneer, and offers the property at public auction under the Land Act 2012 power of sale. Buyers inspect the conditions of sale, conduct diligence, bid, pay the deposit required by the conditions (10% on Murivest-listed sales), and complete within the stated window.",
+          "A chargee — usually a bank — serves the statutory notices, instructs a licensed auctioneer, and offers the property at public auction under the Land Act 2012 power of sale. Buyers inspect the conditions of sale, conduct diligence, bid, pay the deposit set by that lot's conditions of sale, and complete within the stated window.",
       },
       {
         question: "Who conducts the auction?",
@@ -45,7 +45,7 @@ const GROUPS: { title: string; faqs: { question: string; answer: string }[] }[] 
       {
         question: "How does Murivest earn its brokerage fee?",
         answer:
-          "Through a buyer engagement. Murivest charges the successful buyer a brokerage fee of 2% of the final purchase price, payable after the buyer has paid the 10% deposit of the purchase price. The terms are accepted explicitly at bid registration and recorded in the database.",
+          "Through a buyer engagement. Murivest charges the successful buyer a brokerage fee of 2% of the final purchase price, payable after the buyer has paid the deposit required under the lot's conditions of sale. The terms are accepted explicitly at bid registration and recorded in the database.",
       },
       {
         question: "Is the 2% brokerage fee paid by the bank?",
@@ -53,9 +53,9 @@ const GROUPS: { title: string; faqs: { question: string; answer: string }[] }[] 
           "No. The selling bank or institution does not pay Murivest. The fee is the buyer's engagement of its representative — which is precisely what keeps the advice aligned with the buyer's interests rather than the seller's.",
       },
       {
-        question: "Is the brokerage fee part of the 10% deposit?",
+        question: "Is the brokerage fee part of the auction deposit?",
         answer:
-          "No. The deposit is paid to the selling party under the auction conditions. The 2% fee is a separate obligation to Murivest, payable after the deposit. Auctioneer charges, where allocated to the purchaser by the conditions, are separate again.",
+          "No. The deposit — its amount, deadline, payment method and recipient — is set by each lot's conditions of sale and paid to the selling party under those conditions. The 2% fee is a separate obligation to Murivest, payable after the deposit. Auctioneer charges, where allocated to the purchaser by the conditions, are separate again.",
       },
       {
         question: "Is an inquiry or bid registration a binding bid?",

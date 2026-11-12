@@ -79,8 +79,11 @@ export default async function AllLotsPage({
             title="All lots across both markets."
           />
           <p className="max-w-[42rem] text-[1.05rem] leading-[1.9] text-ink">
-            Every listing names the selling party, the auction mechanism and
-            the legal pack status. {lots.length}{" "}
+            Each listing states the auction mechanism and the legal pack
+            position; the selling party and sale authority are disclosed as
+            the auction notice and conditions of sale require, with full
+            documentation released to qualified buyers through confidential
+            data rooms. {lots.length}{" "}
             {lots.length === 1 ? "lot" : "lots"} currently listed.
           </p>
         </Container>

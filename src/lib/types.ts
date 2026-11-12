@@ -39,11 +39,18 @@ export interface PropertyFacts {
   occupancy?: number;
 }
 
-/** Conditions of sale (addendum §3.1) */
+/** Conditions of sale (addendum §3.1; issue #1 — every deposit
+    term is per lot, never hardcoded by market) */
 export interface ConditionsOfSale {
   jurisdiction: "Kenya" | "UK" | "Other";
   summaryPoints: string[];
   depositPercent?: number;
+  /** When the deposit falls due, e.g. "on the fall of the hammer". */
+  depositDue?: string;
+  /** Accepted instrument(s), e.g. "cash or banker's cheque". */
+  depositPaymentMethod?: string;
+  /** Who receives the deposit, e.g. "the selling party's advocates' client account". */
+  depositPayee?: string;
   balanceDays?: number;
   buyersPremium?: string;
   fullDocumentUrl?: string;

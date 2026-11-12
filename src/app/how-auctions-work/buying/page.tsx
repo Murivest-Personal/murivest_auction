@@ -26,7 +26,7 @@ const FAQS = [
   {
     question: "What happens if I win but cannot complete?",
     answer:
-      "In the UK the 10% deposit is forfeited and the buyer may be liable for the seller's losses. In Kenya failure to pay the 75% balance within 90 days can result in forfeiture of the 25% deposit and resale of the property.",
+      "In the UK the deposit — commonly 10% under the standard conditions — is forfeited and the buyer may be liable for the seller's losses. In Kenya, under the standard conditions, failure to pay the balance within 90 days can result in forfeiture of the deposit (commonly 25%) and resale of the property. The deposit and completion terms for any specific lot are set by that lot's conditions of sale — read them before bidding.",
   },
   {
     question: "Can I view the property before the auction?",
@@ -101,9 +101,12 @@ export default function BuyingPage() {
                 licence before bidding.
               </p>
               <p className="text-[1rem] leading-[1.9] text-ink">
-                The successful bidder pays a 25% deposit immediately on the
+                Under the standard Kenyan conditions the successful bidder
+                pays a deposit — commonly 25% — immediately on the
                 fall of the hammer, in cash or by banker&rsquo;s cheque only,
-                and the 75% balance within 90 days. Stamp duty of 4% of value
+                and the balance within 90 days. The deposit amount, payment
+                method and recipient for each lot are set by that lot&apos;s
+                conditions of sale. Stamp duty of 4% of value
                 on urban properties is payable to the Kenya Revenue Authority,
                 plus conveyancing fees under the Advocates Remuneration Order
                 and auctioneer&rsquo;s commission of 1.5–2.5% plus VAT.
@@ -122,7 +125,9 @@ export default function BuyingPage() {
                 period.
               </p>
               <p className="text-[1rem] leading-[1.9] text-ink">
-                A 10% deposit is paid to the auctioneer as agent for the
+                A deposit — commonly 10% under the Common Auction Conditions,
+                always as the special conditions direct — is paid to the
+                auctioneer as agent for the
                 seller, with the balance due on the completion date in the
                 special conditions — typically 20 working days. The buyer
                 insures from exchange, bears the buyer&rsquo;s premium where

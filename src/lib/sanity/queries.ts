@@ -25,7 +25,8 @@ export const PROPERTY_BY_SLUG = /* groq */ `
     "gallery": gallery[]{ ..., "alt": alt },
     facts,
     conditionsOfSale{
-      jurisdiction, summaryPoints, depositPercent, balanceDays,
+      jurisdiction, summaryPoints, depositPercent, depositDue,
+      depositPaymentMethod, depositPayee, balanceDays,
       buyersPremium, documentLabel,
       "fullDocumentUrl": fullDocument.asset->url
     }

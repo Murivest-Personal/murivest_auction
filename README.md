@@ -62,6 +62,13 @@ SANITY_API_READ_TOKEN=<read-token>                    # server only
 # auctions.murivest.com/*, murivest.com/*, localhost:3000/*)
 NEXT_PUBLIC_MAPBOX_TOKEN=pk....
 
+# Buyer qualification & confidential vault (System 2 + System 3)
+BUYER_SESSION_SECRET=<long-random-string>   # signs buyer portal cookies
+ADMIN_SESSION_SECRET=<long-random-string>    # signs back-office cookies
+ADMIN_PASSCODE=<back-office-passcode>        # /back-office login
+# PRIVATE_STORE_DIR defaults to ./.private-store (gitignored) —
+# proof-of-funds and data room PDFs live here, NEVER in public/
+
 # Site
 NEXT_PUBLIC_SITE_URL=https://auctions.murivest.com
 ```
@@ -94,6 +101,11 @@ Run the migrations in order in the Supabase SQL editor, or via
 12. `0012_database_functions.sql` — admin workflows (inquiry status,
     comment moderation, bid verification, engagement issuance, payments).
 13. `0013_database_indexes.sql` — reporting indexes.
+14. `0014_buyer_qualification_vault.sql` — **buyer qualification +
+    confidential document vault** (`buyer_registrations`, `nda_acceptances`,
+    `vault_documents`, `vault_document_versions`, `vault_access_grants`,
+    `vault_notifications`, `vault_access_logs`) plus the private
+    `murivest-confidential` storage bucket (no public access).
 
 `pgcrypto` must be enabled (`create extension if not exists pgcrypto;`).
 
@@ -101,8 +113,71 @@ Bid triage, inquiry management and comment moderation happen through the
 admin functions in `0012_database_functions.sql` (or the Supabase Table
 Editor): `auction_bids.status`, `auction_inquiries.status`
 (new → contacted → qualified → … → engaged → successful), and
-`property_comments.status` (pending → approved/rejected). There is
-deliberately no admin UI on the public site.
+`property_comments.status` (pending → approved/rejected).
+
+## Buyer qualification (System 2) — `/buyers`
+
+Ten-point registration → 8-stage classification → per-property data room
+authorisation.
+
+1. **Registration** (`/buyers/register`, 4 steps): individual/corporate
+   status, residence + tax jurisdiction, contact + identification,
+   purchasing entity + beneficial ownership, budget, preferred market +
+   locations, asset classes, cash/financing, proof of funds or lender
+   evidence, acquisition timeline. The buyer receives a one-time access
+   code (email + code = portal sign-in) and starts at
+   `Registration pending`.
+2. **Classification ladder** (assigned in the back office, every change
+   audit-logged): Unqualified lead → Registration pending → KYC pending →
+   KYC verified → Funding verification pending → **Qualified buyer** →
+   Mandated buyer → Transaction in progress.
+3. **Proof of funds privacy**: uploads go to the private store
+   (`PRIVATE_STORE_DIR`, default `./.private-store`, gitignored) — never
+   `public/`. The only reader is `/api/admin/buyers/[id]/pof` (admin
+   session required, every view logged).
+4. **Portal** (`/buyers/portal`): status banner + ladder, registration
+   file, notifications, authorised data rooms.
+
+## Confidential document vault (System 3) — the data rooms
+
+Accessible to Qualified buyers and above, per property, after a
+timestamped NDA and a per-property authorisation (the “datasite” model).
+
+- **NDA** — 8 clauses (`nda-v1`), acceptance recorded per buyer/property
+  with timestamp, IP hash and terms version; revocable.
+- **Documents** — metadata in the DB, PDF bytes in the private store;
+  uploaded and versioned only through the back office. Categories include
+  legal pack, title, tenancy, searches, valuation, survey and **addendum**.
+- **Version history** — every upload appends an immutable version; the
+  previous one is superseded; buyers see the full history with dates.
+- **Expiry & replacement** — versions can carry an `expires_at`; expired
+  versions are blocked for buyers (HTTP 410) until replaced.
+- **Download permissions** — per document (view-only vs downloadable);
+  enforced server-side and surfaced with a “View only” badge.
+- **PDF viewing** — inline viewer in the portal (iframe over the secure
+  route); lot pages link out to the same route.
+- **Addenda notifications** — publishing a new version notifies every
+  buyer with active access; addenda get a dedicated notice.
+- **Access logs** — every NDA acceptance, view, download (and denial),
+  grant, revoke, version and classification change is recorded and shown
+  in the back office.
+- **Access revocation** — immediate, per property, with reason; the file
+  API fails closed.
+
+Public teaser vs qualified access (source protection): lot pages show a
+“Documentation & data room” section with document titles and categories
+only; the files themselves are gated behind qualification + grant + NDA.
+Selling-party disclosure follows the auction notice and conditions of
+sale.
+
+## Back office — `/back-office`
+
+Passcode-gated (`ADMIN_PASSCODE`; a warning shows while the default is in
+use). Three sections: **Buyers & qualification** (classification + notes,
+proof-of-funds view), **Data rooms** (documents, versions, download
+permissions, expiry, per-property grants/revocations, access-request
+queue) and **Access logs**. Unlisted and `noindex`; also disallowed in
+`robots.txt`.
 
 ## Content workflow (Sanity)
 
@@ -117,7 +192,9 @@ deliberately no admin UI on the public site.
 2. Publish `auctionProperty` documents. The schema carries the full field
    set, including the **Property facts** object (price, NOI, gross rent,
    building area, occupancy, …) and **Conditions of sale** (jurisdiction,
-   summary points, deposit, balance days, buyer's premium, PDF upload).
+   summary points, deposit — percentage, deadline, payment method and
+   recipient, all per lot and never hardcoded by market — balance days,
+   buyer's premium, PDF upload).
    Derived metrics (net yield, payback, ROI, GRM) are computed at render
    time in `src/lib/calculations.ts` — never hand-entered.
 3. Set `NEXT_PUBLIC_SANITY_PROJECT_ID` / `NEXT_PUBLIC_SANITY_DATASET` on
