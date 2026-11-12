@@ -33,8 +33,11 @@ export function Collapsible({
   const [open, setOpen] = useState(defaultOpen);
 
   useEffect(() => {
+    // Deep links (#public-comments etc.) auto-open the section.
+    // Dispatch a click on the trigger rather than setting state
+    // directly, so the toggle logic stays in one place.
     if (window.location.hash === `#${id}`) {
-      setOpen(true);
+      document.getElementById(`${id}-trigger`)?.click();
     }
   }, [id]);
 

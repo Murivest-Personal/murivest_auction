@@ -21,6 +21,7 @@ import { AuctionSidebar } from "@/components/auctions/AuctionSidebar";
 import { UnderwritingGates } from "@/components/auctions/UnderwritingGates";
 import { CommentList } from "@/components/auctions/CommentList";
 import { CommentForm } from "@/components/auctions/CommentForm";
+import { Collapsible } from "@/components/ui/Collapsible";
 import { LoanRepaymentCalculator } from "@/components/calculators/LoanRepaymentCalculator";
 import { ReturnCalculator } from "@/components/calculators/ReturnCalculator";
 import {
@@ -154,19 +155,24 @@ export default async function PropertyDetailPage({ params }: Params) {
 
             <InvestmentMetrics property={property} />
 
-            {/* Loan repayment widget — beneath the investment metrics block (addendum §2.4) */}
+            {/* Loan repayment calculator — dropdown section, opens
+                onclick (addendum §2.4) */}
             {property.facts.price ? (
               <section className="mt-10">
-                <span className="block font-display text-[0.6rem] tracking-[0.3em] uppercase text-gold mb-4">
-                  Debt side
-                </span>
-                <LoanRepaymentCalculator
-                  variant="widget"
-                  defaultPrincipal={Math.round(property.facts.price * 0.65)}
-                  defaultRate={property.market === "kenya" ? 13 : 6.5}
-                  defaultYears={10}
-                  currency={currency}
-                />
+                <Collapsible
+                  id="loan-repayment-calculator"
+                  eyebrow="Debt side"
+                  title="Loan repayment calculator"
+                  description="Monthly payments, total interest and the amortisation schedule for this lot — click to open."
+                >
+                  <LoanRepaymentCalculator
+                    variant="page"
+                    defaultPrincipal={Math.round(property.facts.price * 0.65)}
+                    defaultRate={property.market === "kenya" ? 13 : 6.5}
+                    defaultYears={10}
+                    currency={currency}
+                  />
+                </Collapsible>
               </section>
             ) : null}
 
@@ -233,10 +239,24 @@ export default async function PropertyDetailPage({ params }: Params) {
               <VerificationBlock property={property} />
             </div>
 
-            {/* Public comments — approved comments server-rendered */}
+            {/* Public comments — closed by default, opens onclick;
+                approved comments stay server-rendered in the DOM so
+                they remain indexable (addendum §4.5) */}
             <div className="mt-16 border-t border-hairline pt-10">
-              <CommentForm property={property} />
-              <CommentList comments={comments} />
+              <Collapsible
+                id="public-comments"
+                eyebrow="Moderated by default"
+                title="Comments & questions"
+                meta={
+                  comments.length > 0
+                    ? `${comments.length} published`
+                    : "Be the first"
+                }
+                description="Leave a comment or a question on this lot — published comments show the author's name only. Click to open."
+              >
+                <CommentForm property={property} />
+                <CommentList comments={comments} hideHeading />
+              </Collapsible>
             </div>
           </div>
 
@@ -245,12 +265,19 @@ export default async function PropertyDetailPage({ params }: Params) {
             <div className="lg:sticky lg:top-28">
               <AuctionSidebar property={property} />
               <div className="mt-8">
-                <ReturnCalculator
-                  variant="widget"
-                  defaultPrice={property.facts.price ?? 260_298}
-                  defaultNoi={property.facts.noi ?? 0}
-                  currency={currency}
-                />
+                <Collapsible
+                  id="return-calculator"
+                  eyebrow="Buyer tools"
+                  title="Return calculator"
+                  description="Net yield, cash-on-cash, DSCR and levered IRR for this lot — click to open."
+                >
+                  <ReturnCalculator
+                    variant="embedded"
+                    defaultPrice={property.facts.price ?? 260_298}
+                    defaultNoi={property.facts.noi ?? 0}
+                    currency={currency}
+                  />
+                </Collapsible>
               </div>
             </div>
           </div>

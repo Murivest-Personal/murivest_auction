@@ -38,6 +38,7 @@ const NAV: NavItem[] = [
     label: "How auctions work",
     href: "/how-auctions-work",
     children: [
+      { label: "How auctions work — overview", href: "/how-auctions-work" },
       { label: "Buying at auction", href: "/how-auctions-work/buying" },
       { label: "Selling at auction", href: "/how-auctions-work/selling" },
       { label: "Legal pack and due diligence", href: "/how-auctions-work/legal-pack" },
@@ -59,6 +60,8 @@ const NAV: NavItem[] = [
 export function SiteHeader() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  /* Which menu section is expanded as a dropdown (title click). */
+  const [openSection, setOpenSection] = useState<string | null>(null);
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
@@ -66,6 +69,11 @@ export function SiteHeader() {
       document.body.style.overflow = "";
     };
   }, [open]);
+
+  const closeMenu = () => {
+    setOpen(false);
+    setOpenSection(null);
+  };
 
   return (
     <header className="sticky top-0 z-50 bg-cream border-b border-hairline">
@@ -160,7 +168,8 @@ export function SiteHeader() {
         </div>
       </div>
 
-      {/* Mobile menu */}
+      {/* Mobile menu — section titles act as dropdown toggles; the
+          child links expand underneath on click */}
       {open ? (
         <nav
           aria-label="Primary mobile"
@@ -169,34 +178,64 @@ export function SiteHeader() {
           <ul className="px-6 py-8 space-y-8">
             {NAV.map((item) => (
               <li key={item.label}>
-                <Link
-                  href={item.href}
-                  onClick={() => setOpen(false)}
-                  className="block font-display text-[0.7rem] tracking-[0.25em] uppercase text-green mb-3"
-                >
-                  {item.label}
-                </Link>
                 {item.children ? (
-                  <ul className="space-y-2 pl-4 border-l border-hairline">
-                    {item.children.map((child) => (
-                      <li key={child.label}>
-                        <Link
-                          href={child.href}
-                          onClick={() => setOpen(false)}
-                          className="block py-1 font-body text-[0.85rem] text-ink"
-                        >
-                          {child.label}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                ) : null}
+                  <>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setOpenSection(
+                          openSection === item.label ? null : item.label
+                        )
+                      }
+                      aria-expanded={openSection === item.label}
+                      aria-controls={`mobile-nav-${item.label
+                        .toLowerCase()
+                        .replace(/[^a-z0-9]+/g, "-")}`}
+                      className="flex w-full items-center justify-between gap-6 font-display text-[0.7rem] tracking-[0.25em] uppercase text-green"
+                    >
+                      {item.label}
+                      <span
+                        aria-hidden="true"
+                        className={cn(
+                          "flex-shrink-0 w-7 h-7 border border-sand flex items-center justify-center text-xs text-green transition-colors",
+                          openSection === item.label &&
+                            "bg-green text-cream border-green"
+                        )}
+                      >
+                        {openSection === item.label ? "−" : "+"}
+                      </span>
+                    </button>
+                    {openSection === item.label ? (
+                      <ul className="mt-3 space-y-2 pl-4 border-l border-hairline">
+                        {item.children.map((child) => (
+                          <li key={child.label}>
+                            <Link
+                              href={child.href}
+                              onClick={closeMenu}
+                              className="block py-1 font-body text-[0.85rem] text-ink"
+                            >
+                              {child.label}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : null}
+                  </>
+                ) : (
+                  <Link
+                    href={item.href}
+                    onClick={closeMenu}
+                    className="block font-display text-[0.7rem] tracking-[0.25em] uppercase text-green"
+                  >
+                    {item.label}
+                  </Link>
+                )}
               </li>
             ))}
             <li>
               <Link
                 href="/contact"
-                onClick={() => setOpen(false)}
+                onClick={closeMenu}
                 className="inline-flex items-center justify-center px-8 py-3 text-[0.65rem] tracking-[0.22em] uppercase font-display bg-green text-cream"
               >
                 Contact
