@@ -24,7 +24,62 @@ export const auctionArticle = defineType({
       options: { list: ["analysis", "guide"], layout: "radio" },
       initialValue: "analysis",
     }),
+    defineField({
+      name: "cluster",
+      title: "Topic cluster",
+      description: "Blog cluster taxonomy (blog manual §13).",
+      type: "string",
+      options: {
+        list: [
+          { title: "Auction defence & borrowers", value: "auction-defence" },
+          { title: "How auctions actually work", value: "auction-machinery" },
+          { title: "Trusts & asset structuring", value: "trusts-structuring" },
+          { title: "Buying at auction", value: "buying-at-auction" },
+          { title: "Finance & due diligence", value: "finance-diligence" },
+          { title: "Buyer representation & fees", value: "buyer-representation" },
+          { title: "Kenya auction market", value: "kenya-market" },
+          { title: "UK auction market", value: "uk-market" },
+          { title: "Auction fundamentals", value: "fundamentals" },
+        ],
+      },
+    }),
+    defineField({
+      name: "intent",
+      title: "Search intent",
+      description: "Search-intent classification (blog manual §3.2).",
+      type: "string",
+      options: {
+        list: [
+          "Informational-Investigative",
+          "Commercial Investigation",
+          "Transactional",
+          "Investment Research",
+        ],
+      },
+    }),
+    defineField({
+      name: "featured",
+      title: "Featured",
+      type: "boolean",
+      initialValue: false,
+    }),
     defineField({ name: "excerpt", type: "text", rows: 3, validation: (r) => r.max(240) }),
+    defineField({
+      name: "seoTitle",
+      title: "SEO title",
+      description: "Meta title, max 60 characters.",
+      type: "string",
+      validation: (r) => r.max(60),
+    }),
+    defineField({
+      name: "metaDescription",
+      title: "Meta description",
+      description: "150–160 characters.",
+      type: "text",
+      rows: 2,
+      validation: (r) => r.max(170),
+    }),
+    defineField({ name: "updatedAt", title: "Last substantive revision", type: "datetime" }),
     defineField({
       name: "author",
       type: "string",
@@ -72,6 +127,22 @@ export const auctionArticle = defineType({
           ],
         },
       ],
+    }),
+    defineField({
+      name: "related",
+      title: "Related analysis links",
+      description: "Max 3 contextual internal links (blog manual §8.4).",
+      type: "array",
+      of: [
+        {
+          type: "object",
+          fields: [
+            { name: "label", type: "string" },
+            { name: "href", type: "string" },
+          ],
+        },
+      ],
+      validation: (r) => r.max(3),
     }),
   ],
 });

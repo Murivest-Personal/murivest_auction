@@ -52,7 +52,7 @@ export function VerificationBlock({ property }: { property: Property }) {
 
   return (
     <section id="verification" className="scroll-mt-24">
-      <span className="block font-body text-[0.6rem] tracking-[0.3em] uppercase text-gold mb-4">
+      <span className="block font-display text-[0.6rem] tracking-[0.3em] uppercase text-gold mb-4">
         Verification
       </span>
       <h2 className="font-serif text-2xl md:text-3xl font-light text-green mb-6">

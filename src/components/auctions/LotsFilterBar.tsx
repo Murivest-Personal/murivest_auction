@@ -160,13 +160,13 @@ export function LotsFilterBar({
       <div className="mt-6 flex flex-wrap items-center gap-6">
         <button
           type="submit"
-          className="inline-flex items-center justify-center px-8 py-3 text-[0.6rem] tracking-[0.22em] uppercase font-body bg-green text-cream hover:bg-gold transition-colors"
+          className="inline-flex items-center justify-center px-8 py-3 text-[0.6rem] tracking-[0.22em] uppercase font-display bg-green text-cream hover:bg-gold transition-colors"
         >
           Apply filters
         </button>
         <a
           href={action}
-          className="font-body text-[0.6rem] tracking-[0.22em] uppercase text-gold hover:text-green transition-colors"
+          className="font-display text-[0.6rem] tracking-[0.22em] uppercase text-gold hover:text-green transition-colors"
         >
           Clear
         </a>

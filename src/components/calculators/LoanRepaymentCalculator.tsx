@@ -166,7 +166,7 @@ export function LoanRepaymentCalculator({
         type="button"
         onClick={() => setShowSchedule(!showSchedule)}
         aria-expanded={showSchedule}
-        className="mt-6 inline-flex items-center gap-3 font-body text-[0.65rem] tracking-[0.22em] uppercase text-green hover:text-gold transition-colors group"
+        className="mt-6 inline-flex items-center gap-3 font-display text-[0.65rem] tracking-[0.22em] uppercase text-green hover:text-gold transition-colors group"
       >
         {showSchedule ? "Hide amortisation schedule" : "Show amortisation schedule"}
         <span

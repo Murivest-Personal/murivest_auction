@@ -114,7 +114,7 @@ export default function GlossaryPage() {
                 <dl className="border-t border-hairline">
                   {section.terms.map(([term, definition]) => (
                     <div key={term} className="py-5 border-b border-hairline">
-                      <dt className="font-body text-[0.7rem] tracking-[0.25em] uppercase text-gold mb-2">
+                      <dt className="font-display text-[0.7rem] tracking-[0.25em] uppercase text-gold mb-2">
                         {term}
                       </dt>
                       <dd className="text-[0.95rem] leading-[1.8] text-ink">

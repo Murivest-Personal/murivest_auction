@@ -62,7 +62,7 @@ export function PropertyMap({
   if (!coordinates) {
     return (
       <section id="location" className="scroll-mt-24">
-        <span className="block font-body text-[0.6rem] tracking-[0.3em] uppercase text-gold mb-4">
+        <span className="block font-display text-[0.6rem] tracking-[0.3em] uppercase text-gold mb-4">
           Location
         </span>
         <h2 className="font-serif text-2xl md:text-3xl font-light text-green mb-6">
@@ -82,7 +82,7 @@ export function PropertyMap({
 
   return (
     <section id="location" className="scroll-mt-24">
-      <span className="block font-body text-[0.6rem] tracking-[0.3em] uppercase text-gold mb-4">
+      <span className="block font-display text-[0.6rem] tracking-[0.3em] uppercase text-gold mb-4">
         Location
       </span>
       <h2 className="font-serif text-2xl md:text-3xl font-light text-green mb-6">
@@ -101,7 +101,7 @@ export function PropertyMap({
           href={gmapsSearch}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center justify-center px-6 py-2.5 text-[0.6rem] tracking-[0.22em] uppercase font-body text-green border border-green hover:bg-green hover:text-cream transition-colors"
+          className="inline-flex items-center justify-center px-6 py-2.5 text-[0.6rem] tracking-[0.22em] uppercase font-display text-green border border-green hover:bg-green hover:text-cream transition-colors"
         >
           Open in Google Maps
         </a>
@@ -109,7 +109,7 @@ export function PropertyMap({
           href={gmapsDirections}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center justify-center px-6 py-2.5 text-[0.6rem] tracking-[0.22em] uppercase font-body text-green border border-green hover:bg-green hover:text-cream transition-colors"
+          className="inline-flex items-center justify-center px-6 py-2.5 text-[0.6rem] tracking-[0.22em] uppercase font-display text-green border border-green hover:bg-green hover:text-cream transition-colors"
         >
           Get directions
         </a>

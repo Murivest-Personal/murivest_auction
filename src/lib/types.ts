@@ -144,6 +144,42 @@ export interface Faq {
   answer: string;
 }
 
+/** Search-intent classification (blog manual §3.2). */
+export type ArticleIntent =
+  | "Informational-Investigative"
+  | "Commercial Investigation"
+  | "Transactional"
+  | "Investment Research";
+
+/** Topic clusters — the Murivest taxonomy (blog manual §13). */
+export type ArticleCluster =
+  | "auction-defence"
+  | "auction-machinery"
+  | "trusts-structuring"
+  | "buying-at-auction"
+  | "finance-diligence"
+  | "buyer-representation"
+  | "kenya-market"
+  | "uk-market"
+  | "fundamentals";
+
+export const CLUSTER_LABELS: Record<ArticleCluster, string> = {
+  "auction-defence": "Auction defence & borrowers",
+  "auction-machinery": "How auctions actually work",
+  "trusts-structuring": "Trusts & asset structuring",
+  "buying-at-auction": "Buying at auction",
+  "finance-diligence": "Finance & due diligence",
+  "buyer-representation": "Buyer representation & fees",
+  "kenya-market": "Kenya auction market",
+  "uk-market": "UK auction market",
+  fundamentals: "Auction fundamentals",
+};
+
+export interface ArticleRelatedLink {
+  label: string;
+  href: string;
+}
+
 export interface Article {
   _id: string;
   title: string;
@@ -156,6 +192,21 @@ export interface Article {
   body: ArticleBlock[];
   faqs: Faq[];
   sources: ArticleSource[];
+  /* --- Blog manual extensions (SEO output requirements §5.1) --- */
+  /** Meta title, ≤60 characters. Falls back to title. */
+  seoTitle?: string;
+  /** Meta description, 150–160 characters. Falls back to excerpt. */
+  metaDescription?: string;
+  /** Search-intent classification. */
+  intent?: ArticleIntent;
+  /** Topic cluster. */
+  cluster?: ArticleCluster;
+  /** Last substantive revision. */
+  updatedAt?: string;
+  /** Editorial “related analysis” links, max 3 (manual §8.4). */
+  related?: ArticleRelatedLink[];
+  /** Featured placement on the blog index. */
+  featured?: boolean;
 }
 
 /* ---------------- Markets ---------------- */

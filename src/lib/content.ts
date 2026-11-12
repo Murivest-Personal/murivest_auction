@@ -187,7 +187,7 @@ export async function getProperties(
   }
   if (filters.status) list = list.filter((p) => p.status === filters.status);
   if (filters.price) {
-    list = list.filter((p) => matchPriceBand(p.factsPrice, filters.price));
+    list = list.filter((p) => matchPriceBand(p.facts.price, filters.price));
   }
   if (filters.q) {
     const q = filters.q.toLowerCase();
@@ -284,12 +284,19 @@ export async function getArticles(market?: Market): Promise<Article[]> {
     }
   }
   list = ARTICLES;
-  return market ? list.filter((a) => a.market === market || a.market === "both") : list;
+  const sorted = [...list].sort((a, b) =>
+    b.publishedAt.localeCompare(a.publishedAt)
+  );
+  return market
+    ? sorted.filter((a) => a.market === market || a.market === "both")
+    : sorted;
 }
 
 export async function getLatestArticles(count = 3): Promise<Article[]> {
   const all = await getArticles();
-  return all.slice(0, count);
+  return [...all]
+    .sort((a, b) => b.publishedAt.localeCompare(a.publishedAt))
+    .slice(0, count);
 }
 
 export async function getArticleBySlug(slug: string): Promise<Article | null> {
@@ -310,9 +317,11 @@ export async function getRelatedArticles(current: Article, count = 2): Promise<A
   return all
     .filter((a) => a.slug !== current.slug)
     .sort((a, b) => {
-      const aScore = (a.market === current.market ? 2 : 0) + (a.category === current.category ? 1 : 0);
-      const bScore = (b.market === current.market ? 2 : 0) + (b.category === current.category ? 1 : 0);
-      return bScore - aScore;
+      const score = (x: Article) =>
+        (x.cluster && x.cluster === current.cluster ? 3 : 0) +
+        (x.market === current.market ? 2 : 0) +
+        (x.category === current.category ? 1 : 0);
+      return score(b) - score(a);
     })
     .slice(0, count);
 }
@@ -331,6 +340,13 @@ function normaliseArticle(raw: Record<string, unknown>): Article | null {
     body: (raw.body as Article["body"]) ?? [],
     faqs: (raw.faqs as Faq[]) ?? [],
     sources: (raw.sources as Article["sources"]) ?? [],
+    seoTitle: raw.seoTitle ? String(raw.seoTitle) : undefined,
+    metaDescription: raw.metaDescription ? String(raw.metaDescription) : undefined,
+    intent: (raw.intent as Article["intent"]) ?? undefined,
+    cluster: (raw.cluster as Article["cluster"]) ?? undefined,
+    updatedAt: raw.updatedAt ? String(raw.updatedAt) : undefined,
+    related: (raw.related as Article["related"]) ?? undefined,
+    featured: Boolean(raw.featured),
   };
 }
 

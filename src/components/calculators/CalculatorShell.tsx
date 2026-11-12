@@ -42,7 +42,7 @@ export function CalculatorShell({
 
       <section className="py-16 md:py-24 border-b border-hairline">
         <Container>
-          <span className="block font-body text-[0.6rem] tracking-[0.3em] uppercase text-gold mb-4">
+          <span className="block font-display text-[0.6rem] tracking-[0.3em] uppercase text-gold mb-4">
             Free institutional-grade calculators
           </span>
           <h1 className="font-serif font-light text-green leading-[1.15] text-[clamp(2rem,3.5vw,3.2rem)] mb-6 max-w-[44rem]">

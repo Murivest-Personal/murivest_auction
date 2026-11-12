@@ -105,7 +105,7 @@ export default function AboutPage() {
           </h2>
           <div className="grid gap-12 md:grid-cols-2 max-w-[42rem]">
             <div>
-              <p className="font-body text-[0.6rem] tracking-[0.3em] uppercase text-gold mb-3">
+              <p className="font-display text-[0.6rem] tracking-[0.3em] uppercase text-gold mb-3">
                 Nairobi
               </p>
               <p className="text-[0.95rem] leading-[1.8] text-ink">
@@ -113,7 +113,7 @@ export default function AboutPage() {
               </p>
             </div>
             <div>
-              <p className="font-body text-[0.6rem] tracking-[0.3em] uppercase text-gold mb-3">
+              <p className="font-display text-[0.6rem] tracking-[0.3em] uppercase text-gold mb-3">
                 London
               </p>
               <p className="text-[0.95rem] leading-[1.8] text-ink">

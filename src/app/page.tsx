@@ -16,9 +16,10 @@ import { formatDateShort, marketLabel } from "@/lib/format";
 export const revalidate = 300;
 
 export const metadata = buildMetadata({
-  title: "Commercial Property Auctions — Kenya & UK | Murivest Group Ltd",
+  title:
+    "Property Auctions in Kenya & the UK — Buyer Representation | Murivest",
   description:
-    "Verified commercial property auction listings across Kenya and the UK. Bank sales, receiver sales and investment lots, presented by Murivest Group Ltd. Mandate-only access.",
+    "Discover verified commercial and residential property auctions across Kenya and the UK. Bank sales, receiver sales and investment lots, with discreet buyer representation from Murivest Group Ltd. Discover. Evaluate. Acquire.",
   path: "/",
   ogImage: "/images/hero-home.webp",
 });
@@ -74,7 +75,7 @@ export default async function HomePage() {
         <div className="relative z-10 max-w-[1400px] mx-auto px-6 md:px-12 lg:px-16 pb-20 md:pb-24 w-full">
           <div className="max-w-[42rem]">
             <Reveal hero>
-              <span className="block font-body text-[0.6rem] tracking-[0.3em] uppercase text-[color:var(--mv-on-dark-faint)] mb-6">
+              <span className="block font-display text-[0.6rem] tracking-[0.3em] uppercase text-[color:var(--mv-on-dark-faint)] mb-6">
                 Verified auction intelligence · Kenya &amp; United Kingdom
               </span>
               <h1 className="font-serif font-light text-cream leading-[1.1] text-[clamp(2.8rem,5vw,5rem)] mb-8">
@@ -134,7 +135,7 @@ export default async function HomePage() {
                 href={m.href}
                 className="group bg-cream p-8 md:p-12 hover:bg-white transition-colors"
               >
-                <span className="block font-body text-[0.6rem] tracking-[0.3em] uppercase text-gold mb-4">
+                <span className="block font-display text-[0.6rem] tracking-[0.3em] uppercase text-gold mb-4">
                   Market hub
                 </span>
                 <h3 className="font-serif text-3xl font-light text-green mb-4">
@@ -278,8 +279,98 @@ export default async function HomePage() {
               </article>
             ))}
           </div>
-          <div className="mt-12">
-            <ArrowLink href="/intelligence">All market intelligence</ArrowLink>
+          <div className="mt-12 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+            <ArrowLink href="/intelligence">All research — 46 articles</ArrowLink>
+            <div className="flex flex-wrap gap-x-6 gap-y-2">
+              {[
+                { label: "Auction defence", href: "/intelligence" },
+                { label: "Trusts & structuring", href: "/intelligence" },
+                { label: "Buying at auction", href: "/intelligence" },
+                { label: "FAQs", href: "/faqs" },
+              ].map((l) => (
+                <Link
+                  key={l.label}
+                  href={l.href}
+                  className="text-[0.6rem] tracking-[0.25em] uppercase text-charcoal hover:text-gold transition-colors font-display"
+                >
+                  {l.label}
+                </Link>
+              ))}
+            </div>
+          </div>
+        </Container>
+      </section>
+
+      {/* Buyer services — representation, fees, alerts */}
+      <section className="py-20 md:py-28 border-t border-hairline bg-white">
+        <Container>
+          <SectionHeader
+            numeral="V"
+            eyebrow="Buyer services"
+            title="Represented at the table, not processed."
+          />
+          <div className="grid gap-px bg-hairline border border-hairline md:grid-cols-3">
+            <div className="bg-cream p-8">
+              <p className="font-display text-[0.55rem] tracking-[0.3em] uppercase text-gold mb-4">
+                01 — Buyer representation
+              </p>
+              <h3 className="font-serif text-xl font-light text-green mb-3">
+                Your side of the table, staffed
+              </h3>
+              <p className="text-[0.9rem] leading-[1.8] text-ink mb-6">
+                Lot discovery, sale-authority verification, diligence
+                coordination, bidding execution and completion management.
+                Everyone on the selling side works for the seller. Murivest
+                works for you.
+              </p>
+              <Link
+                href="/buyer-fees"
+                className="text-[0.6rem] tracking-[0.3em] uppercase text-gold hover:text-green transition-colors font-display"
+              >
+                Buyer representation →
+              </Link>
+            </div>
+            <div className="bg-cream p-8">
+              <p className="font-display text-[0.55rem] tracking-[0.3em] uppercase text-gold mb-4">
+                02 — Transparent fees
+              </p>
+              <h3 className="font-serif text-xl font-light text-green mb-3">
+                2% of the purchase price
+              </h3>
+              <p className="text-[0.9rem] leading-[1.8] text-ink mb-6">
+                A buyer brokerage fee of 2% of the final purchase price,
+                payable after the 10% deposit. Worked examples in shillings,
+                what the fee covers, and how it differs from the deposit and
+                auctioneer charges.
+              </p>
+              <Link
+                href="/buyer-fees"
+                className="text-[0.6rem] tracking-[0.3em] uppercase text-gold hover:text-green transition-colors font-display"
+              >
+                Read the fee terms →
+              </Link>
+            </div>
+            <div className="bg-cream p-8">
+              <p className="font-display text-[0.55rem] tracking-[0.3em] uppercase text-gold mb-4">
+                03 — Auction alerts
+              </p>
+              <h3 className="font-serif text-xl font-light text-green mb-3">
+                Notified before the public notice
+              </h3>
+              <p className="text-[0.9rem] leading-[1.8] text-ink mb-6">
+                Registered buyers receive auction and off-market notifications
+                — new lots, auction dates and documentation — through the
+                Murivest client portal.
+              </p>
+              <a
+                href="https://portal.murivest.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[0.6rem] tracking-[0.3em] uppercase text-gold hover:text-green transition-colors font-display"
+              >
+                Register at the portal ↗
+              </a>
+            </div>
           </div>
         </Container>
       </section>
@@ -288,37 +379,40 @@ export default async function HomePage() {
       <section className="bg-green py-20 md:py-28">
         <Container>
           <div className="max-w-[42rem]">
-            <span className="block font-body text-[0.6rem] tracking-[0.3em] uppercase text-[color:var(--mv-on-dark-faint)] mb-6">
+            <span className="block font-display text-[0.6rem] tracking-[0.3em] uppercase text-[color:var(--mv-on-dark-faint)] mb-6">
               Engage the deal team
             </span>
             <h2 className="font-serif text-3xl md:text-4xl font-light text-cream leading-tight mb-6">
-              Submit a buyer mandate or list a property for auction.
+              Discover. Evaluate. Acquire.
             </h2>
             <p className="text-[1rem] leading-[1.9] text-[color:var(--mv-on-dark)] mb-10">
-              Murivest Group Ltd provides commercial real estate services —
-              brokerage, property and asset management, and investment property
-              services. All engagements are by mandate only, non-pooled, and
-              subject to KYC/AML verification.
+              Murivest Group Ltd publishes verified auction intelligence and
+              represents buyers under separate mandate — a 2% brokerage fee of
+              the final purchase price, payable after the 10% deposit. All
+              engagements are by mandate only and subject to KYC/AML
+              verification.
             </p>
             <div className="flex flex-col sm:flex-row gap-6">
               <Link
                 href="/contact"
-                className="inline-flex items-center justify-center px-8 py-3 text-[0.65rem] tracking-[0.22em] uppercase font-body bg-cream text-green hover:bg-gold hover:text-cream transition-colors"
+                className="inline-flex items-center justify-center px-8 py-3 text-[0.65rem] tracking-[0.22em] uppercase font-display bg-cream text-green hover:bg-gold hover:text-cream transition-colors"
               >
                 Submit a buyer mandate
               </Link>
-              <Link
-                href="/contact"
-                className="inline-flex items-center gap-3 font-body text-[0.65rem] tracking-[0.22em] uppercase text-cream/75 hover:text-gold transition-colors group"
+              <a
+                href="https://portal.murivest.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-3 font-display text-[0.65rem] tracking-[0.22em] uppercase text-cream/75 hover:text-gold transition-colors group"
               >
-                List a property for auction
+                Register for auction alerts
                 <span
                   aria-hidden="true"
                   className="w-7 h-7 border border-current flex items-center justify-center text-xs transition-colors group-hover:bg-gold group-hover:text-green"
                 >
                   ↗
                 </span>
-              </Link>
+              </a>
             </div>
           </div>
         </Container>

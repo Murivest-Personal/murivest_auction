@@ -116,7 +116,7 @@ export default async function CalendarPage({
                 key={tab.href}
                 href={tab.href}
                 aria-current={tab.active ? "page" : undefined}
-                className={`font-body text-[0.6rem] tracking-[0.25em] uppercase transition-colors ${
+                className={`font-display text-[0.6rem] tracking-[0.25em] uppercase transition-colors ${
                   tab.active
                     ? "text-green border-b border-gold pb-1"
                     : "text-charcoal hover:text-gold"

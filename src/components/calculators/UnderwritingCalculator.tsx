@@ -93,7 +93,7 @@ export function UnderwritingCalculator({
 
       {/* Debt assumptions — embedded loan repayment summary (addendum §2.4) */}
       <div className="mt-10">
-        <p className="font-body text-[0.6rem] tracking-[0.3em] uppercase text-gold mb-4">
+        <p className="font-display text-[0.6rem] tracking-[0.3em] uppercase text-gold mb-4">
           Debt assumptions
         </p>
         <div className="grid gap-6 sm:grid-cols-3">
@@ -108,7 +108,7 @@ export function UnderwritingCalculator({
       </div>
 
       <div className="mt-10">
-        <p className="font-body text-[0.6rem] tracking-[0.3em] uppercase text-gold mb-2">
+        <p className="font-display text-[0.6rem] tracking-[0.3em] uppercase text-gold mb-2">
           Underwriting gates
         </p>
         <div className="border-t border-hairline">

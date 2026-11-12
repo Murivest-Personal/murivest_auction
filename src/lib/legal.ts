@@ -1,11 +1,30 @@
-/* Locked legal copy. Rendered verbatim — never edit. */
+/* Legal copy. The auction disclosure and fee texts are locked —
+   render verbatim, never edit without board approval. */
 
 export const AUCTION_DISCLOSURE =
-  "Auction disclosure. Murivest Group Ltd provides commercial real estate services and publishes auction intelligence. Murivest is not the auctioneer, does not receive bids, does not hold deposits, and does not act as principal in any auction transaction. The selling party named on each listing is responsible for the auction process, the legal pack, and the sale contract. Guide prices are not valuations. All lots are subject to the selling party’s terms, due diligence, and formal contract. This information does not constitute an offer, solicitation, or investment advice. All engagements are by mandate only and subject to KYC/AML verification.";
+  "Auction disclosure. Murivest Group Ltd provides commercial real estate services and publishes auction intelligence. Murivest is not the auctioneer and does not act as principal in any auction transaction. Bid registrations submitted through this website are expressions of buyer intent, are not binding bids, and are routed by Murivest to the authorised sale channel. Deposits payable under the auction conditions are paid to the selling party, not to Murivest. Murivest acts for buyers under a separate engagement and charges the successful purchaser a brokerage fee of 2% of the final purchase price, payable after the 10% deposit. Guide prices are not valuations. All lots are subject to the selling party’s terms, due diligence, and formal contract. This information does not constitute an offer, solicitation, or investment advice. All engagements are by mandate only and subject to KYC/AML verification.";
 
 /** Selling party block (property detail page) — mandatory sentence. */
 export const SELLING_PARTY_STATEMENT =
-  "Murivest is not the auctioneer, does not receive bids, does not hold deposits.";
+  "Murivest is not the auctioneer, does not receive binding bids, and does not hold deposits.";
+
+/** The bold 2% buyer brokerage consent recorded with every bid
+    registration (user requirement — must render in bold). */
+export const FEE_CONSENT_TEXT =
+  "I accept that Murivest Group Ltd charges a buyer brokerage fee of 2% of the final purchase price, payable after I have paid the 10% deposit of the purchase price to the selling party under the auction conditions.";
+
+/** Version tag for the consent text stored with each bid record. */
+export const FEE_CONSENT_VERSION = "buyer-fee-2pct-v1";
+
+/** Terms consent text recorded with every bid registration. */
+export const TERMS_CONSENT_TEXT =
+  "I accept the Terms of Service and Privacy Policy, and confirm that this registration is a registration of intent, not a binding bid.";
+
+export const TERMS_CONSENT_VERSION = "terms-v2";
+
+/** Short fee line used on the buyer-fees page and listing sidebars. */
+export const FEE_SUMMARY =
+  "Murivest charges the successful buyer a brokerage fee of 2% of the final purchase price. The fee becomes payable after the buyer has paid the 10% deposit of the purchase price required under the auction conditions. The fee is separate from the deposit, separate from the auctioneer’s charges, and is never paid by the selling bank or institution.";
 
 /** Investment metrics footnote (addendum §1.4) */
 export const METRICS_FOOTNOTE =
@@ -19,9 +38,10 @@ export const METRIC_DEFINITIONS =
 export const CONDITIONS_DISCLAIMER =
   "Summary only. The full conditions of sale, together with any special conditions and addenda, govern the transaction. Murivest Group Ltd is not a party to the sale contract. Buyers must read the full legal pack before bidding.";
 
-/** Bid registration sub-line (features spec §3.5) */
+/** Bid registration sub-line (features spec §3.5) — updated for the
+    buyer-brokerage model and source confidentiality. */
 export const BID_SUBLINE =
-  "Bids submitted here are registrations of intent. Murivest will route your registration to the selling party named above. This is not a binding bid and Murivest does not receive bids on behalf of the auctioneer.";
+  "Bids submitted here are registrations of buyer intent. Murivest, acting as your buyer-side auction brokerage, will route your registration to the authorised sale channel and support your acquisition. The selling institution and appointed auctioneer are identified in the formal auction notice issued to registered bidders. This is not a binding bid.";
 
 /** Comment form guidance (addendum §4.5) */
 export const COMMENT_INTRO =
@@ -30,3 +50,7 @@ export const COMMENT_INTRO =
 /** Comment legal footer (addendum §4.7) — also lives in the Terms of Service. */
 export const COMMENT_LEGAL =
   "Comments are the views of the authors and not of Murivest Group Ltd. Murivest does not verify, endorse, or adopt any comment. Murivest reserves the right to remove any comment that is unlawful, defamatory, misleading, or that discloses confidential information, and to report unlawful content to the relevant authorities.";
+
+/** Research disclaimer carried on every article (blog manual §9.3). */
+export const RESEARCH_DISCLAIMER =
+  "This analysis is for informational purposes only and does not constitute investment, legal, or tax advice. Figures and statutory timelines are stated as generally applicable in Kenya and may vary with the facts of a specific matter. Obtain professional advice before acting.";

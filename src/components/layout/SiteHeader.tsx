@@ -13,26 +13,25 @@ interface NavItem {
 
 const NAV: NavItem[] = [
   {
-    label: "Kenya auctions",
-    href: "/kenya",
+    label: "Auctions",
+    href: "/auctions",
     children: [
-      { label: "All Kenya lots", href: "/kenya" },
-      { label: "Nairobi", href: "/kenya?region=Nairobi" },
-      { label: "Mombasa", href: "/kenya?region=Mombasa" },
-      { label: "Kisumu", href: "/kenya?region=Kisumu" },
-      { label: "Nakuru", href: "/kenya?region=Nakuru" },
-      { label: "Upcoming auction calendar", href: "/calendar?market=kenya" },
+      { label: "All lots", href: "/auctions" },
+      { label: "Kenya auctions", href: "/kenya" },
+      { label: "UK auctions", href: "/uk" },
+      { label: "Auction calendar", href: "/calendar" },
+      { label: "Nairobi submarkets", href: "/kenya" },
     ],
   },
   {
-    label: "UK auctions",
-    href: "/uk",
+    label: "Research",
+    href: "/intelligence",
     children: [
-      { label: "All UK lots", href: "/uk" },
-      { label: "London", href: "/uk?region=London" },
-      { label: "Regional UK", href: "/uk?region=North+West" },
-      { label: "Commercial investment", href: "/uk?assetType=Office" },
-      { label: "Upcoming auction calendar", href: "/calendar?market=uk" },
+      { label: "All research", href: "/intelligence" },
+      { label: "Auction defence & borrowers", href: "/intelligence" },
+      { label: "Trusts & asset structuring", href: "/intelligence" },
+      { label: "Buying at auction", href: "/intelligence" },
+      { label: "FAQs", href: "/faqs" },
     ],
   },
   {
@@ -46,15 +45,14 @@ const NAV: NavItem[] = [
     ],
   },
   {
-    label: "Market intelligence",
-    href: "/intelligence",
+    label: "Buyer services",
+    href: "/buyer-fees",
     children: [
-      { label: "Kenya auction market", href: "/kenya#market-context" },
-      { label: "UK auction market", href: "/uk#market-context" },
-      { label: "Articles", href: "/intelligence" },
+      { label: "Buyer representation & the 2% fee", href: "/buyer-fees" },
+      { label: "Auction alerts — the portal", href: "https://portal.murivest.com" },
+      { label: "Tools & calculators", href: "/tools" },
     ],
   },
-  { label: "Tools", href: "/tools" },
   { label: "About", href: "/about" },
 ];
 
@@ -78,14 +76,14 @@ export function SiteHeader() {
             className="flex items-baseline gap-3"
             aria-label="Murivest Auctions — home"
           >
-            <span className="font-serif text-2xl font-light tracking-[0.14em] text-green">
+            <span className="font-display text-xl tracking-[0.28em] text-green">
               MURIVEST
             </span>
             <span
               className="hidden sm:block w-px h-5 bg-sand self-center"
               aria-hidden="true"
             />
-            <span className="hidden sm:block font-body text-[0.55rem] tracking-[0.3em] uppercase text-gold">
+            <span className="hidden sm:block font-display text-[0.55rem] tracking-[0.34em] uppercase text-gold">
               Auctions
             </span>
           </Link>
@@ -100,7 +98,7 @@ export function SiteHeader() {
                     aria-current={
                       pathname === item.href.split("?")[0] ? "page" : undefined
                     }
-                    className="flex items-center gap-1 py-7 font-body text-[0.62rem] tracking-[0.2em] uppercase text-green hover:text-gold transition-colors whitespace-nowrap"
+                    className="flex items-center gap-1 py-7 font-display text-[0.62rem] tracking-[0.2em] uppercase text-green hover:text-gold transition-colors whitespace-nowrap"
                   >
                     {item.label}
                     {item.children ? (
@@ -116,7 +114,7 @@ export function SiteHeader() {
                           <li key={child.label}>
                             <Link
                               href={child.href}
-                              className="block py-2 font-body text-[0.6rem] tracking-[0.2em] uppercase text-ink hover:text-gold transition-colors"
+                              className="block py-2 font-display text-[0.6rem] tracking-[0.2em] uppercase text-ink hover:text-gold transition-colors"
                             >
                               {child.label}
                             </Link>
@@ -130,7 +128,7 @@ export function SiteHeader() {
               <li>
                 <Link
                   href="/contact"
-                  className="inline-flex items-center justify-center px-6 py-2.5 text-[0.6rem] tracking-[0.22em] uppercase font-body text-green border border-green hover:bg-green hover:text-cream transition-colors whitespace-nowrap"
+                  className="inline-flex items-center justify-center px-6 py-2.5 text-[0.6rem] tracking-[0.22em] uppercase font-display text-green border border-green hover:bg-green hover:text-cream transition-colors whitespace-nowrap"
                 >
                   Contact
                 </Link>
@@ -174,7 +172,7 @@ export function SiteHeader() {
                 <Link
                   href={item.href}
                   onClick={() => setOpen(false)}
-                  className="block font-body text-[0.7rem] tracking-[0.25em] uppercase text-green mb-3"
+                  className="block font-display text-[0.7rem] tracking-[0.25em] uppercase text-green mb-3"
                 >
                   {item.label}
                 </Link>
@@ -199,7 +197,7 @@ export function SiteHeader() {
               <Link
                 href="/contact"
                 onClick={() => setOpen(false)}
-                className="inline-flex items-center justify-center px-8 py-3 text-[0.65rem] tracking-[0.22em] uppercase font-body bg-green text-cream"
+                className="inline-flex items-center justify-center px-8 py-3 text-[0.65rem] tracking-[0.22em] uppercase font-display bg-green text-cream"
               >
                 Contact
               </Link>

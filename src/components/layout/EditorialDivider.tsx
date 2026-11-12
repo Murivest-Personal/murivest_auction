@@ -5,7 +5,7 @@ export function EditorialDivider() {
       <span className="font-serif italic text-base text-ink">
         Murivest Group Ltd. — Nairobi · London
       </span>
-      <span className="font-body text-[0.55rem] tracking-[0.3em] uppercase text-gold">
+      <span className="font-display text-[0.55rem] tracking-[0.3em] uppercase text-gold">
         Engagements by Mandate Only
       </span>
       <span className="font-serif italic text-base text-ink">

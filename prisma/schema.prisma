@@ -1,8 +1,9 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+// Prisma schema — LOCAL development/demo store for
+// auctions.murivest.com. Mirrors the Supabase tables in
+// /supabase/migrations (auction_bids, auction_inquiries,
+// property_comments). In production with SUPABASE_URL +
+// SUPABASE_SERVICE_ROLE_KEY configured, the API routes call the
+// Postgres RPCs instead and this store is bypassed.
 
 generator client {
   provider = "prisma-client-js"
@@ -29,4 +30,86 @@ model Post {
   authorId  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+/// Guest bid registrations (mirrors public.auction_bids).
+/// consent_fee + consent_terms + timestamps + consent text
+/// versions are stored with every record (user requirement:
+/// the buyer accepts the 2% fee and the T&Cs, all in the DB).
+model AuctionBid {
+  id                String   @id @default(uuid())
+  propertySanityId  String
+  propertySlug      String
+  propertyTitle     String
+  propertyMarket    String
+  bidderName        String
+  bidderEmail       String
+  bidderPhone       String
+  bidAmount         Float
+  bidCurrency       String   @default("KES")
+  consentTerms      Boolean
+  consentFee        Boolean
+  termsConsentAt    DateTime?
+  feeConsentAt      DateTime?
+  depositAcknowledged Boolean @default(true)
+  termsVersion      String?
+  feeTermsVersion   String?
+  status            String   @default("pending")
+  ipHash            String?
+  userAgent         String?
+  referrer          String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@index([propertySanityId])
+  @@index([bidderEmail, createdAt])
+  @@index([status, createdAt])
+}
+
+/// Buyer inquiries (mirrors public.auction_inquiries).
+model AuctionInquiry {
+  id               String   @id @default(uuid())
+  propertySanityId String?
+  propertySlug     String?
+  propertyTitle    String?
+  fullName         String
+  email            String
+  phone            String?
+  country          String?
+  buyerType        String?
+  budgetMin        Float?
+  budgetMax        Float?
+  currency         String   @default("KES")
+  financingMethod  String?
+  inquiryType      String   @default("general")
+  message          String?
+  status           String   @default("new")
+  consentPrivacy   Boolean  @default(false)
+  consentAt        DateTime?
+  ipHash           String?
+  userAgent        String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([propertySanityId])
+  @@index([email, createdAt])
+  @@index([status, createdAt])
+}
+
+/// Property comments, moderated before publication (mirrors
+/// public.property_comments).
+model PropertyComment {
+  id               String   @id @default(uuid())
+  propertySanityId String
+  propertySlug     String
+  authorName       String
+  authorEmail      String
+  body             String
+  moderationStatus String   @default("pending")
+  isPublic         Boolean  @default(false)
+  ipHash           String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([propertySanityId, moderationStatus])
 }

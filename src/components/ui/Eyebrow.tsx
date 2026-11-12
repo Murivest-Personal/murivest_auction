@@ -12,7 +12,7 @@ export function Eyebrow({
   return (
     <span
       className={cn(
-        "block font-body text-[0.6rem] tracking-[0.3em] uppercase mb-4",
+        "block font-display text-[0.6rem] tracking-[0.3em] uppercase mb-4",
         tone === "cream" ? "text-gold" : "text-[color:var(--mv-on-dark-faint)]",
         className
       )}

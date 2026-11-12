@@ -16,6 +16,7 @@ import { SellingPartyBlock } from "@/components/auctions/SellingPartyBlock";
 import { VerificationBlock } from "@/components/auctions/VerificationBlock";
 import { PropertyMap } from "@/components/auctions/PropertyMap";
 import { BidForm } from "@/components/auctions/BidForm";
+import { InquiryForm } from "@/components/auctions/InquiryForm";
 import { AuctionSidebar } from "@/components/auctions/AuctionSidebar";
 import { UnderwritingGates } from "@/components/auctions/UnderwritingGates";
 import { CommentList } from "@/components/auctions/CommentList";
@@ -156,7 +157,7 @@ export default async function PropertyDetailPage({ params }: Params) {
             {/* Loan repayment widget — beneath the investment metrics block (addendum §2.4) */}
             {property.facts.price ? (
               <section className="mt-10">
-                <span className="block font-body text-[0.6rem] tracking-[0.3em] uppercase text-gold mb-4">
+                <span className="block font-display text-[0.6rem] tracking-[0.3em] uppercase text-gold mb-4">
                   Debt side
                 </span>
                 <LoanRepaymentCalculator
@@ -285,7 +286,7 @@ export default async function PropertyDetailPage({ params }: Params) {
               </p>
               <Link
                 href={`/${property.market}`}
-                className="inline-flex items-center justify-center px-8 py-3 text-[0.65rem] tracking-[0.22em] uppercase font-body bg-green text-cream hover:bg-gold transition-colors"
+                className="inline-flex items-center justify-center px-8 py-3 text-[0.65rem] tracking-[0.22em] uppercase font-display bg-green text-cream hover:bg-gold transition-colors"
               >
                 View similar lots
               </Link>
@@ -294,11 +295,75 @@ export default async function PropertyDetailPage({ params }: Params) {
         </section>
       )}
 
+      {/* Register interest + auction alerts — buyer not ready to
+          name a number can request the brief; alerts live on the
+          client portal */}
+      <section className="border-t border-hairline py-20 md:py-28 bg-white">
+        <Container>
+          <div className="grid gap-12 lg:grid-cols-2 max-w-[72rem] mx-auto">
+            <div>
+              <span className="block font-display text-[0.6rem] tracking-[0.3em] uppercase text-gold mb-5">
+                Not ready to bid?
+              </span>
+              <h2 className="font-serif text-2xl md:text-3xl font-light text-green mb-4">
+                Register your interest.
+              </h2>
+              <p className="text-[0.95rem] leading-[1.8] text-ink mb-8">
+                Request the property brief, arrange a viewing, or put a
+                question to the team handling this lot. Murivest represents
+                buyers — under a separate engagement with transparent terms.
+              </p>
+              <div className="border border-hairline">
+                <div className="p-5 border-b border-hairline">
+                  <p className="text-[0.85rem] leading-[1.7] text-ink">
+                    <span className="text-green">Buyer brokerage:</span>{" "}
+                    Murivest charges the successful buyer a fee of{" "}
+                    <strong>2% of the final purchase price, payable after the
+                    10% deposit</strong>.{" "}
+                    <Link
+                      href="/buyer-fees"
+                      className="text-green underline underline-offset-4 hover:text-gold transition-colors"
+                    >
+                      Read the full fee terms
+                    </Link>
+                    .
+                  </p>
+                </div>
+                <div className="p-5">
+                  <p className="text-[0.85rem] leading-[1.7] text-ink">
+                    <span className="text-green">Auction alerts:</span> be
+                    notified of this and similar lots — including off-market
+                    opportunities — by registering at{" "}
+                    <a
+                      href="https://portal.murivest.com"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-green underline underline-offset-4 hover:text-gold transition-colors"
+                    >
+                      portal.murivest.com
+                    </a>
+                    .
+                  </p>
+                </div>
+              </div>
+            </div>
+            <InquiryForm
+              compact
+              property={{
+                _id: property._id,
+                slug: property.slug,
+                title: property.title,
+              }}
+            />
+          </div>
+        </Container>
+      </section>
+
       {/* Related lots */}
       {related.length > 0 ? (
         <section className="border-t border-hairline py-20 md:py-28">
           <Container>
-            <span className="block font-body text-[0.6rem] tracking-[0.3em] uppercase text-gold mb-4">
+            <span className="block font-display text-[0.6rem] tracking-[0.3em] uppercase text-gold mb-4">
               Same market · {property.assetType}
             </span>
             <h2 className="font-serif text-2xl md:text-3xl font-light text-green mb-10">

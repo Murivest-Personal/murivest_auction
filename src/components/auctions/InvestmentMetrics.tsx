@@ -23,7 +23,7 @@ export function InvestmentMetrics({ property }: { property: Property }) {
 
   return (
     <section className="mt-10" aria-label="Investment metrics">
-      <span className="block font-body text-[0.6rem] tracking-[0.3em] uppercase text-gold mb-4">
+      <span className="block font-display text-[0.6rem] tracking-[0.3em] uppercase text-gold mb-4">
         Investment metrics
       </span>
       <dl className="grid grid-cols-2 md:grid-cols-4 gap-px bg-[#E8E3DA] border border-[#E8E3DA]">

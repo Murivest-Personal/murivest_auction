@@ -46,7 +46,7 @@ export function ArrowLinkDark({
     <a
       href={href}
       className={cn(
-        "inline-flex items-center gap-3 font-body text-[0.65rem] tracking-[0.22em] uppercase text-cream/75 hover:text-gold transition-colors group",
+        "inline-flex items-center gap-3 font-display text-[0.65rem] tracking-[0.22em] uppercase text-cream/75 hover:text-gold transition-colors group",
         className
       )}
       {...rest}

@@ -27,11 +27,16 @@
   --color-destructive: #a23b2e;
   --color-white: #ffffff;
 
-  /* Typography — serif only. No sans-serif anywhere except
-     the native Mapbox UI. */
+  /* Typography — the luxury gallery trio. Serif only, no
+     sans-serif anywhere except the native Mapbox UI.
+     - font-display: Cinzel — Roman capitals for structural
+       labels, navigation, eyebrows, museum placards, buttons.
+     - font-body: Times New Roman — the reading voice.
+     - font-serif: Cormorant Garamond — oversized editorial
+       statements and display headlines. */
   --font-serif: var(--font-cormorant), Georgia, serif;
-  --font-display: var(--font-cormorant), Georgia, serif;
-  --font-body: var(--font-libre), Georgia, serif;
+  --font-display: var(--font-cinzel), "Times New Roman", serif;
+  --font-body: "Times New Roman", Times, Georgia, serif;
 }
 
 :root {
@@ -69,7 +74,7 @@ html {
 body {
   background-color: var(--mv-cream);
   color: var(--mv-green);
-  font-family: var(--font-libre), Georgia, serif;
+  font-family: "Times New Roman", Times, Georgia, serif;
 }
 
 /* Focus states — visible gold ring on all interactive elements */
@@ -139,9 +144,9 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 0.75rem;
-  font-family: var(--font-libre), Georgia, serif;
-  font-size: 0.65rem;
-  letter-spacing: 0.22em;
+  font-family: var(--font-cinzel), "Times New Roman", serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.24em;
   text-transform: uppercase;
   color: var(--mv-green);
   transition: color 200ms ease;
@@ -173,7 +178,7 @@ body {
 
 /* ---------- Mapbox (native UI permitted sans-serif) ---------- */
 .mapboxgl-popup-content {
-  font-family: var(--font-libre), Georgia, serif;
+  font-family: "Times New Roman", Times, Georgia, serif;
   font-size: 0.8rem;
   color: var(--mv-green);
   border-radius: 0;

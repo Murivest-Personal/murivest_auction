@@ -21,6 +21,7 @@ export const SITE = {
   siteName: "Murivest Auctions",
   url: "https://auctions.murivest.com",
   mainSite: "https://murivest.com",
+  portalUrl: "https://portal.murivest.com",
   linkedin: "https://www.linkedin.com/company/murivest-group-ltd",
   officeEmail: "office@murivest.com",
   officePhone: "+254 115 277 610",

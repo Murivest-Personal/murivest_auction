@@ -6,7 +6,7 @@ export default function NotFound() {
     <section className="py-24 md:py-40">
       <Container>
         <div className="max-w-[42rem]">
-          <span className="block font-body text-[0.6rem] tracking-[0.3em] uppercase text-gold mb-6">
+          <span className="block font-display text-[0.6rem] tracking-[0.3em] uppercase text-gold mb-6">
             404
           </span>
           <h1 className="font-serif font-light text-green leading-tight text-[clamp(2rem,3.5vw,3.2rem)] mb-6">
@@ -20,13 +20,13 @@ export default function NotFound() {
           <div className="flex flex-col sm:flex-row gap-6">
             <Link
               href="/auctions"
-              className="inline-flex items-center justify-center px-8 py-3 text-[0.65rem] tracking-[0.22em] uppercase font-body bg-green text-cream hover:bg-gold transition-colors"
+              className="inline-flex items-center justify-center px-8 py-3 text-[0.65rem] tracking-[0.22em] uppercase font-display bg-green text-cream hover:bg-gold transition-colors"
             >
               Browse current lots
             </Link>
             <Link
               href="/"
-              className="inline-flex items-center justify-center px-8 py-3 text-[0.65rem] tracking-[0.22em] uppercase font-body text-green border border-green hover:bg-green hover:text-cream transition-colors"
+              className="inline-flex items-center justify-center px-8 py-3 text-[0.65rem] tracking-[0.22em] uppercase font-display text-green border border-green hover:bg-green hover:text-cream transition-colors"
             >
               Return home
             </Link>

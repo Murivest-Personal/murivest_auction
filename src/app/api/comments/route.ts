@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { createHash } from "crypto";
+import { db } from "@/lib/db";
 
 export const runtime = "nodejs";
 
@@ -35,20 +36,45 @@ export async function POST(req: NextRequest) {
     }
 
     const supabase = getClient();
-    if (!supabase) {
-      return NextResponse.json(
-        {
-          error:
-            "Comments are temporarily unavailable. Please contact office@murivest.com.",
-        },
-        { status: 503 }
-      );
-    }
-
     const ip =
       req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
       req.headers.get("x-real-ip") ??
       null;
+
+    if (!supabase) {
+      // Local demo store — moderated comments persist locally.
+      const email = String(body.author_email ?? "").trim().toLowerCase();
+      const name = String(body.author_name ?? "").trim();
+      const text = String(body.body ?? "").trim();
+      if (name.length < 2 || name.length > 80)
+        return NextResponse.json(
+          { error: "Please provide your name (2–80 characters)." },
+          { status: 400 }
+        );
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
+        return NextResponse.json(
+          { error: "Please provide a valid email address." },
+          { status: 400 }
+        );
+      if (text.length < 10 || text.length > 2000)
+        return NextResponse.json(
+          { error: "Comments must be between 10 and 2000 characters." },
+          { status: 400 }
+        );
+      const comment = await db.propertyComment.create({
+        data: {
+          propertySanityId: String(body.property_sanity_id ?? ""),
+          propertySlug: String(body.property_slug ?? ""),
+          authorName: name,
+          authorEmail: email,
+          body: text,
+          moderationStatus: "pending",
+          isPublic: false,
+          ipHash: hashIp(ip),
+        },
+      });
+      return NextResponse.json({ ok: true, comment_id: comment.id });
+    }
 
     const { data, error } = await supabase.rpc("submit_property_comment", {
       p_property_sanity_id: body.property_sanity_id,

@@ -1,14 +1,22 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { AUCTION_DISCLOSURE, BID_SUBLINE } from "@/lib/legal";
+import {
+  AUCTION_DISCLOSURE,
+  BID_SUBLINE,
+  FEE_CONSENT_TEXT,
+  TERMS_CONSENT_TEXT,
+} from "@/lib/legal";
 import type { Property } from "@/lib/types";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
 /** Guest bid registration — no sign-in, no account, no session
     (features spec §2). Posts to /api/bids, which calls the
-    service-role RPC. Honeypot + timing check on every submission. */
+    service-role RPC. Honeypot + timing check on every submission.
+    The buyer must accept BOTH the Terms and the bold 2% buyer
+    brokerage fee (payable after the 10% deposit) — both consents
+    are recorded in the database with timestamps and text versions. */
 export function BidForm({ property }: { property: Property }) {
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState("");
@@ -22,6 +30,7 @@ export function BidForm({ property }: { property: Property }) {
     bidder_phone: "",
     bid_amount: "",
     consent_terms: false,
+    consent_fee: false,
     hp_field: "",
   });
   const amountRef = useRef<HTMLInputElement>(null);
@@ -52,6 +61,8 @@ export function BidForm({ property }: { property: Property }) {
       return "Please provide a bid amount greater than zero.";
     if (!form.consent_terms)
       return "You must accept the Terms and Privacy Policy.";
+    if (!form.consent_fee)
+      return "You must accept the 2% buyer brokerage fee to register your bid.";
     return null;
   }
 
@@ -80,6 +91,7 @@ export function BidForm({ property }: { property: Property }) {
           bid_amount: Number(form.bid_amount),
           bid_currency: currency,
           consent_terms: form.consent_terms,
+          consent_fee: form.consent_fee,
           hp_field: form.hp_field,
           form_started_at: startedAt,
         }),
@@ -106,7 +118,7 @@ export function BidForm({ property }: { property: Property }) {
         role="status"
         className="border border-hairline bg-white p-8 md:p-10 max-w-[42rem] mx-auto text-center"
       >
-        <span className="block font-body text-[0.6rem] tracking-[0.3em] uppercase text-gold mb-4">
+        <span className="block font-display text-[0.6rem] tracking-[0.3em] uppercase text-gold mb-4">
           Registration received
         </span>
         <p className="font-serif text-2xl font-light text-green mb-4">
@@ -114,10 +126,11 @@ export function BidForm({ property }: { property: Property }) {
         </p>
         <p className="text-[0.95rem] leading-[1.8] text-ink mb-4">
           Your bid registration has been received and will be reviewed by the
-          Murivest team. You will receive confirmation by email.
+          Murivest team. Your acceptance of the buyer brokerage terms has been
+          recorded. You will receive confirmation by email.
         </p>
         {reference ? (
-          <p className="text-[0.6rem] tracking-[0.25em] uppercase text-charcoal">
+          <p className="text-[0.6rem] tracking-[0.25em] uppercase text-charcoal font-display">
             Reference {reference}
           </p>
         ) : null}
@@ -142,7 +155,7 @@ export function BidForm({ property }: { property: Property }) {
         </p>
 
         {property.guidePrice ? (
-          <p className="mb-6 text-[0.6rem] tracking-[0.25em] uppercase text-charcoal">
+          <p className="mb-6 text-[0.6rem] tracking-[0.25em] uppercase text-charcoal font-display">
             Guide price: <span className="text-green">{property.guidePrice}</span>
           </p>
         ) : null}
@@ -159,7 +172,7 @@ export function BidForm({ property }: { property: Property }) {
 
         <div className="grid gap-8 sm:grid-cols-2">
           <label className="block">
-            <span className="block text-[0.6rem] tracking-[0.28em] uppercase text-charcoal mb-3 font-body">
+            <span className="block text-[0.6rem] tracking-[0.28em] uppercase text-charcoal mb-3 font-display">
               Full name
             </span>
             <input
@@ -170,11 +183,11 @@ export function BidForm({ property }: { property: Property }) {
               minLength={2}
               maxLength={120}
               autoComplete="name"
-              className="w-full bg-transparent border-0 border-b border-sand focus:border-green outline-none py-3 font-body text-base text-green placeholder:text-charcoal/50 transition-colors"
+              className="w-full bg-transparent border-0 border-b border-sand focus:border-green outline-none py-3 text-base text-green placeholder:text-charcoal/50 transition-colors"
             />
           </label>
           <label className="block">
-            <span className="block text-[0.6rem] tracking-[0.28em] uppercase text-charcoal mb-3 font-body">
+            <span className="block text-[0.6rem] tracking-[0.28em] uppercase text-charcoal mb-3 font-display">
               Email address
             </span>
             <input
@@ -183,11 +196,11 @@ export function BidForm({ property }: { property: Property }) {
               onChange={set("bidder_email")}
               required
               autoComplete="email"
-              className="w-full bg-transparent border-0 border-b border-sand focus:border-green outline-none py-3 font-body text-base text-green placeholder:text-charcoal/50 transition-colors"
+              className="w-full bg-transparent border-0 border-b border-sand focus:border-green outline-none py-3 text-base text-green placeholder:text-charcoal/50 transition-colors"
             />
           </label>
           <label className="block">
-            <span className="block text-[0.6rem] tracking-[0.28em] uppercase text-charcoal mb-3 font-body">
+            <span className="block text-[0.6rem] tracking-[0.28em] uppercase text-charcoal mb-3 font-display">
               Phone
             </span>
             <input
@@ -197,11 +210,11 @@ export function BidForm({ property }: { property: Property }) {
               required
               autoComplete="tel"
               placeholder="+254 …"
-              className="w-full bg-transparent border-0 border-b border-sand focus:border-green outline-none py-3 font-body text-base text-green placeholder:text-charcoal/50 transition-colors"
+              className="w-full bg-transparent border-0 border-b border-sand focus:border-green outline-none py-3 text-base text-green placeholder:text-charcoal/50 transition-colors"
             />
           </label>
           <label className="block">
-            <span className="block text-[0.6rem] tracking-[0.28em] uppercase text-charcoal mb-3 font-body">
+            <span className="block text-[0.6rem] tracking-[0.28em] uppercase text-charcoal mb-3 font-display">
               Bid amount ({currency})
             </span>
             <input
@@ -213,7 +226,7 @@ export function BidForm({ property }: { property: Property }) {
               min={1}
               step={1000}
               inputMode="numeric"
-              className="w-full bg-transparent border-0 border-b border-sand focus:border-green outline-none py-3 font-body text-base text-green placeholder:text-charcoal/50 transition-colors"
+              className="w-full bg-transparent border-0 border-b border-sand focus:border-green outline-none py-3 text-base text-green placeholder:text-charcoal/50 transition-colors"
             />
           </label>
         </div>
@@ -232,6 +245,7 @@ export function BidForm({ property }: { property: Property }) {
           </label>
         </div>
 
+        {/* Consent 1 — Terms & Privacy */}
         <label className="flex items-start gap-4 mt-8 cursor-pointer">
           <input
             type="checkbox"
@@ -240,11 +254,33 @@ export function BidForm({ property }: { property: Property }) {
             required
             className="mt-1 accent-[#1C2B1E] w-4 h-4"
           />
-          <span className="text-[0.75rem] leading-[1.7] text-charcoal font-body">
-            I accept the Terms of Service and Privacy Policy, and confirm that
-            this registration is a registration of intent, not a binding bid.
+          <span className="text-[0.75rem] leading-[1.7] text-charcoal">
+            {TERMS_CONSENT_TEXT}
           </span>
         </label>
+
+        {/* Consent 2 — the 2% buyer brokerage fee. BOLD, boxed,
+            gold-ruled. The acceptance is stored in the database
+            with a timestamp and consent-text version. */}
+        <div className="border border-green bg-cream p-5 mt-5">
+          <label className="flex items-start gap-4 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={form.consent_fee}
+              onChange={set("consent_fee")}
+              required
+              className="mt-1 accent-[#8B6C2A] w-4 h-4"
+            />
+            <span>
+              <span className="block font-display text-[0.55rem] tracking-[0.3em] uppercase text-gold mb-2">
+                Buyer brokerage fee — required
+              </span>
+              <strong className="text-[0.85rem] leading-[1.7] text-green font-bold">
+                {FEE_CONSENT_TEXT}
+              </strong>
+            </span>
+          </label>
+        </div>
 
         {status === "error" && error ? (
           <p
@@ -259,14 +295,14 @@ export function BidForm({ property }: { property: Property }) {
         <button
           type="submit"
           disabled={status === "submitting" || disabled}
-          className="w-full mt-8 px-8 py-4 text-[0.65rem] tracking-[0.25em] uppercase font-body bg-green text-cream hover:bg-gold transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+          className="w-full mt-8 px-8 py-4 text-[0.65rem] tracking-[0.25em] uppercase font-display bg-green text-cream hover:bg-gold transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
         >
           {status === "submitting" ? "Submitting" : "Submit bid registration"}
         </button>
       </div>
 
       {/* Auction disclosure — verbatim, on every bid form */}
-      <div className="border border-hairline bg-cream p-6 mt-6 text-[0.75rem] leading-[1.7] text-charcoal font-body">
+      <div className="border border-hairline bg-cream p-6 mt-6 text-[0.75rem] leading-[1.7] text-charcoal">
         {AUCTION_DISCLOSURE}
       </div>
     </form>

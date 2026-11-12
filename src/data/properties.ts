@@ -84,7 +84,7 @@ const KENYA: Property[] = [
     yield: "12.0% net",
     auctionDate: "2026-11-26T11:00:00+03:00",
     auctionHouse: "Garam Auctioneers",
-    sellingParty: "KCB Bank Kenya PLC (chargee sale)",
+    sellingParty: "Kenyan commercial bank (chargee sale — institution disclosed in the legal pack)",
     legalPackAvailable: true,
     referenceCode: "MRV-004",
     viewingDetails: VIEWING,

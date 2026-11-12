@@ -84,7 +84,7 @@ export async function MarketHubPage({
           <div className="absolute inset-0 bg-gradient-to-b from-green/10 via-green/40 to-green/75" />
         </div>
         <div className="relative z-10 max-w-[1400px] mx-auto px-6 md:px-12 lg:px-16 pb-12 w-full">
-          <span className="block font-body text-[0.6rem] tracking-[0.3em] uppercase text-[color:var(--mv-on-dark-faint)] mb-5">
+          <span className="block font-display text-[0.6rem] tracking-[0.3em] uppercase text-[color:var(--mv-on-dark-faint)] mb-5">
             Market hub · market data updated {formatDate(hub.dataLastUpdated)}
           </span>
           <h1 className="font-serif font-light text-cream leading-[1.15] text-[clamp(2rem,3.5vw,3.2rem)] max-w-[44rem]">

@@ -155,14 +155,14 @@ export function ReturnCalculator({
   if (variant === "widget") {
     return (
       <div className="border border-hairline bg-white p-6">
-        <p className="font-body text-[0.55rem] tracking-[0.3em] uppercase text-gold mb-4">
+        <p className="font-display text-[0.55rem] tracking-[0.3em] uppercase text-gold mb-4">
           Return calculator
         </p>
         {!open ? (
           <button
             type="button"
             onClick={() => setOpen(true)}
-            className="w-full px-8 py-4 text-[0.65rem] tracking-[0.25em] uppercase font-body bg-green text-cream hover:bg-gold transition-colors"
+            className="w-full px-8 py-4 text-[0.65rem] tracking-[0.25em] uppercase font-display bg-green text-cream hover:bg-gold transition-colors"
           >
             Calculate return
           </button>

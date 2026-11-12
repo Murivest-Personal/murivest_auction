@@ -59,14 +59,14 @@ export function AuctionSidebar({ property }: { property: Property }) {
           {property.status === "sold" ? (
             <a
               href={`/${property.market}`}
-              className="block text-center px-8 py-4 text-[0.65rem] tracking-[0.25em] uppercase font-body bg-green text-cream hover:bg-gold transition-colors"
+              className="block text-center px-8 py-4 text-[0.65rem] tracking-[0.25em] uppercase font-display bg-green text-cream hover:bg-gold transition-colors"
             >
               View similar lots
             </a>
           ) : (
             <a
               href={property.status === "under-offer" ? "#selling-party" : "#register-your-bid"}
-              className="block text-center px-8 py-4 text-[0.65rem] tracking-[0.25em] uppercase font-body bg-green text-cream hover:bg-gold transition-colors"
+              className="block text-center px-8 py-4 text-[0.65rem] tracking-[0.25em] uppercase font-display bg-green text-cream hover:bg-gold transition-colors"
             >
               {property.status === "under-offer"
                 ? "Request notification"
@@ -152,14 +152,14 @@ function ShareButtons({ property }: { property: Property }) {
       <button
         type="button"
         onClick={share}
-        className="font-body text-[0.6rem] tracking-[0.25em] uppercase text-gold hover:text-green transition-colors"
+        className="font-display text-[0.6rem] tracking-[0.25em] uppercase text-gold hover:text-green transition-colors"
       >
         Share
       </button>
       <button
         type="button"
         onClick={() => copy()}
-        className="font-body text-[0.6rem] tracking-[0.25em] uppercase text-gold hover:text-green transition-colors"
+        className="font-display text-[0.6rem] tracking-[0.25em] uppercase text-gold hover:text-green transition-colors"
       >
         {copied ? "Link copied" : "Copy link"}
       </button>

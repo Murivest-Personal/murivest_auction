@@ -44,7 +44,7 @@ export default function ContactPage() {
         <Container>
           <div className="grid gap-px bg-hairline border border-hairline md:grid-cols-3">
             <div className="bg-cream p-8">
-              <p className="font-body text-[0.6rem] tracking-[0.3em] uppercase text-gold mb-4">
+              <p className="font-display text-[0.6rem] tracking-[0.3em] uppercase text-gold mb-4">
                 Email
               </p>
               <a
@@ -58,7 +58,7 @@ export default function ContactPage() {
               </p>
             </div>
             <div className="bg-cream p-8">
-              <p className="font-body text-[0.6rem] tracking-[0.3em] uppercase text-gold mb-4">
+              <p className="font-display text-[0.6rem] tracking-[0.3em] uppercase text-gold mb-4">
                 Telephone
               </p>
               <p className="font-serif text-xl font-light text-green">
@@ -69,7 +69,7 @@ export default function ContactPage() {
               </p>
             </div>
             <div className="bg-cream p-8">
-              <p className="font-body text-[0.6rem] tracking-[0.3em] uppercase text-gold mb-4">
+              <p className="font-display text-[0.6rem] tracking-[0.3em] uppercase text-gold mb-4">
                 Offices
               </p>
               <p className="text-[0.9rem] leading-[1.8] text-green">

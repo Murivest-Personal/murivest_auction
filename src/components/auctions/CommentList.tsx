@@ -6,7 +6,7 @@ import type { PublicComment } from "@/lib/types";
 export function CommentList({ comments }: { comments: PublicComment[] }) {
   return (
     <section id="public-comments" className="scroll-mt-24">
-      <span className="block font-body text-[0.6rem] tracking-[0.3em] uppercase text-gold mb-4">
+      <span className="block font-display text-[0.6rem] tracking-[0.3em] uppercase text-gold mb-4">
         Moderated by default
       </span>
       <h2 className="font-serif text-2xl md:text-3xl font-light text-green mb-8">

@@ -6,7 +6,7 @@ import type { ConditionsOfSale as ConditionsType } from "@/lib/types";
 export function ConditionsOfSale({ conditions }: { conditions: ConditionsType }) {
   return (
     <section id="conditions-of-sale" className="scroll-mt-24">
-      <span className="block font-body text-[0.6rem] tracking-[0.3em] uppercase text-gold mb-4">
+      <span className="block font-display text-[0.6rem] tracking-[0.3em] uppercase text-gold mb-4">
         {conditions.jurisdiction === "Kenya"
           ? "Land Act 2012 · Auctioneers Act"
           : conditions.jurisdiction === "UK"

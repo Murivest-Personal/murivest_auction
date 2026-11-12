@@ -3,7 +3,13 @@ import { AUCTION_DISCLOSURE } from "@/lib/legal";
 import { SITE } from "@/lib/brand";
 import { Container } from "@/components/ui/Container";
 
-const COLUMNS: { title: string; links: { label: string; href: string }[] }[] = [
+interface FooterLink {
+  label: string;
+  href: string;
+  external?: boolean;
+}
+
+const COLUMNS: { title: string; links: FooterLink[] }[] = [
   {
     title: "Auctions",
     links: [
@@ -14,22 +20,22 @@ const COLUMNS: { title: string; links: { label: string; href: string }[] }[] = [
     ],
   },
   {
-    title: "Guides",
+    title: "Buyer services",
     links: [
-      { label: "How auctions work", href: "/how-auctions-work" },
-      { label: "Buying at auction", href: "/how-auctions-work/buying" },
-      { label: "Selling at auction", href: "/how-auctions-work/selling" },
-      { label: "Legal pack and due diligence", href: "/how-auctions-work/legal-pack" },
-      { label: "Auction glossary", href: "/how-auctions-work/glossary" },
+      { label: "Buyer representation & fees", href: "/buyer-fees" },
+      { label: "Auction alerts — the portal", href: "https://portal.murivest.com", external: true },
+      { label: "Tools & calculators", href: "/tools" },
+      { label: "FAQs", href: "/faqs" },
     ],
   },
   {
-    title: "Intelligence",
+    title: "Research",
     links: [
-      { label: "Kenya auction market", href: "/kenya" },
-      { label: "UK auction market", href: "/uk" },
-      { label: "Articles", href: "/intelligence" },
-      { label: "Calculators", href: "/tools" },
+      { label: "All research", href: "/intelligence" },
+      { label: "Auction defence & borrowers", href: "/intelligence" },
+      { label: "Trusts & asset structuring", href: "/intelligence" },
+      { label: "Buying at auction", href: "/intelligence" },
+      { label: "Guides & glossary", href: "/how-auctions-work" },
     ],
   },
   {
@@ -51,10 +57,10 @@ export function SiteFooter() {
       <Container className="py-16 md:py-20">
         <div className="grid gap-12 lg:grid-cols-[1.2fr_2fr] mb-16">
           <div>
-            <p className="font-serif text-2xl font-light tracking-[0.18em] text-cream mb-4">
+            <p className="font-display text-lg tracking-[0.3em] text-cream mb-4">
               MURIVEST
             </p>
-            <p className="font-body text-[0.55rem] tracking-[0.3em] uppercase text-[color:var(--mv-on-dark-faint)] mb-6">
+            <p className="font-display text-[0.55rem] tracking-[0.3em] uppercase text-[color:var(--mv-on-dark-faint)] mb-6">
               Auctions — Kenya · United Kingdom
             </p>
             <p className="max-w-[26rem] text-[0.9rem] leading-[1.8] text-[color:var(--mv-on-dark)]">
@@ -80,18 +86,29 @@ export function SiteFooter() {
           <nav aria-label="Footer" className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {COLUMNS.map((col) => (
               <div key={col.title}>
-                <p className="font-body text-[0.55rem] tracking-[0.3em] uppercase text-[color:var(--mv-on-dark-faint)] mb-5">
+                <p className="font-display text-[0.55rem] tracking-[0.3em] uppercase text-[color:var(--mv-on-dark-faint)] mb-5">
                   {col.title}
                 </p>
                 <ul className="space-y-3">
                   {col.links.map((link) => (
                     <li key={link.label}>
-                      <Link
-                        href={link.href}
-                        className="text-[0.85rem] text-[color:var(--mv-on-dark)] hover:text-gold transition-colors"
-                      >
-                        {link.label}
-                      </Link>
+                      {link.external ? (
+                        <a
+                          href={link.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-[0.85rem] text-[color:var(--mv-on-dark)] hover:text-gold transition-colors"
+                        >
+                          {link.label} ↗
+                        </a>
+                      ) : (
+                        <Link
+                          href={link.href}
+                          className="text-[0.85rem] text-[color:var(--mv-on-dark)] hover:text-gold transition-colors"
+                        >
+                          {link.label}
+                        </Link>
+                      )}
                     </li>
                   ))}
                 </ul>
@@ -100,8 +117,33 @@ export function SiteFooter() {
           </nav>
         </div>
 
+        {/* Auction alerts — portal registration CTA */}
+        <div className="border border-[color:var(--mv-on-dark-faint)]/40 p-8 mb-16 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+          <div>
+            <p className="font-display text-[0.55rem] tracking-[0.3em] uppercase text-[color:var(--mv-on-dark-faint)] mb-3">
+              Auction alerts
+            </p>
+            <p className="text-[1.05rem] leading-[1.7] text-cream mb-2 font-serif font-light">
+              Be notified of auction and off-market properties.
+            </p>
+            <p className="text-[0.85rem] leading-[1.7] text-[color:var(--mv-on-dark)] max-w-[38rem]">
+              Registered buyers receive auction dates, new lots and off-market
+              opportunities through the Murivest client portal.
+            </p>
+          </div>
+          <a
+            href={SITE.portalUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center gap-3 whitespace-nowrap px-8 py-4 text-[0.65rem] tracking-[0.25em] uppercase font-display border border-cream text-cream hover:bg-cream hover:text-green transition-colors"
+          >
+            Register at portal.murivest.com
+            <span aria-hidden="true">↗</span>
+          </a>
+        </div>
+
         {/* Auction disclosure — locked copy, verbatim (§5.13) */}
-        <div className="border border-hairline bg-cream p-6 text-[0.75rem] leading-[1.7] text-charcoal font-body">
+        <div className="border border-hairline bg-cream p-6 text-[0.75rem] leading-[1.7] text-charcoal">
           {AUCTION_DISCLOSURE}
         </div>
 

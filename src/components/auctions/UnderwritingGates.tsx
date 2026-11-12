@@ -39,7 +39,7 @@ export function UnderwritingGates({ property }: { property: Property }) {
 
   return (
     <section className="border-t border-hairline pt-10 mt-16" id="underwriting-screen">
-      <span className="block font-body text-[0.6rem] tracking-[0.3em] uppercase text-gold mb-4">
+      <span className="block font-display text-[0.6rem] tracking-[0.3em] uppercase text-gold mb-4">
         Institutional screen
       </span>
       <h2 className="font-serif text-2xl md:text-3xl font-light text-green mb-4">

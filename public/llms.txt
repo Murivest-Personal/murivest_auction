@@ -1,59 +1,167 @@
 # Murivest Auctions (auctions.murivest.com)
 
-> Commercial property auction intelligence for Kenya and the United Kingdom,
-> published by Murivest Group Ltd — a commercial real estate services firm
-> providing brokerage, property and asset management, and investment property
-> services across East Africa, the United Kingdom and international markets.
-> Murivest Group Ltd is not an auctioneer, does not receive bids, does not
-> hold deposits, and does not act as principal in any auction transaction.
+> Commercial and investment property auction intelligence for Kenya and the
+> United Kingdom, published by Murivest Group Ltd — a commercial real estate
+> services firm providing brokerage, property and asset management, and
+> investment property services across East Africa, the United Kingdom and
+> international markets. Murivest acts as buyer-side auction brokerage: it
+> publishes verified auction intelligence and represents buyers under separate
+> mandate. Murivest Group Ltd is not an auctioneer, does not receive binding
+> bids, does not hold deposits, and does not act as principal in any auction
+> transaction.
 
 ## About
 
-Murivest Group Ltd aggregates, verifies and presents commercial property
-auction opportunities and routes qualified buyers to the appropriate
-auctioneer, receiver or bank process. All engagements are by mandate only,
-non-pooled, and subject to KYC/AML verification. The selling party named on
-each listing is responsible for the auction process, the legal pack, and the
-sale contract. Guide prices are not valuations.
+Murivest Group Ltd aggregates, verifies and presents property auction
+opportunities and represents buyers through the acquisition process.
+Buyer brokerage fee: 2% of the final purchase price, payable by the
+successful buyer after the 10% deposit of the purchase price paid to the
+selling party under the auction conditions. All engagements are by mandate
+only and subject to KYC/AML verification. The selling institution and
+appointed auctioneer for each lot are identified in the formal auction
+notice issued to registered bidders. Guide prices are not valuations.
 
 ## Markets
 
-- Kenya (/kenya): bank sales, receiver sales, court-ordered sales and private
-  treaty lots. Governed by the Land Act 2012 (ss. 90-97) and the Auctioneers
-  Act (Cap 526). 25% deposit on the fall of the hammer (cash or banker's
-  cheque), 75% balance within 90 days, stamp duty of 4% on urban properties.
-- United Kingdom (/uk): commercial investment lots across London and regional
-  UK. Governed by the RICS Common Auction Conditions (4th edition) and the
-  Standard Commercial Property Conditions. 10% deposit on exchange, balance
-  typically 20 working days later, unconditional contracts on the fall of the
-  hammer.
+- Kenya (/kenya): bank chargee sales, receiver sales and private treaty
+  lots. Governed by the Land Act 2012 (s.90: 90-day notice of default;
+  s.96 as amended 2016: notification of sale at least 40 days before sale)
+  and the Auctioneers Act (Cap 526) and Auctioneers Rules 1997. Deposits
+  and completion periods are set by each sale's conditions (Murivest-listed
+  sales require a 10% deposit). Stamp duty 4% of market value within
+  municipalities, 2% outside; capital gains tax 15% (as at writing).
+- United Kingdom (/uk): commercial investment lots across London and
+  regional UK, under RICS Common Auction Conditions and standard
+  commercial property conditions. 10% deposit on exchange; unconditional
+  contracts on the fall of the hammer.
 
 ## Content
 
 - /auctions — all verified lots, filterable by market, region, asset type,
   status and price
-- /calendar — upcoming auctions by date, market and auction house
+- /calendar — upcoming auctions by date and market
 - /how-auctions-work — buying, selling, legal pack and glossary guides
-- /intelligence — market analysis and evergreen guides from Murivest Research
+- /intelligence — the research library: 46 articles across six subject
+  clusters (auction defence & borrowers, how auctions actually work, trusts
+  & asset structuring, buying at auction, finance & due diligence, buyer
+  representation & fees) plus Kenya and UK market analysis
+- /buyer-fees — the 2% buyer brokerage model with worked examples (KES
+  10m → 200k; 50m → 1m; 100m → 2m)
+- /faqs — answers on how Kenyan auctions work, who pays what, deposits,
+  financing, due diligence and foreign buyer rules
 - /tools — free institutional-grade calculators: return (net yield,
   cash-on-cash, DSCR, levered IRR), underwriting gates, and loan repayment.
   All calculations run client-side; no data is stored.
+- Auction and off-market alerts: registered buyers are notified through the
+  client portal at https://portal.murivest.com (this public site hosts no
+  accounts).
 
 ## Listing facts
 
-Each listing states the selling party, auction house, auction date, guide
-price, tenure, legal pack status, a full property facts set (price, NOI,
-gross rent where disclosed, building area, occupancy), derived investment
-metrics (net yield, payback, ROI, GRM), jurisdiction-appropriate conditions
-of sale, and a verification summary. Where gross annual rent is not disclosed
-by the selling party, GRM is shown as "Not disclosed."
+Each listing states the sale mechanism, auction date, guide price, tenure,
+legal pack status, a full property facts set (price, NOI, gross rent where
+disclosed, building area, occupancy), derived investment metrics (net
+yield, payback, ROI, GRM), jurisdiction-appropriate conditions of sale, and
+a verification summary. Where gross annual rent is not disclosed by the
+selling party, GRM is shown as "Not disclosed."
 
-## Citation policy
+## Research library — auction defence & borrowers
 
-Content on auctions.murivest.com may be cited with attribution to
-"Murivest Group Ltd" and a link to the relevant page. Auction disclosure:
-Murivest Group Ltd provides commercial real estate services and publishes
-auction intelligence. Murivest is not the auctioneer, does not receive bids,
-does not hold deposits, and does not act as principal in any auction
-transaction. This information does not constitute an offer, solicitation, or
-investment advice.
+- /intelligence/how-to-avoid-being-auctioned-kenya-borrower-defence — the
+  three statutory windows and the defence sequence
+- /intelligence/what-to-do-when-you-receive-a-statutory-notice-kenya — the
+  first 40 days after a statutory notice
+- /intelligence/why-borrowers-default-and-get-auctioned-kenya — anatomy of
+  a distressed loan
+- /intelligence/how-to-stop-a-bank-auction-kenya — restructure, refinance,
+  redeem or sell first
+- /intelligence/loan-restructuring-vs-refinancing-distressed-property-kenya
+- /intelligence/redemption-rights-kenya-before-and-after-the-hammer
+
+## Research library — how auctions actually work
+
+- /intelligence/how-auctioneers-get-to-sell-your-property-kenya — the chain
+  of authority
+- /intelligence/how-banks-exercise-power-of-sale-kenya
+- /intelligence/auctioneers-act-kenya-borrowers-buyers-guide
+- /intelligence/forced-sale-valuation-reserve-prices-kenya — why auction
+  discounts exist
+- /intelligence/how-to-buy-property-on-loan-without-being-auctioned
+
+## Research library — trusts & asset structuring
+
+- /intelligence/register-a-trust-to-avoid-owning-anything-kenya — the logic
+  of legal separation
+- /intelligence/what-to-do-to-avoid-owning-anything-and-not-get-auctioned —
+  the honest sequence
+- /intelligence/family-trust-kenya-registration-costs-protection
+- /intelligence/company-vs-trust-property-ownership-kenya
+- /intelligence/limits-of-asset-protection-trusts-kenya — when a trust
+  will not save you
+
+## Research library — buying at auction
+
+- /intelligence/how-property-auctions-work-kenya — the complete mechanics
+- /intelligence/commercial-real-estate-auctions-kenya — the institutional
+  framework
+- /intelligence/bank-repossessed-properties-kenya — where the value and the
+  risk sit
+- /intelligence/cost-of-buying-auction-property-kenya — beyond the hammer
+  price
+- /intelligence/auction-deposit-10-percent-kenya-what-happens-if-you-fail
+- /intelligence/occupied-auction-properties-tenants-possession-kenya
+- /intelligence/auction-vs-private-treaty-kenya-buyer-comparison
+
+## Research library — finance & due diligence
+
+- /intelligence/financing-an-auction-purchase-kenya — why a letter of offer
+  is not enough
+- /intelligence/auction-property-due-diligence-kenya — the file that must
+  exist before you bid
+- /intelligence/title-verification-encumbrances-kenya-auction-buyer
+
+## Research library — buyer representation & market
+
+- /intelligence/buyer-brokerage-2-percent-model-why-sellers-bank-never-pays
+- /intelligence/why-banks-sell-through-auctioneers-not-portals — the
+  disposal logic
+- /intelligence/off-market-auction-intelligence-kenya
+- /intelligence/nairobi-auction-submarkets-westlands-upper-hill-industrial
+
+## Research library — market analysis
+
+- /intelligence/commercial-property-auctions-kenya-buyers-guide
+- /intelligence/bank-sales-vs-receiver-sales-kenya
+- /intelligence/kenya-commercial-auction-market-2026
+- /intelligence/why-commercial-property-auctions-fail-kenya
+- /intelligence/nairobi-vs-mombasa-vs-kisumu-auction-opportunities
+- /intelligence/title-encumbrances-legal-pack-kenya-due-diligence
+- /intelligence/uk-commercial-property-auctions-buyers-guide
+- /intelligence/guide-price-vs-reserve-price-uk-auction-catalogue
+- /intelligence/uk-commercial-auction-market-2026
+- /intelligence/london-vs-regional-uk-auction-yields-2026
+- /intelligence/alternative-assets-uk-auction-hotels-care-homes
+- /intelligence/financing-a-uk-auction-purchase-bridging-debt
+
+## Research library — evergreen guides
+
+- /intelligence/auction-glossary-kenya-uk-commercial-property-terms
+- /intelligence/how-to-register-to-bid-commercial-property-auction
+- /intelligence/what-is-a-legal-pack-what-should-it-contain
+- /intelligence/selling-commercial-property-at-auction-sellers-checklist
+
+## Legal disclosure
+
+Auction disclosure. Murivest Group Ltd provides commercial real estate
+services and publishes auction intelligence. Murivest is not the auctioneer
+and does not act as principal in any auction transaction. Bid registrations
+submitted through this website are expressions of buyer intent, are not
+binding bids, and are routed by Murivest to the authorised sale channel.
+Deposits payable under the auction conditions are paid to the selling
+party, not to Murivest. Murivest acts for buyers under a separate
+engagement and charges the successful purchaser a brokerage fee of 2% of
+the final purchase price, payable after the 10% deposit. Guide prices are
+not valuations. All lots are subject to the selling party's terms, due
+diligence, and formal contract. This information does not constitute an
+offer, solicitation, or investment advice. All engagements are by mandate
+only and subject to KYC/AML verification.

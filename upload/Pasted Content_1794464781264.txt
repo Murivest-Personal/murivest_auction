@@ -1,0 +1,2271 @@
+auctions.murivest.com
+
+I am building this as a public site
+This si to publish auction properties and we get paid by the buyer. Our brokerage fees is 2% of the purchase price. We get paid by the client and not the seller as the seller would be the banks. 
+
+I want not to reveal who the owner of the client auctioneer so that our buyer does not go directly to the owner and purchase. 
+
+GIve me additional content for each page that will improve the seo and geo of the site
+
+The AI to also give me the exact sql to run in order to post data to the db
+bids, comments, auction_inquiries, etc.
+
+The site to get the properties from my sanity studio
+to create schema for the properties
+
+Give me the full prompt to implement this
+Master implementation prompt — auctions.murivest.com
+I would position Auctions by Murivest as a public-facing commercial and investment property auction marketplace, operated by Murivest Group Ltd.
+
+The business model should be built around three principles:
+
+Property discovery: Publish verified auction opportunities sourced from banks, lenders, appointed auctioneers and other authorised channels.
+
+Buyer representation: Murivest introduces and assists prospective purchasers throughout the acquisition process.
+
+Buyer-paid brokerage: Murivest charges the successful buyer a brokerage fee of 2% of the final purchase price, subject to the buyer's disclosed and accepted engagement terms.
+
+There is one important distinction in your source-protection strategy: you can protect your commercial sourcing relationships and avoid publicly advertising the underlying seller's direct contact details. However, you must not conceal information that applicable auction laws, auction notices, court orders or transaction documents require buyers to receive. The identity of the legally appointed auctioneer and the relevant sale authority must be handled transparently where disclosure is required.
+
+I would also avoid describing Murivest as the auctioneer unless it holds the appropriate appointment and authorisation. Position it as the buyer's property acquisition and auction brokerage representative.
+
+1. Recommended website architecture
+auctions.murivest.com
+
+Public website
+Buyer-facing auction property marketplace
+
+Public website
+
+SEO, listings, property searches, inquiries and bids.
+
+Sanity Studio
+
+Property creation, editing, images and publication.
+
+Supabase
+
+Bids, inquiries, comments, buyer records and transactions.
+
+Security
+
+RLS, validation, moderation, audit trails and permissions.
+
+Data flow
+
+Sanity
+Public website
+Supabase
+Sanity is the source of truth for property information. Supabase is the source of truth for buyer interactions and auction activity.
+
+Important database decision
+Do not store the same property independently in Sanity and Supabase.
+
+Use Sanity for:
+
+Property descriptions and specifications.
+
+Images, galleries and floor plans.
+
+Asking/reserve prices and auction information.
+
+Property location and geographical SEO.
+
+Auction status and publication.
+
+SEO titles, descriptions and editorial content.
+
+Use Supabase for:
+
+Buyer registrations and profiles.
+
+Auction inquiries.
+
+Bid submissions and bid history.
+
+Comments and questions.
+
+Viewing requests.
+
+Saved properties.
+
+Buyer brokerage agreements.
+
+Successful transactions and 2% brokerage fee records.
+
+Notifications and audit logs.
+
+Every Supabase interaction should reference the corresponding Sanity document ID.
+
+2. Pages and content to build
+Page
+
+Additional SEO/GEO content
+
+Homepage
+
+Kenyan property auctions, investment opportunities, buyer representation and how auctions work
+
+All auctions
+
+Searchable auction inventory, property categories and locations
+
+Commercial auctions
+
+Offices, retail, warehouses, industrial and mixed-use
+
+Residential auctions
+
+Apartments, houses, maisonettes and land
+
+Property detail
+
+Unique property descriptions, auction terms, location, reserve price and buyer FAQs
+
+Nairobi auctions
+
+CBD, Westlands, Kilimani, Upper Hill, Karen, Runda and other areas
+
+Mombasa auctions
+
+Nyali, Bamburi, Mombasa Island and other areas
+
+Other counties
+
+County-specific auction landing pages generated only where listings and useful content exist
+
+How auctions work
+
+Registration, due diligence, deposits, bidding and completion
+
+Buyer representation
+
+Murivest's role, buyer protection and acquisition support
+
+Brokerage fees
+
+Transparent 2% buyer-paid fee and worked examples
+
+About Murivest
+
+Company identity, approach, services and contact information
+
+Auction insights
+
+Original research, guides, market commentary and auction education
+
+FAQs
+
+Search-focused answers about Kenyan property auctions
+
+Contact
+
+Buyer inquiries, viewing requests and acquisition consultations
+
+The biggest SEO opportunity is the individual property page. Each property should have its own indexable URL, unique title, complete information, location references, useful FAQs and internal links.
+
+Do not generate hundreds of empty county or neighbourhood pages just to capture keywords. Publish geographically targeted pages when there is meaningful property inventory and original information to support them.
+
+For GEO (generative engine optimisation), write clear factual paragraphs that answer questions directly, identify Murivest accurately, provide dates and prices, and distinguish verified facts from estimates.
+
+3. Full implementation prompt
+The following is designed to be pasted into your coding AI. It instructs the AI to inspect your existing project first, understand its framework and existing Sanity/Supabase setup, and then implement the entire platform rather than creating an unrelated replacement.
+
+MASTER DEVELOPMENT PROMPT: AUCTIONS BY MURIVEST
+Public Auction Property Marketplace — auctions.murivest.com
+Act as a senior full-stack software architect, Next.js engineer, Sanity CMS architect, Supabase/PostgreSQL database engineer, technical SEO specialist, GEO specialist, and real estate marketplace product designer.
+
+I am building auctions.murivest.com, a public-facing property auction marketplace under Murivest Group Ltd.
+
+Your responsibility is to inspect the existing codebase and implement a complete, production-ready property auction platform.
+
+Do not simply provide recommendations. Inspect the existing files, identify the architecture, prepare the implementation plan, and implement the changes in the existing project.
+
+Do not unnecessarily replace the existing framework, design system, architecture, or working functionality.
+
+PART 1: BUSINESS MODEL AND POSITIONING
+1.1 Business identity
+Brand: Auctions by Murivest
+Parent company: Murivest Group Ltd
+Website: https://auctions.murivest.com
+Primary market: Kenya
+Primary currency: KES
+Secondary currencies: USD, GBP
+Business category: Property auction marketplace and buyer-side property acquisition brokerage.
+
+Position the platform as a professional property auction discovery and buyer representation service.
+
+Brand positioning:
+
+"Discover. Evaluate. Acquire."
+
+Additional positioning:
+
+"Exceptional Property Opportunities. Discreet Buyer Representation."
+
+The website should communicate professionalism, transparency, institutional credibility and access to carefully presented auction opportunities.
+
+It must not look like a generic property listing portal.
+
+1.2 Revenue model
+Murivest charges the purchaser a brokerage fee of:
+
+2% of the final purchase price.
+
+Examples:
+
+Purchase price: KES 10,000,000.
+
+Murivest brokerage fee: KES 200,000.
+
+Purchase price: KES 50,000,000.
+
+Murivest brokerage fee: KES 1,000,000.
+
+Purchase price: KES 100,000,000.
+
+Murivest brokerage fee: KES 2,000,000.
+
+The buyer is responsible for this fee under a separately disclosed and accepted buyer engagement agreement.
+
+The seller or bank is not assumed to be responsible for Murivest's brokerage fee.
+
+Important:
+
+Clearly disclose the 2% buyer brokerage fee.
+
+Explain when the fee becomes payable.
+
+Explain whether it is calculated on the hammer price or final purchase price.
+
+Specify the applicable payment deadline and tax treatment in the engagement agreement.
+
+Do not imply that the fee is part of the bank's auction conditions.
+
+Do not collect the fee automatically merely because someone submits an inquiry.
+
+Obtain professional Kenyan legal and tax review of the fee arrangement.
+
+Create a dedicated /buyer-fees page.
+
+1.3 Source confidentiality
+Murivest develops commercial relationships with banks, financial institutions, appointed auctioneers, asset recovery departments and other authorised property sourcing channels.
+
+The public website must protect commercially sensitive sourcing relationships.
+
+Implement the following:
+
+Never expose private sourcing contacts.
+
+Never publish private telephone numbers or email addresses belonging to sourcing partners.
+
+Never expose internal correspondence or acquisition negotiations.
+
+Never expose internal source IDs or confidential partner records through public APIs.
+
+Do not display internal Sanity fields intended for administrators.
+
+Use Murivest's own contact and inquiry channels.
+
+Do not provide direct links to private source records or confidential documents.
+
+Keep internal source information in restricted CMS fields.
+
+Public descriptions should refer to the property and its documented sale context without unnecessarily revealing confidential sourcing arrangements.
+
+However, this confidentiality must never override statutory auction advertisement requirements, legally required auctioneer identification, court orders, official sale conditions, buyer due diligence or applicable disclosure obligations.
+
+Where the legally appointed auctioneer must be identified, display that information accurately.
+
+Do not falsely represent Murivest as the appointed auctioneer or seller.
+
+PART 2: FIRST INSPECT THE EXISTING PROJECT
+Before changing anything:
+
+Inspect the entire project structure.
+
+Identify the frontend framework and version.
+
+Identify the routing system.
+
+Identify the styling framework and existing design components.
+
+Identify the existing Sanity Studio configuration.
+
+Identify the Sanity project ID and dataset configuration without exposing secrets.
+
+Identify the Supabase project configuration.
+
+Inspect existing database tables, functions, triggers and RLS policies.
+
+Inspect authentication implementation.
+
+Inspect existing SEO components, metadata generation and sitemap implementation.
+
+Inspect the deployment configuration and environment variables.
+
+Identify existing integrations and reusable components.
+
+Produce a short implementation report before modifying the project.
+
+Do not invent environment variables or database table names.
+
+Do not overwrite existing Sanity schemas, Supabase tables, or authentication logic without first understanding their dependencies.
+
+Preserve working functionality.
+
+If a required integration does not exist, implement it and explain the environment variables and setup required.
+
+PART 3: WEBSITE DESIGN AND BRANDING
+Build a premium institutional auction marketplace.
+
+Visual direction:
+
+Quiet luxury.
+
+Institutional property investment.
+
+Minimal editorial layouts.
+
+Sophisticated typography.
+
+Professional real estate photography.
+
+Strong property imagery.
+
+Restrained use of gold.
+
+Excellent mobile responsiveness.
+
+Suggested palette:
+
+Deep green: #1B4332
+
+Dark green: #0E2A1C
+
+Off-white: #FAF9F6
+
+Muted gold: #B8956B
+
+White: #FFFFFF
+
+Charcoal: #242424
+
+Typography:
+
+Playfair Display for selected editorial headings.
+
+Inter or Montserrat for interface typography.
+
+Avoid:
+
+Generic marketplace templates.
+
+Excessive gradients.
+
+Excessive rounded cards.
+
+Cartoon-style icons.
+
+Artificial-looking property photographs.
+
+Unnecessary animations.
+
+Fake auction countdowns.
+
+Fake bid activity.
+
+Fake testimonials.
+
+The website should feel like an institutional property investment publication combined with a sophisticated auction marketplace.
+
+PART 4: WEBSITE PAGES AND REQUIRED CONTENT
+Implement the following pages.
+
+4.1 Homepage /
+SEO title:
+
+Property Auctions in Kenya | Commercial & Residential | Murivest
+
+Meta description:
+
+Discover commercial, residential and investment property auctions across Kenya. Explore verified auction opportunities and receive professional buyer representation from Murivest.
+
+Sections:
+
+Premium hero section.
+
+Headline: "Exceptional Property Opportunities. A More Informed Way to Acquire."
+
+Search properties by location, category and price.
+
+Featured auction opportunities.
+
+Recently published auctions.
+
+Commercial property auctions.
+
+Residential property auctions.
+
+Auctions by location.
+
+How property auctions work.
+
+Why buyers use Murivest.
+
+Buyer representation explanation.
+
+Transparent 2% brokerage fee explanation.
+
+Latest auction insights and research.
+
+Frequently asked questions.
+
+Strong contact CTA.
+
+Include original SEO content explaining:
+
+Property auctions in Kenya.
+
+Bank-related property disposals.
+
+Commercial property auctions.
+
+Residential property auctions.
+
+Investment property acquisition.
+
+Buyer's role in auction due diligence.
+
+Do not keyword-stuff.
+
+4.2 Auction inventory /auctions
+Create a searchable and filterable property inventory.
+
+Filters:
+
+Property category.
+
+County.
+
+Town.
+
+Neighbourhood.
+
+Minimum price.
+
+Maximum price.
+
+Auction date.
+
+Auction status.
+
+Property tenure.
+
+Commercial/residential.
+
+Property type.
+
+Sort options:
+
+Recently published.
+
+Auction date.
+
+Price ascending.
+
+Price descending.
+
+Featured properties.
+
+Display:
+
+Property image.
+
+Property title.
+
+Location.
+
+Property type.
+
+Reserve price where authorised for publication.
+
+Auction date.
+
+Auction status.
+
+Property reference.
+
+View property CTA.
+
+Implement pagination or an SEO-friendly crawlable pagination strategy.
+
+Never publish unpublished or withdrawn properties.
+
+4.3 Commercial auctions /auctions/commercial
+Create a unique landing page covering:
+
+Office buildings.
+
+Retail properties.
+
+Shopping centres.
+
+Warehouses.
+
+Industrial properties.
+
+Mixed-use buildings.
+
+Hospitality assets.
+
+Income-producing commercial properties.
+
+Explain commercial auction due diligence:
+
+Rental income.
+
+Tenant schedules.
+
+Occupancy.
+
+Lease terms.
+
+Operating expenses.
+
+Service charge.
+
+Land tenure.
+
+Existing encumbrances.
+
+Property management.
+
+Capital expenditure.
+
+Valuation.
+
+Acquisition costs.
+
+Use relevant Kenyan commercial property terminology.
+
+4.4 Residential auctions /auctions/residential
+Cover:
+
+Apartments.
+
+Maisonettes.
+
+Detached houses.
+
+Townhouses.
+
+Residential land.
+
+Gated community properties.
+
+Explain inspection, title verification, occupation, vacant possession and acquisition considerations.
+
+4.5 Location pages
+Create location landing pages only when sufficient real inventory or meaningful original editorial content exists.
+
+Suggested routes:
+
+/auctions/nairobi
+/auctions/nairobi/westlands
+/auctions/nairobi/kilimani
+/auctions/nairobi/upper-hill
+/auctions/nairobi/karen
+/auctions/nairobi/runda
+/auctions/mombasa
+/auctions/kiambu
+/auctions/nakuru
+/auctions/kisumu
+
+Each page must contain:
+
+Unique SEO title.
+
+Unique meta description.
+
+Introductory editorial content.
+
+Relevant auction listings.
+
+Local property market context.
+
+Neighbourhood descriptions.
+
+Local auction buyer considerations.
+
+Relevant internal links.
+
+Location-specific FAQs.
+
+Contact CTA.
+
+Do not create thin, duplicate or empty location pages.
+
+Use noindex when a filter combination has insufficient unique content.
+
+4.6 Individual property page /property/[slug]
+This is one of the most important pages.
+
+Every published property must have a dedicated indexable URL.
+
+Required sections:
+
+Property image gallery.
+
+Property title.
+
+Property reference.
+
+County, town and neighbourhood.
+
+Property category.
+
+Property description.
+
+Property specifications.
+
+Land size.
+
+Built-up area.
+
+Number of units.
+
+Tenure.
+
+Reserve price or guide price, when authorised.
+
+Auction date.
+
+Auction time.
+
+Auction location or platform.
+
+Deposit requirements.
+
+Payment deadline.
+
+Conditions of sale.
+
+Viewing arrangements.
+
+Available documentation.
+
+Due diligence checklist.
+
+Important auction disclosures.
+
+Buyer brokerage fee explanation.
+
+Related properties.
+
+FAQs.
+
+Inquiry form.
+
+Create a prominent inquiry CTA:
+
+"Register Your Interest"
+
+Secondary CTA:
+
+"Request a Property Brief"
+
+Optional CTA:
+
+"Schedule a Viewing"
+
+The inquiry form should collect:
+
+Full name.
+
+Email.
+
+Telephone number.
+
+Country.
+
+Intended purchase budget.
+
+Buyer type: Individual, company, family office or institutional.
+
+Financing method: Cash, financing or undecided.
+
+Interest type.
+
+Additional questions.
+
+Consent to the privacy policy.
+
+Do not expose private seller contact details.
+
+Include the legally required auction particulars and identify the appointed auctioneer wherever required.
+
+Never invent:
+
+Auction dates.
+
+Reserve prices.
+
+Property ownership.
+
+Title status.
+
+Rental income.
+
+Occupancy.
+
+Legal status.
+
+Viewing availability.
+
+Auction conditions.
+
+Display "Not yet confirmed" or omit information that has not been verified.
+
+4.7 Buyer representation /buyer-representation
+Explain Murivest's buyer-side service.
+
+Content:
+
+Property identification.
+
+Auction opportunity assessment.
+
+Property information review.
+
+Due diligence coordination.
+
+Inspection coordination.
+
+Acquisition guidance.
+
+Auction process assistance.
+
+Completion coordination.
+
+Clearly explain that Murivest is representing the purchaser under a separate engagement arrangement.
+
+Do not claim to provide legal, valuation or financial services unless appropriately authorised.
+
+4.8 Buyer fees /buyer-fees
+Headline:
+
+"Transparent Buyer Representation. Clear Brokerage Terms."
+
+Explain:
+
+Murivest charges a brokerage fee of 2% of the final purchase price, payable by the buyer under an accepted buyer engagement agreement.
+
+Include examples for KES 10 million, KES 50 million and KES 100 million.
+
+Explain:
+
+What the fee covers.
+
+When it becomes payable.
+
+How the fee is calculated.
+
+Applicable taxes.
+
+Whether other third-party acquisition expenses apply.
+
+The difference between brokerage fees and auction deposits.
+
+The fact that official auction terms remain separate.
+
+Provide a link to the buyer engagement terms.
+
+4.9 How auctions work /how-auctions-work
+Create a detailed educational guide:
+
+Discover an auction property.
+
+Review property information.
+
+Register interest with Murivest.
+
+Request available documentation.
+
+Review official auction conditions.
+
+Arrange inspection.
+
+Conduct legal and financial due diligence.
+
+Confirm auction eligibility.
+
+Submit bids through the authorised auction channel.
+
+Complete the purchase according to official conditions.
+
+Clearly distinguish Murivest's role from the legally appointed auctioneer.
+
+Explain that an inquiry or expression of interest is not a formal auction bid.
+
+4.10 About /about
+Explain:
+
+Murivest Group Ltd.
+
+The marketplace's purpose.
+
+Buyer representation model.
+
+Institutional approach.
+
+Property sourcing and research.
+
+Transparency.
+
+Professional standards.
+
+Do not fabricate licences, partnerships, transaction history, testimonials or completed deals.
+
+4.11 Auction insights /insights
+Create an SEO-focused editorial section.
+
+Initial article topics:
+
+How Bank Property Auctions Work in Kenya.
+
+What Buyers Should Know Before Purchasing Auction Property.
+
+Understanding Reserve Prices and Forced Sale Valuations.
+
+The Cost of Acquiring Property Through Auction in Kenya.
+
+Commercial Property Auctions in Nairobi.
+
+How to Conduct Due Diligence Before Buying Auction Property.
+
+Understanding Land Titles and Encumbrances in Kenya.
+
+Auction Property vs Traditional Property Purchases.
+
+How to Evaluate Income-Producing Commercial Properties.
+
+Common Mistakes Made by First-Time Auction Buyers.
+
+Articles must provide original, useful, well-researched information.
+
+Do not publish fabricated statistics or legal advice.
+
+4.12 FAQ /faqs
+Create comprehensive questions and answers.
+
+Examples:
+
+How do property auctions work in Kenya?
+
+Who conducts the auction?
+
+Does Murivest own the properties?
+
+How does Murivest earn its brokerage fee?
+
+Who pays the 2% brokerage fee?
+
+Is the brokerage fee paid by the bank?
+
+Can I inspect an auction property?
+
+Can I request property documents?
+
+What is a reserve price?
+
+What happens after winning an auction?
+
+Are auction deposits refundable?
+
+Can I finance an auction property?
+
+Can foreign investors purchase property in Kenya?
+
+How do I register my interest?
+
+Can I purchase a commercial building through auction?
+
+Answers must be legally accurate and distinguish official auction terms from Murivest's service terms.
+
+4.13 Contact /contact
+Include:
+
+General inquiries.
+
+Property-specific inquiries.
+
+Acquisition consultations.
+
+Viewing requests.
+
+Buyer representation inquiries.
+
+Use Murivest contact details already configured in the project. Do not invent new contact details.
+
+PART 5: SANITY STUDIO — PROPERTY CONTENT MANAGEMENT
+Sanity must be the single source of truth for public property listings.
+
+Create or update the Sanity schema for an auctionProperty document.
+
+Do not create a duplicate property database in Supabase.
+
+Organise the schemas into reusable files.
+
+Suggested files:
+
+schemas/auctionProperty.ts
+schemas/objects/propertyLocation.ts
+schemas/objects/propertySpecifications.ts
+schemas/objects/auctionDetails.ts
+schemas/objects/auctionDocuments.ts
+schemas/objects/seo.ts
+schemas/objects/propertyPricing.ts
+
+Register all types correctly in the existing Studio configuration.
+
+5.1 Property schema fields
+Identity
+title
+
+slug
+
+propertyReference
+
+internalSourceReference
+
+internalNotes
+
+featured
+
+publicationStatus
+
+Classification
+propertyCategory
+
+propertyType
+
+propertySubType
+
+tenure
+
+propertyCondition
+
+Location
+country
+
+county
+
+town
+
+neighbourhood
+
+address
+
+latitude
+
+longitude
+
+mapVisibility
+
+Property specifications
+landSize
+
+landSizeUnit
+
+builtUpArea
+
+builtUpAreaUnit
+
+bedrooms
+
+bathrooms
+
+parkingSpaces
+
+numberOfFloors
+
+numberOfUnits
+
+yearBuilt
+
+Property description
+shortDescription
+
+overview
+
+keyFeatures
+
+propertyAmenities
+
+investmentHighlights
+
+dueDiligenceNotes
+
+Pricing
+currency
+
+reservePrice
+
+guidePrice
+
+previousValuation
+
+valuationDate
+
+priceVisibility
+
+Never expose internal valuation or confidential pricing fields without an explicit public visibility setting.
+
+Auction details
+auctionStatus
+
+auctionDate
+
+auctionTime
+
+auctionTimezone
+
+auctionMethod
+
+auctionVenue
+
+registrationDeadline
+
+biddingPlatform
+
+depositAmount
+
+depositPercentage
+
+paymentDeadline
+
+saleConditions
+
+appointedAuctioneerName
+
+legallyRequiredAuctionDetails
+
+officialNoticeDocument
+
+Media
+coverImage
+
+gallery
+
+floorPlans
+
+sitePlans
+
+propertyDocuments
+
+videoUrl
+
+Support captions and alternative text for images.
+
+Sensitive documents must never automatically become public.
+
+SEO
+seoTitle
+
+seoDescription
+
+seoKeywords
+
+canonicalUrl
+
+socialImage
+
+structuredIntroduction
+
+frequentlyAskedQuestions
+
+indexable
+
+Publication
+draft
+
+published
+
+underOffer
+
+auctionCompleted
+
+withdrawn
+
+expired
+
+Use appropriate validation rules.
+
+Require a verified property reference, location, meaningful description and necessary auction particulars before publication.
+
+Implement a publishing checklist.
+
+5.2 Public Sanity query
+Create a reusable GROQ query that returns only published properties with public information.
+
+Ensure the query explicitly projects public fields.
+
+Never use unrestricted ... projections that expose internal notes, source references, confidential contacts or internal commercial data.
+
+Implement queries for:
+
+All published auctions.
+
+Featured auctions.
+
+Individual property by slug.
+
+Auctions by category.
+
+Auctions by county.
+
+Auctions by neighbourhood.
+
+Upcoming auctions.
+
+Recently published auctions.
+
+Related properties.
+
+Ensure expired, withdrawn, draft and completed auctions are treated appropriately.
+
+A completed auction can remain accessible as an archive if configured, but must not appear as an active opportunity.
+
+PART 6: SUPABASE DATABASE ARCHITECTURE
+Supabase must store operational interactions, not duplicate Sanity property content.
+
+Use PostgreSQL migrations.
+
+Before creating tables, inspect existing schemas and avoid conflicts.
+
+Create a versioned migration directory.
+
+Required tables:
+
+6.1 buyer_profiles
+Store buyer information.
+
+Fields:
+
+id UUID primary key.
+
+user_id UUID referencing authenticated users where applicable.
+
+full_name.
+
+email.
+
+phone.
+
+country.
+
+buyer_type.
+
+created_at.
+
+updated_at.
+
+6.2 auction_inquiries
+Store property inquiries.
+
+Fields:
+
+id UUID primary key.
+
+sanity_property_id TEXT.
+
+property_reference TEXT.
+
+full_name.
+
+email.
+
+phone.
+
+country.
+
+buyer_type.
+
+budget_min NUMERIC.
+
+budget_max NUMERIC.
+
+currency.
+
+financing_method.
+
+inquiry_type.
+
+message.
+
+status.
+
+assigned_to.
+
+consent_at.
+
+created_at.
+
+updated_at.
+
+Inquiry statuses:
+
+new
+
+contacted
+
+qualified
+
+viewing_requested
+
+due_diligence
+
+engaged
+
+successful
+
+unsuccessful
+
+closed
+
+6.3 auction_comments
+Allow prospective buyers to ask questions.
+
+Fields:
+
+id UUID.
+
+sanity_property_id TEXT.
+
+buyer_user_id UUID nullable.
+
+guest_name.
+
+guest_email.
+
+comment.
+
+parent_comment_id UUID nullable.
+
+moderation_status.
+
+is_public.
+
+created_at.
+
+updated_at.
+
+Moderation statuses:
+
+pending
+
+approved
+
+rejected
+
+flagged
+
+Do not publish comments automatically.
+
+Do not expose guest email addresses or private information publicly.
+
+6.4 auction_bids
+Create a bid record system only where the auction arrangement authorises Murivest to receive and transmit bids.
+
+Important distinction:
+
+An inquiry, indicative offer or expression of interest must never be presented as a legally binding auction bid.
+
+Where formal bids must be submitted directly to the appointed auctioneer or official bidding platform, direct buyers to that channel.
+
+Fields:
+
+id UUID.
+
+sanity_property_id TEXT.
+
+property_reference TEXT.
+
+buyer_user_id UUID.
+
+amount NUMERIC.
+
+currency TEXT.
+
+bid_type TEXT.
+
+bid_status TEXT.
+
+submitted_at TIMESTAMPTZ.
+
+verified_at TIMESTAMPTZ.
+
+verification_notes TEXT.
+
+external_bid_reference TEXT.
+
+Possible statuses:
+
+submitted
+
+pending_verification
+
+accepted
+
+rejected
+
+withdrawn
+
+expired
+
+Implement server-side validation and an immutable audit trail.
+
+Never allow a buyer to alter another buyer's bid.
+
+Never allow a browser client to directly modify verified bid records.
+
+Do not create fake public bidding activity.
+
+6.5 property_viewing_requests
+Fields:
+
+id UUID.
+
+sanity_property_id TEXT.
+
+full_name.
+
+email.
+
+phone.
+
+preferred_date.
+
+preferred_time.
+
+message.
+
+status.
+
+created_at.
+
+6.6 saved_properties
+Fields:
+
+id UUID.
+
+user_id UUID.
+
+sanity_property_id TEXT.
+
+created_at.
+
+Enforce unique user/property combinations.
+
+6.7 buyer_engagements
+Track buyer engagement agreements.
+
+Fields:
+
+id UUID.
+
+buyer_user_id UUID.
+
+sanity_property_id TEXT.
+
+agreement_reference TEXT.
+
+brokerage_percentage NUMERIC DEFAULT 2.00.
+
+agreed_purchase_price NUMERIC nullable.
+
+currency TEXT.
+
+agreement_status TEXT.
+
+accepted_at TIMESTAMPTZ.
+
+agreement_document_path TEXT.
+
+created_at.
+
+updated_at.
+
+6.8 brokerage_transactions
+Track successful acquisitions and brokerage fees.
+
+Fields:
+
+id UUID.
+
+buyer_engagement_id UUID.
+
+sanity_property_id TEXT.
+
+final_purchase_price NUMERIC.
+
+brokerage_percentage NUMERIC.
+
+brokerage_fee NUMERIC.
+
+currency TEXT.
+
+tax_amount NUMERIC nullable.
+
+payment_status TEXT.
+
+payment_reference TEXT.
+
+payment_date TIMESTAMPTZ nullable.
+
+created_at.
+
+Calculate the brokerage fee using:
+
+final_purchase_price * brokerage_percentage / 100
+
+Default percentage: 2%.
+
+Only authorised administrators can confirm a successful transaction or modify the final fee calculation.
+
+6.9 notifications
+Store operational notifications.
+
+Fields:
+
+id UUID.
+
+recipient_user_id UUID.
+
+notification_type TEXT.
+
+title TEXT.
+
+message TEXT.
+
+related_record_id UUID.
+
+is_read BOOLEAN DEFAULT FALSE.
+
+created_at.
+
+6.10 audit_logs
+Record important administrative actions.
+
+Fields:
+
+id UUID.
+
+actor_user_id UUID.
+
+action TEXT.
+
+entity_type TEXT.
+
+entity_id TEXT.
+
+old_data JSONB.
+
+new_data JSONB.
+
+created_at.
+
+Restrict audit-log access to authorised administrators.
+
+PART 7: EXACT SQL MIGRATIONS
+This is a mandatory deliverable.
+
+I want the AI to generate the exact SQL necessary to implement the entire database.
+
+Do not give me pseudocode.
+
+Do not provide incomplete SQL.
+
+Do not say "create a table similar to this."
+
+Inspect the existing Supabase database first.
+
+Then create numbered, executable PostgreSQL migration files.
+
+For every table, include:
+
+CREATE TABLE.
+
+Appropriate UUID primary keys.
+
+Foreign keys where appropriate.
+
+NOT NULL constraints.
+
+CHECK constraints.
+
+UNIQUE constraints.
+
+DEFAULT values.
+
+Appropriate indexes.
+
+Updated-at triggers.
+
+RLS enablement.
+
+SELECT policies.
+
+INSERT policies.
+
+UPDATE policies.
+
+DELETE policies where appropriate.
+
+Admin-only permissions.
+
+Appropriate grants and revocations.
+
+Use NUMERIC, not floating-point types, for monetary amounts and percentages.
+
+Use TIMESTAMPTZ for dates and times where appropriate.
+
+Use DECIMAL precision suitable for Kenyan property transactions.
+
+Implement safe, repeatable migrations where practical.
+
+Do not use DROP TABLE, CASCADE or destructive schema changes without explicit justification and approval.
+
+7.1 Required SQL files
+Generate:
+
+001_buyer_profiles.sql
+002_auction_inquiries.sql
+003_auction_comments.sql
+004_auction_bids.sql
+005_property_viewing_requests.sql
+006_saved_properties.sql
+007_buyer_engagements.sql
+008_brokerage_transactions.sql
+009_notifications.sql
+010_audit_logs.sql
+011_rls_policies.sql
+012_database_functions.sql
+013_database_indexes.sql
+
+Adapt the migration count and filenames to the actual existing schema.
+
+7.2 Required database functions
+Create secure PostgreSQL functions for:
+
+Creating an auction inquiry.
+
+Submitting an authorised bid or expression of interest.
+
+Submitting a property comment.
+
+Moderating a comment.
+
+Calculating brokerage fees.
+
+Creating a buyer engagement record.
+
+Updating inquiry status.
+
+Marking notifications as read.
+
+Recording administrative audit events.
+
+Use SECURITY DEFINER only when necessary.
+
+When using SECURITY DEFINER:
+
+Set a safe search_path.
+
+Fully qualify table names.
+
+Validate the caller's identity and permissions.
+
+Prevent privilege escalation.
+
+Restrict execution grants.
+
+Do not trust user-supplied role values.
+
+Use database transactions for multi-step operations.
+
+7.3 SQL execution instructions
+After creating the SQL:
+
+Provide a single clearly ordered list explaining:
+
+Which Supabase project to open.
+
+How to open the SQL Editor.
+
+Which migration to run first.
+
+The exact SQL for each migration.
+
+How to verify the tables were created.
+
+How to verify RLS is enabled.
+
+How to verify policies.
+
+How to test inserts.
+
+How to test authenticated and anonymous access.
+
+How to confirm restricted data cannot be accessed.
+
+Provide a separate seed-data script only if useful.
+
+Never pretend that SQL has been executed when it has only been generated.
+
+The SQL must be complete and ready for me to copy and run.
+
+PART 8: DATABASE SECURITY
+Security is essential because the site is publicly accessible.
+
+Implement:
+
+Row Level Security on every sensitive table.
+
+Anonymous inquiry submission through a secure server endpoint or RPC.
+
+Rate limiting.
+
+Input validation.
+
+CAPTCHA or an equivalent anti-spam measure where appropriate.
+
+Email verification where required.
+
+Server-side authentication checks.
+
+Role-based administrative permissions.
+
+Audit logs.
+
+Comment moderation.
+
+Protection against SQL injection.
+
+Protection against mass assignment.
+
+Protection against unauthorised record enumeration.
+
+Never expose:
+
+Supabase service-role keys.
+
+Private Sanity write tokens.
+
+Internal source information.
+
+Buyer private records.
+
+Other buyers' inquiries.
+
+Private comments.
+
+Unverified bids.
+
+Brokerage transaction records.
+
+Public users should only see information specifically intended for public display.
+
+Never rely on hiding a button or UI element as a security measure.
+
+PART 9: API AND DATA FLOW
+Create a clean service architecture.
+
+Sanity services:
+
+getPublishedAuctions()
+
+getFeaturedAuctions()
+
+getAuctionBySlug()
+
+getAuctionsByLocation()
+
+getAuctionsByCategory()
+
+getUpcomingAuctions()
+
+getRelatedAuctions()
+
+Supabase services:
+
+createAuctionInquiry()
+
+submitAuctionComment()
+
+submitAuthorisedBid()
+
+requestPropertyViewing()
+
+saveProperty()
+
+getBuyerInquiries()
+
+getBuyerNotifications()
+
+Admin services:
+
+updateInquiryStatus()
+
+approveAuctionComment()
+
+rejectAuctionComment()
+
+verifyBid()
+
+createBuyerEngagement()
+
+recordSuccessfulTransaction()
+
+calculateBrokerageFee()
+
+Use server-side endpoints for sensitive operations.
+
+Do not put privileged credentials in browser code.
+
+Use Zod or the project's existing validation framework.
+
+Create consistent error handling and logging.
+
+Do not silently swallow failed database operations.
+
+PART 10: TECHNICAL SEO
+Implement SEO at the page and property level.
+
+10.1 Metadata
+Every indexable page must have:
+
+Unique title.
+
+Unique meta description.
+
+Canonical URL.
+
+Appropriate robots directives.
+
+Open Graph title.
+
+Open Graph description.
+
+Open Graph image.
+
+Twitter metadata.
+
+Generate property metadata dynamically from Sanity.
+
+10.2 Structured data
+Implement valid JSON-LD where appropriate:
+
+Organization.
+
+WebSite.
+
+BreadcrumbList.
+
+Article.
+
+WebPage.
+
+RealEstateListing or another suitable Schema.org representation where appropriate.
+
+Use structured data only where supported by the actual page content.
+
+Do not invent an official Google auction rich-result type.
+
+Do not mark up fake ratings, fake reviews, fictional prices or information that is not visible on the page.
+
+Keep structured data consistent with the visible content.
+
+10.3 Technical SEO
+Implement:
+
+XML sitemap.
+
+Dynamic property sitemap.
+
+Insights sitemap.
+
+Robots.txt.
+
+Canonical URLs.
+
+Clean URLs.
+
+Breadcrumb navigation.
+
+Internal linking.
+
+Image alt text.
+
+Image optimisation.
+
+Fast loading.
+
+Mobile responsiveness.
+
+Core Web Vitals optimisation.
+
+Correct HTTP status codes.
+
+404 page.
+
+301 redirects when slugs change.
+
+Pagination.
+
+Duplicate content prevention.
+
+Only published and indexable property pages should enter the sitemap.
+
+Update lastmod when meaningful content changes, not on every request.
+
+10.4 SEO keyword clusters
+Build the content architecture around these keyword clusters:
+
+Primary:
+
+Property auctions in Kenya.
+
+Auction properties in Kenya.
+
+Bank auction properties Kenya.
+
+Properties for auction in Nairobi.
+
+Commercial property auctions Kenya.
+
+Secondary:
+
+Commercial buildings for auction.
+
+Residential houses for auction.
+
+Land for auction in Kenya.
+
+Bank repossessed properties.
+
+Auction apartments in Nairobi.
+
+Warehouse auctions Kenya.
+
+Industrial property auctions Kenya.
+
+Investment properties for auction.
+
+Long-tail:
+
+How to buy auction property in Kenya.
+
+How bank property auctions work in Kenya.
+
+Auction property due diligence Kenya.
+
+Commercial buildings for sale by auction Nairobi.
+
+Properties with upcoming auction dates in Kenya.
+
+Costs of purchasing auction property in Kenya.
+
+Use keywords naturally in relevant pages.
+
+Do not force every keyword into every page.
+
+PART 11: GEO — GEOGRAPHIC AND GENERATIVE ENGINE OPTIMISATION
+Optimise the website for traditional local search and AI-generated search answers.
+
+For geographic SEO:
+
+Use real county, town and neighbourhood names.
+
+Connect properties to their actual geographical locations.
+
+Add accurate geographical coordinates when available.
+
+Include useful neighbourhood context.
+
+Create location-specific internal links.
+
+Use consistent business identity information.
+
+Add accurate organisation contact information.
+
+Use location-specific property FAQs.
+
+For generative engine optimisation:
+
+Write concise answers to common property auction questions.
+
+Use descriptive headings.
+
+Include clear factual paragraphs.
+
+Provide original editorial research.
+
+State the date of time-sensitive information.
+
+Explain the source and status of property information.
+
+Distinguish confirmed information from estimates.
+
+Reference official auction conditions when available.
+
+Include useful definitions and due diligence explanations.
+
+Avoid unsupported investment claims.
+
+Create content that AI search systems can understand, quote accurately and attribute to Murivest.
+
+Do not fabricate authority, awards, transactions, rankings or partnerships.
+
+PART 12: USER EXPERIENCE AND INTERACTIONS
+Implement the following:
+
+Property search.
+
+Location filters.
+
+Category filters.
+
+Price filters.
+
+Auction date filters.
+
+Property image galleries.
+
+Property inquiry forms.
+
+Viewing requests.
+
+Property questions and comments.
+
+User registration where needed.
+
+Saved properties.
+
+Buyer dashboard if appropriate.
+
+Inquiry tracking.
+
+Notification system.
+
+Administrative moderation.
+
+Create clear states for:
+
+Upcoming.
+
+Active.
+
+Closed.
+
+Completed.
+
+Withdrawn.
+
+Under offer.
+
+Do not show a property as actively available after its auction has closed unless the status has been verified and updated.
+
+Do not use artificial auction countdowns.
+
+PART 13: ADMINISTRATION AND OPERATIONS
+Sanity Studio handles property content management.
+
+Supabase handles operational activity.
+
+Create a clear administrative workflow for:
+
+Receiving an inquiry.
+
+Assigning a responsible advisor.
+
+Contacting the buyer.
+
+Qualifying the buyer.
+
+Arranging a viewing.
+
+Providing authorised property documentation.
+
+Recording buyer engagement.
+
+Tracking acquisition progress.
+
+Recording successful transactions.
+
+Calculating the 2% brokerage fee.
+
+Recording payment status.
+
+Add internal notes that are never exposed publicly.
+
+Implement an administrative dashboard only if an existing admin system is available or can be integrated cleanly.
+
+Do not create an unnecessary second CMS.
+
+PART 14: PERFORMANCE AND ACCESSIBILITY
+Ensure:
+
+Responsive design across mobile, tablet and desktop.
+
+Fast image loading.
+
+Lazy loading where appropriate.
+
+Correct image dimensions.
+
+Good font loading strategy.
+
+Accessible forms.
+
+Keyboard navigation.
+
+Accessible contrast.
+
+Semantic HTML.
+
+Descriptive button labels.
+
+Loading states.
+
+Error states.
+
+Empty states.
+
+Useful success messages.
+
+Aim for excellent Core Web Vitals.
+
+Avoid unnecessary client-side JavaScript.
+
+Use server rendering or the framework's appropriate rendering strategy for indexable property content.
+
+PART 15: TESTING AND VERIFICATION
+Test the entire system.
+
+Sanity:
+
+Can create a property.
+
+Can edit a property.
+
+Can publish a property.
+
+Can unpublish a property.
+
+Public queries exclude drafts.
+
+Internal fields are not exposed.
+
+Property images load correctly.
+
+Supabase:
+
+Inquiry creation works.
+
+Invalid inquiries are rejected.
+
+Comments require moderation.
+
+Bids cannot be modified by unauthorised users.
+
+Buyers cannot read other buyers' private records.
+
+Admin-only operations require appropriate roles.
+
+Brokerage calculations are correct.
+
+Audit logs are generated.
+
+SEO:
+
+Metadata renders correctly.
+
+Sitemap includes published properties.
+
+Canonical URLs are correct.
+
+Structured data is valid.
+
+Noindex rules work.
+
+No duplicate property pages.
+
+No broken internal links.
+
+Performance:
+
+Test mobile layouts.
+
+Test slow network conditions.
+
+Test image loading.
+
+Test large property inventories.
+
+Run:
+
+Production build.
+
+TypeScript checks.
+
+Lint.
+
+Existing tests.
+
+Database migration validation where available.
+
+Fix all errors introduced by your implementation.
+
+PART 16: REQUIRED FINAL DELIVERABLES
+At completion, provide:
+
+Summary of the existing architecture.
+
+Files created.
+
+Files modified.
+
+Sanity schema files.
+
+Sanity configuration changes.
+
+GROQ queries.
+
+Supabase migration files.
+
+Complete executable SQL.
+
+RLS policies.
+
+Database functions.
+
+API endpoints.
+
+SEO implementation.
+
+GEO implementation.
+
+Pages created.
+
+Environment variables required.
+
+Deployment instructions.
+
+Supabase SQL execution instructions.
+
+Testing results.
+
+Outstanding issues.
+
+Manual configuration still required.
+
+For every SQL migration, include the complete SQL, not just a description.
+
+For every environment variable, explain whether it belongs in local development or the production deployment environment.
+
+Never expose actual secret values in source code.
+
+Do not claim that a feature is complete unless you have implemented and tested it.
+
+FINAL IMPLEMENTATION PRINCIPLE
+The objective is to build a premium, search-engine-friendly Kenyan property auction marketplace that generates qualified purchaser inquiries and supports Murivest's 2% buyer-paid brokerage business.
+
+Sanity must power the property inventory.
+
+Supabase must power buyer interactions and transactional records.
+
+Murivest must control the buyer relationship, communication, acquisition support and brokerage engagement without misrepresenting its relationship with sellers, banks or appointed auctioneers.
+
+Build this as a scalable, secure and professionally operated platform, not merely a property listing website.
+
+4. Important implementation decisions
+There are four things I would insist the coding AI gets right.
+
+1. Protect your sourcing relationships without compromising disclosures.
+
+Create two separate sets of fields in Sanity:
+
+publicInformation: property information that visitors can see.
+
+internalInformation: source identity, private contacts, negotiations, internal documents and confidential notes.
+
+The public API must use explicit field projections. Hiding fields in the frontend is insufficient.
+
+2. Do not confuse auction inquiries with formal bids.
+
+I recommend initially making the website an auction discovery and buyer acquisition platform. Buyers register interest and receive assistance. Formal bids go through the legally authorised auction channel unless Murivest has an authorised arrangement to receive them.
+
+3. Make the 2% fee a proper commercial process.
+
+A buyer should understand and accept the brokerage agreement before Murivest undertakes the agreed representation services. Record the agreement and its acceptance in Supabase. Keep the brokerage fee separate from auction deposits.
+
+4. Make SQL generation dependent on actual database inspection.
+
+The AI should inspect existing tables and policies before generating migrations. Otherwise, you risk duplicate tables, conflicting policies and breaking existing applications.
+
+Useful technical references:
+
+Sanity content modelling and schemas.
+
+Sanity GROQ query documentation.
+
+Kenya Auctioneers Act.
+
+Google structured data quality guidelines.
+
+5. My recommended launch priorities
+Priority
+
+Implementation
+
+1
+
+Sanity auction property schema
+
+2
+
+Homepage and auction inventory
+
+3
+
+Individual SEO property pages
+
+4
+
+Supabase inquiry database and SQL
+
+5
+
+Buyer registration and inquiry workflow
+
+6
+
+Buyer-paid 2% brokerage system
+
+7
+
+Location landing pages
+
+8
+
+Insights and SEO/GEO content
+
+9
+
+Comments, moderation and authorised bidding
+
+10
+
+Analytics, testing and deployment
