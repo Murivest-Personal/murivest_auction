@@ -70,6 +70,21 @@ export async function MarketHubPage({
       />
       {/* Metadata is exported by the thin page files */}
 
+      {/* Search filter bar — top of page, below the site header;
+          scrolls away with the page (not fixed) */}
+      <LotsFilterBar
+        market={market}
+        regions={regions}
+        current={{
+          region: get("region") ?? "",
+          assetType: get("assetType") ?? "",
+          status: get("status") ?? "",
+          price: get("price") ?? "",
+          q: get("q") ?? "",
+        }}
+        action={market === "kenya" ? "/kenya" : "/uk"}
+      />
+
       {/* Hero — image, 60vh */}
       <section className="relative h-[46vh] md:h-[60vh] flex items-end">
         <div className="absolute inset-0">
@@ -118,24 +133,10 @@ export async function MarketHubPage({
         </Container>
       </section>
 
-      {/* Filter bar + lots grid */}
+      {/* Lots grid */}
       <section className="pb-20 md:pb-28" id="lots">
         <Container>
-          <LotsFilterBar
-            market={market}
-            regions={regions}
-            current={{
-              region: get("region") ?? "",
-              assetType: get("assetType") ?? "",
-              status: get("status") ?? "",
-              price: get("price") ?? "",
-              q: get("q") ?? "",
-            }}
-            action={market === "kenya" ? "/kenya" : "/uk"}
-          />
-
-          <div className="mt-12">
-            {lots.length === 0 ? (
+          {lots.length === 0 ? (
               <div className="border-t border-sand pt-8">
                 <p className="text-[0.95rem] text-charcoal">
                   No lots match the current filters in this market. Clear the
@@ -160,7 +161,6 @@ export async function MarketHubPage({
                 ))}
               </div>
             )}
-          </div>
         </Container>
       </section>
 

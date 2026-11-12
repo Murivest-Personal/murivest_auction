@@ -56,6 +56,21 @@ export default async function AllLotsPage({
         ]}
       />
 
+      {/* Search filter bar — top of page, below the site header;
+          scrolls away with the page (not fixed) */}
+      <LotsFilterBar
+        market="all"
+        regions={regions}
+        current={{
+          region: get("region") ?? "",
+          assetType: get("assetType") ?? "",
+          status: get("status") ?? "",
+          price: get("price") ?? "",
+          q: get("q") ?? "",
+        }}
+        action="/auctions"
+      />
+
       <section className="py-16 md:py-24 border-b border-hairline">
         <Container>
           <SectionHeader
@@ -79,35 +94,21 @@ export default async function AllLotsPage({
               Sanity
             </p>
           ) : null}
-          <LotsFilterBar
-            market="all"
-            regions={regions}
-            current={{
-              region: get("region") ?? "",
-              assetType: get("assetType") ?? "",
-              status: get("status") ?? "",
-              price: get("price") ?? "",
-              q: get("q") ?? "",
-            }}
-            action="/auctions"
-          />
 
-          <div className="mt-12">
-            {lots.length === 0 ? (
-              <div className="border-t border-sand pt-8">
-                <p className="text-[0.95rem] text-charcoal">
-                  No lots match the current filters. Clear the filters or
-                  browse the market hubs below.
-                </p>
-              </div>
-            ) : (
-              <div className="grid gap-px bg-hairline border border-hairline md:grid-cols-2 lg:grid-cols-3">
-                {lots.map((lot) => (
-                  <PropertyCard key={lot._id} property={lot} className="bg-white" />
-                ))}
-              </div>
-            )}
-          </div>
+          {lots.length === 0 ? (
+            <div className="border-t border-sand pt-8">
+              <p className="text-[0.95rem] text-charcoal">
+                No lots match the current filters. Clear the filters or browse
+                the market hubs below.
+              </p>
+            </div>
+          ) : (
+            <div className="grid gap-px bg-hairline border border-hairline md:grid-cols-2 lg:grid-cols-3">
+              {lots.map((lot) => (
+                <PropertyCard key={lot._id} property={lot} className="bg-white" />
+              ))}
+            </div>
+          )}
         </Container>
       </section>
     </>

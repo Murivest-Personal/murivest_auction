@@ -12,7 +12,7 @@ import {
 } from "@/lib/format";
 import { NumberField, OutputRow, SelectField, parseNumber } from "./fields";
 
-type Variant = "page" | "widget";
+type Variant = "page" | "widget" | "embedded";
 
 interface Props {
   variant?: Variant;
@@ -188,7 +188,7 @@ export function ReturnCalculator({
   }
 
   return (
-    <div className={cn("border border-hairline bg-cream p-6 md:p-10")}>
+    <div className={cn(variant === "page" && "border border-hairline bg-cream p-6 md:p-10")}>
       {inputs}
       {outputs}
       {supporting}
