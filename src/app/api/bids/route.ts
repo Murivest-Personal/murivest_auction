@@ -3,6 +3,8 @@ import { createClient } from "@supabase/supabase-js";
 import { createHash } from "crypto";
 import { db } from "@/lib/db";
 import { FEE_CONSENT_VERSION, TERMS_CONSENT_VERSION } from "@/lib/legal";
+import { sanityConfigured, getFreshSanity } from "@/lib/sanity/client";
+import { PROPERTY_STATUS_BY_SLUG } from "@/lib/sanity/queries";
 
 export const runtime = "nodejs";
 
@@ -44,6 +46,67 @@ export async function POST(req: NextRequest) {
     const elapsed = Date.now() - Number(body.form_started_at ?? 0);
     if (!Number.isFinite(elapsed) || elapsed < 1500) {
       return NextResponse.json({ error: "Rejected" }, { status: 400 });
+    }
+
+    /* ---------- Lot status gate (server-side, fail closed) ----------
+       Bids are only accepted for lots that are actively for sale.
+       The status is verified against the published Sanity document
+       with a non-CDN client at submission time. Sold and
+       under-offer lots reject every submission, even direct API
+       posts that bypass the form. */
+    const slug = String(body.property_slug ?? "").trim();
+    if (!slug) {
+      return NextResponse.json(
+        { error: "Invalid request." },
+        { status: 400 }
+      );
+    }
+    if (!sanityConfigured()) {
+      console.error("[bids] Rejected: Sanity is not configured.");
+      return NextResponse.json(
+        {
+          error:
+            "Bid registration is temporarily unavailable. Please try again later or contact office@murivest.com.",
+        },
+        { status: 503 }
+      );
+    }
+    let lot: { status?: string } | null = null;
+    try {
+      lot = await getFreshSanity().fetch(PROPERTY_STATUS_BY_SLUG, { slug });
+    } catch (err) {
+      console.error("[bids] Lot status lookup failed:", err);
+      return NextResponse.json(
+        {
+          error:
+            "Bid registration is temporarily unavailable. Please try again later or contact office@murivest.com.",
+        },
+        { status: 503 }
+      );
+    }
+    if (!lot) {
+      return NextResponse.json(
+        {
+          error:
+            "This lot could not be found. It may have been withdrawn from sale.",
+        },
+        { status: 404 }
+      );
+    }
+    if (lot.status === "sold") {
+      return NextResponse.json(
+        { error: "This lot has been sold. Bid registration is closed." },
+        { status: 409 }
+      );
+    }
+    if (lot.status === "under-offer") {
+      return NextResponse.json(
+        {
+          error:
+            "This lot is currently under offer. Bid registration is paused. Register your interest to be notified should the transaction not proceed.",
+        },
+        { status: 409 }
+      );
     }
 
     // Server-side consent enforcement — both consents are mandatory

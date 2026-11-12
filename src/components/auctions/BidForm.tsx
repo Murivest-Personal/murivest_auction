@@ -38,6 +38,12 @@ export function BidForm({ property }: { property: Property }) {
   const currency =
     property.facts.currency ?? (property.market === "kenya" ? "KES" : "GBP");
 
+  /* Sold and under-offer lots accept no bid registrations — the
+     button is disabled here and the API rejects direct posts
+     server-side as well. */
+  const bidClosed =
+    property.status === "under-offer" || property.status === "sold";
+
   const set = (key: keyof typeof form) => (
     e: React.ChangeEvent<HTMLInputElement>
   ) =>
@@ -68,6 +74,7 @@ export function BidForm({ property }: { property: Property }) {
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
+    if (bidClosed) return; // sold / under-offer lots never submit
     const validationError = validate();
     if (validationError) {
       setError(validationError);
@@ -138,13 +145,12 @@ export function BidForm({ property }: { property: Property }) {
     );
   }
 
-  const disabled = property.status === "under-offer";
-
   return (
     <form
       onSubmit={onSubmit}
       className="max-w-[42rem] mx-auto"
       noValidate
+      aria-label={bidClosed ? "Bid registration closed" : "Register your bid"}
     >
       <div className="border border-hairline bg-white p-6 md:p-10">
         <h2 className="font-serif text-2xl md:text-3xl font-light text-green mb-3">
@@ -160,13 +166,14 @@ export function BidForm({ property }: { property: Property }) {
           </p>
         ) : null}
 
-        {disabled ? (
+        {bidClosed ? (
           <p
             role="alert"
             className="border border-hairline bg-cream p-4 text-[0.85rem] text-charcoal mb-6"
           >
-            This lot is currently under offer. Bid registration is paused.
-            Register to be notified should the transaction not proceed.
+            {property.status === "sold"
+              ? "This lot has been sold. Bid registration is closed."
+              : "This lot is currently under offer. Bid registration is paused. Register to be notified should the transaction not proceed."}
           </p>
         ) : null}
 
@@ -294,10 +301,16 @@ export function BidForm({ property }: { property: Property }) {
 
         <button
           type="submit"
-          disabled={status === "submitting" || disabled}
+          disabled={status === "submitting" || bidClosed}
           className="w-full mt-8 px-8 py-4 text-[0.65rem] tracking-[0.25em] uppercase font-display bg-green text-cream hover:bg-gold transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
         >
-          {status === "submitting" ? "Submitting" : "Submit bid registration"}
+          {status === "submitting"
+            ? "Submitting"
+            : property.status === "sold"
+              ? "Bid registration closed"
+              : property.status === "under-offer"
+                ? "Bid registration paused"
+                : "Submit bid registration"}
         </button>
       </div>
 

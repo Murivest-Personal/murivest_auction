@@ -4,7 +4,8 @@ import { CalculatorShell } from "@/components/calculators/CalculatorShell";
 import { UnderwritingCalculator } from "@/components/calculators/UnderwritingCalculator";
 import { buildGates } from "@/components/calculators/gates";
 import { monthlyPayment } from "@/lib/calculations";
-import { getPropertyBySlug, WORKED_EXAMPLE_SLUG } from "@/lib/content";
+import { getWorkedExampleProperty } from "@/lib/content";
+import type { Property } from "@/lib/types";
 import { formatCurrency, formatPercent } from "@/lib/format";
 
 export const metadata = buildMetadata({
@@ -14,7 +15,8 @@ export const metadata = buildMetadata({
   path: "/tools/underwriting-calculator",
 });
 
-export default function UnderwritingCalculatorPage() {
+export default async function UnderwritingCalculatorPage() {
+  const property = await getWorkedExampleProperty();
   return (
     <CalculatorShell
       title="Commercial property underwriting calculator"
@@ -54,7 +56,8 @@ export default function UnderwritingCalculatorPage() {
             "Cleared gates are shown in gold. Gates that fail the screen are shown in charcoal. The calculator never uses red or green traffic lights.",
         },
       ]}
-      workedExample={<WorkedExample />}
+      workedExample={<WorkedExample property={property} />}
+      hasWorkedExample={Boolean(property?.facts.price && property.facts.noi)}
       doesNot={[
         "It is not a valuation and not advice. It is a screen applied to particulars you supply.",
         "It does not verify the particulars behind a lot. Verify everything against the legal pack.",
@@ -94,8 +97,7 @@ export default function UnderwritingCalculatorPage() {
   );
 }
 
-async function WorkedExample() {
-  const property = await getPropertyBySlug(WORKED_EXAMPLE_SLUG);
+function WorkedExample({ property }: { property: Property | null }) {
   if (!property?.facts.price || !property.facts.noi) return null;
   const { price, noi, grossAnnualRent } = property.facts;
   const currency = property.facts.currency ?? "USD";

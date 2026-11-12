@@ -10,7 +10,7 @@ import { ButtonLink } from "@/components/ui/Buttons";
 import { PropertyCard } from "@/components/ui/PropertyCard";
 import { Reveal } from "@/components/ui/Reveal";
 import { EditorialDivider } from "@/components/layout/EditorialDivider";
-import { getProperties, getLatestArticles, isSampleData } from "@/lib/content";
+import { getProperties, getFeaturedProperties, getLatestArticles } from "@/lib/content";
 import { formatDateShort, marketLabel } from "@/lib/format";
 
 export const revalidate = 300;
@@ -48,12 +48,14 @@ const VERIFICATION_STAGES = [
 ];
 
 export default async function HomePage() {
-  const [lots, articles] = await Promise.all([
+  const [featured, allLots, articles] = await Promise.all([
+    getFeaturedProperties(6),
     getProperties({ market: "all" }),
     getLatestArticles(3),
   ]);
-  const latestLots = lots.slice(0, 6);
-  const sample = isSampleData();
+  /* Featured auctions come from Sanity (featured == true); when
+     none are flagged, the latest published lots fill the slot. */
+  const showcase = featured.length > 0 ? featured : allLots.slice(0, 6);
 
   return (
     <>
@@ -159,27 +161,47 @@ export default async function HomePage() {
         </Container>
       </section>
 
-      {/* Latest lots */}
+      {/* Featured / latest lots — driven by the Sanity project */}
       <section className="py-20 md:py-28 border-t border-hairline">
         <Container>
           <SectionHeader
             numeral="II"
             eyebrow="Current opportunities"
-            title="Latest lots across both markets"
+            title={
+              featured.length > 0
+                ? "Featured lots across both markets"
+                : "Latest lots across both markets"
+            }
           />
-          {sample ? (
-            <p className="text-[0.55rem] tracking-[0.25em] uppercase text-charcoal mb-6">
-              Sample listings for demonstration — live listings publish through
-              Sanity
-            </p>
-          ) : null}
-          <div className="grid gap-px bg-hairline border border-hairline md:grid-cols-2 lg:grid-cols-3">
-            {latestLots.map((lot, i) => (
-              <Reveal key={lot._id} delay={i * 90} className="bg-white">
-                <PropertyCard property={lot} />
-              </Reveal>
-            ))}
-          </div>
+          {showcase.length === 0 ? (
+            <div className="border border-hairline bg-cream p-8 md:p-12 max-w-[42rem]">
+              <p className="text-[1.05rem] leading-[1.9] text-ink mb-4">
+                No lots are currently published on the portal.
+              </p>
+              <p className="text-[0.95rem] leading-[1.8] text-ink">
+                Verified commercial auction lots across Kenya and the United
+                Kingdom are published here as they clear the Murivest
+                four-check standard. Register at the{" "}
+                <a
+                  href="https://portal.murivest.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gold hover:text-green transition-colors"
+                >
+                  client portal
+                </a>{" "}
+                to receive auction alerts before lots are published.
+              </p>
+            </div>
+          ) : (
+            <div className="grid gap-px bg-hairline border border-hairline md:grid-cols-2 lg:grid-cols-3">
+              {showcase.map((lot, i) => (
+                <Reveal key={lot._id} delay={i * 90} className="bg-white">
+                  <PropertyCard property={lot} />
+                </Reveal>
+              ))}
+            </div>
+          )}
           <div className="mt-12">
             <ArrowLink href="/auctions">View all lots</ArrowLink>
           </div>

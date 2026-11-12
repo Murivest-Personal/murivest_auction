@@ -2,9 +2,10 @@ import Link from "next/link";
 import { buildMetadata } from "@/lib/seo";
 import { CalculatorShell } from "@/components/calculators/CalculatorShell";
 import { LoanRepaymentCalculator } from "@/components/calculators/LoanRepaymentCalculator";
-import { getPropertyBySlug, WORKED_EXAMPLE_SLUG } from "@/lib/content";
+import { getWorkedExampleProperty } from "@/lib/content";
 import { monthlyPayment } from "@/lib/calculations";
 import { formatCurrency } from "@/lib/format";
+import type { Property } from "@/lib/types";
 
 export const metadata = buildMetadata({
   title: "Commercial Property Loan Repayment Calculator | Murivest Group Ltd",
@@ -13,7 +14,8 @@ export const metadata = buildMetadata({
   path: "/tools/loan-repayment-calculator",
 });
 
-export default function LoanRepaymentCalculatorPage() {
+export default async function LoanRepaymentCalculatorPage() {
+  const property = await getWorkedExampleProperty();
   return (
     <CalculatorShell
       title="Commercial property loan repayment calculator"
@@ -46,7 +48,8 @@ export default function LoanRepaymentCalculatorPage() {
             "The outstanding principal after that number of monthly payments on an amortising loan. For an interest-only loan the balance remains the principal throughout.",
         },
       ]}
-      workedExample={<WorkedExample />}
+      workedExample={<WorkedExample property={property} />}
+      hasWorkedExample={Boolean(property?.facts.price)}
       doesNot={[
         "It is not a loan offer. Actual terms come from a lender after underwriting.",
         "It does not account for arrangement fees, exit fees, interest rate changes, or hedging.",
@@ -86,8 +89,7 @@ export default function LoanRepaymentCalculatorPage() {
   );
 }
 
-async function WorkedExample() {
-  const property = await getPropertyBySlug(WORKED_EXAMPLE_SLUG);
+function WorkedExample({ property }: { property: Property | null }) {
   if (!property?.facts.price) return null;
   const { price } = property.facts;
   const currency = property.facts.currency ?? "USD";

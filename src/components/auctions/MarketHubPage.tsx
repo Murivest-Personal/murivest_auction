@@ -139,17 +139,22 @@ export async function MarketHubPage({
           {lots.length === 0 ? (
               <div className="border-t border-sand pt-8">
                 <p className="text-[0.95rem] text-charcoal">
-                  No lots match the current filters in this market. Clear the
-                  filters or{" "}
-                  <a
-                    href={`mailto:office@murivest.com?subject=${encodeURIComponent(
-                      "Auction enquiry"
-                    )}`}
-                    className="text-gold hover:text-green transition-colors"
-                  >
-                    contact the deal team
-                  </a>{" "}
-                  to register a buying mandate.
+                  {allLots.length === 0
+                    ? "No lots are currently published in this market. Verified lots are published here as they clear the Murivest four-check standard — register at the client portal for auction alerts."
+                    : "No lots match the current filters in this market. Clear the filters or"}{" "}
+                  {allLots.length > 0 ? (
+                    <>
+                      <a
+                        href={`mailto:office@murivest.com?subject=${encodeURIComponent(
+                          "Auction enquiry"
+                        )}`}
+                        className="text-gold hover:text-green transition-colors"
+                      >
+                        contact the deal team
+                      </a>{" "}
+                      to register a buying mandate.
+                    </>
+                  ) : null}
                 </p>
               </div>
             ) : (

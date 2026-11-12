@@ -60,6 +60,13 @@ export const auctionProperty = defineType({
       initialValue: false,
     }),
     defineField({
+      name: "featured",
+      title: "Featured lot",
+      type: "boolean",
+      description: "Show this lot in the “Featured lots” showcase on the homepage. If no lots are featured, the homepage falls back to the latest published lots.",
+      initialValue: false,
+    }),
+    defineField({
       name: "tenure",
       type: "string",
       options: { list: ["Freehold", "Leasehold", "Unknown"] },

@@ -17,6 +17,7 @@ export function CalculatorShell({
   children,
   formulas,
   workedExample,
+  hasWorkedExample = true,
   doesNot,
   faqs,
 }: {
@@ -28,6 +29,9 @@ export function CalculatorShell({
   children: React.ReactNode;
   formulas: { label: string; formula: string }[];
   workedExample: React.ReactNode;
+  /** Hide the whole worked-example section when no published lot
+      is available from Sanity. */
+  hasWorkedExample?: boolean;
   doesNot: string[];
   faqs: Faq[];
 }) {
@@ -82,14 +86,16 @@ export function CalculatorShell({
         </Container>
       </section>
 
-      <section className="border-t border-hairline py-14 md:py-20 bg-white">
-        <Container>
-          <h2 className="font-serif text-2xl md:text-3xl font-light text-green mb-8">
-            Worked example from a live lot
-          </h2>
-          {workedExample}
-        </Container>
-      </section>
+      {hasWorkedExample ? (
+        <section className="border-t border-hairline py-14 md:py-20 bg-white">
+          <Container>
+            <h2 className="font-serif text-2xl md:text-3xl font-light text-green mb-8">
+              Worked example from a live lot
+            </h2>
+            {workedExample}
+          </Container>
+        </section>
+      ) : null}
 
       <section className="border-t border-hairline py-14 md:py-20">
         <Container>

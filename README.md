@@ -51,8 +51,9 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=<anon-key>
 # Anti-abuse salt for IP hashing (rotate for production)
 BID_IP_SALT=<long-random-string>
 
-# Sanity — set the project id to serve live content and mount /studio.
-# Without it the site serves the bundled sample dataset.
+# Sanity — REQUIRED. All auction lots publish through Sanity; there
+# is no bundled sample dataset. Without these the portal shows no
+# lots and bid registration is disabled (fail closed).
 NEXT_PUBLIC_SANITY_PROJECT_ID=<sanity-project-id>
 NEXT_PUBLIC_SANITY_DATASET=production
 SANITY_API_READ_TOKEN=<read-token>                    # server only
@@ -125,14 +126,23 @@ deliberately no admin UI on the public site.
 4. `auctionArticle` documents power `/intelligence` (body, FAQs, sources,
    SEO fields, topic cluster, search-intent classification and related
    links).
-5. Until a project is configured, the site serves the bundled sample
-   dataset (`src/data/properties.ts`, 6 Kenya + 6 UK lots, marked as sample
-   on the pages) so the portal is never empty.
+5. There is no bundled sample dataset. Until documents are published
+   in Sanity, listing surfaces render their empty states and the
+   homepage falls back to “No lots are currently published”.
 
 ## Architecture notes
 
-- **All listing data flows through `src/lib/content.ts`** — Sanity first,
-  sample dataset as fallback. Pages never hardcode listings.
+- **All listing data flows through `src/lib/content.ts`** — fetched
+  exclusively from Sanity (`auctionProperty`). Pages never hardcode
+  listings and there is no sample/mock fallback.
+- **Featured auctions** — homepage showcase lots are `auctionProperty`
+  documents with `featured == true`; with none flagged, the latest
+  published lots fill the slot.
+- **Bid gating** — `/api/bids` verifies the lot's published status in
+  Sanity with a non-CDN client at submission time. Lots marked Sold or
+  Under Offer reject every bid server-side (409), and the form is
+  disabled client-side. Without Sanity configured the API fails
+  closed (503).
 - **Source confidentiality** — listings do not name the selling bank or the
   appointed auctioneer publicly. Selling-party blocks describe the sale
   mechanism ("Kenyan commercial bank — chargee sale") and disclose the

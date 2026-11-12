@@ -2,7 +2,8 @@ import Link from "next/link";
 import { buildMetadata } from "@/lib/seo";
 import { CalculatorShell } from "@/components/calculators/CalculatorShell";
 import { ReturnCalculator } from "@/components/calculators/ReturnCalculator";
-import { getPropertyBySlug, WORKED_EXAMPLE_SLUG } from "@/lib/content";
+import { getWorkedExampleProperty } from "@/lib/content";
+import type { Property } from "@/lib/types";
 import {
   capRate,
   grm,
@@ -21,7 +22,8 @@ export const metadata = buildMetadata({
   path: "/tools/return-calculator",
 });
 
-export default function ReturnCalculatorPage() {
+export default async function ReturnCalculatorPage() {
+  const property = await getWorkedExampleProperty();
   return (
     <CalculatorShell
       title="Commercial property return calculator"
@@ -75,7 +77,8 @@ export default function ReturnCalculatorPage() {
           formula: METRIC_DEFINITIONS,
         },
       ]}
-      workedExample={<WorkedExample />}
+      workedExample={<WorkedExample property={property} />}
+      hasWorkedExample={Boolean(property?.facts.price && property.facts.noi)}
       doesNot={[
         "It is not a valuation. Guide prices and particulars come from the selling party.",
         "It is not investment advice. It is arithmetic applied to assumptions you supply.",
@@ -116,8 +119,7 @@ export default function ReturnCalculatorPage() {
   );
 }
 
-async function WorkedExample() {
-  const property = await getPropertyBySlug(WORKED_EXAMPLE_SLUG);
+function WorkedExample({ property }: { property: Property | null }) {
   if (!property?.facts.price || !property.facts.noi) return null;
   const { price, noi, pricePerSf: ppsfSupplied, grossAnnualRent, buildingSf } =
     property.facts;

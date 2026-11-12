@@ -28,7 +28,6 @@ import {
   getPropertyBySlug,
   getRelatedProperties,
   getAllSlugs,
-  isSampleData,
 } from "@/lib/content";
 import { getApprovedComments } from "@/lib/comments";
 import { AUCTION_DISCLOSURE } from "@/lib/legal";
@@ -284,19 +283,14 @@ export default async function PropertyDetailPage({ params }: Params) {
         </div>
       </Container>
 
-      {/* Bid registration block — centred, max 42rem */}
+      {/* Bid registration block — centred, max 42rem. Sold lots
+          never render a bid form at all. */}
       {property.status !== "sold" ? (
         <section
           id="register-your-bid"
           className="scroll-mt-24 border-t border-hairline py-20 md:py-28"
         >
           <Container>
-            {isSampleData() ? (
-              <p className="text-center text-[0.55rem] tracking-[0.25em] uppercase text-charcoal mb-8">
-                Sample listing for demonstration — live listings publish
-                through Sanity
-              </p>
-            ) : null}
             <BidForm property={property} />
           </Container>
         </section>

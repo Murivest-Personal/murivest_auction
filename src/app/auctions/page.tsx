@@ -5,7 +5,7 @@ import { Container } from "@/components/ui/Container";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { PropertyCard } from "@/components/ui/PropertyCard";
 import { LotsFilterBar } from "@/components/auctions/LotsFilterBar";
-import { getProperties, isSampleData } from "@/lib/content";
+import { getProperties } from "@/lib/content";
 
 export const revalidate = 300;
 
@@ -88,18 +88,12 @@ export default async function AllLotsPage({
 
       <section className="py-12 md:py-16">
         <Container>
-          {isSampleData() ? (
-            <p className="text-[0.55rem] tracking-[0.25em] uppercase text-charcoal mb-6">
-              Sample listings for demonstration — live listings publish through
-              Sanity
-            </p>
-          ) : null}
-
           {lots.length === 0 ? (
             <div className="border-t border-sand pt-8">
               <p className="text-[0.95rem] text-charcoal">
-                No lots match the current filters. Clear the filters or browse
-                the market hubs below.
+                {allLots.length === 0
+                  ? "No lots are currently published on the portal. Verified lots are published here as they clear the Murivest four-check standard — register at the client portal for auction alerts."
+                  : "No lots match the current filters. Clear the filters or browse the market hubs below."}
               </p>
             </div>
           ) : (

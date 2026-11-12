@@ -1,21 +1,25 @@
 /* ============================================================
-   Content layer. Every fetch tries Sanity first (when
-   NEXT_PUBLIC_SANITY_PROJECT_ID is configured) and falls back to
-   the bundled sample dataset. Listings are never hardcoded in
-   page components — they always come through this adapter.
+   Content layer. Auction lots (listings, featured auctions,
+   related lots) are fetched EXCLUSIVELY from the Sanity project
+   (auctionProperty documents) — there is no bundled sample
+   dataset. If Sanity is not configured, or a fetch fails, the
+   listing surfaces render their empty states.
+
+   Articles try Sanity first (auctionArticle) and fall back to
+   the bundled research collection; market hub editorial copy is
+   static site content.
    ============================================================ */
 
 import {
   ALL_ARTICLES,
   ALL_PROPERTIES,
   ARTICLE_BY_SLUG,
-  LATEST_ARTICLES,
+  FEATURED_PROPERTIES,
   PROPERTY_BY_SLUG,
   RELATED_PROPERTIES,
 } from "@/lib/sanity/queries";
 import { sanityConfigured, getSanity } from "@/lib/sanity/client";
 import { toPropertyImage } from "@/lib/sanity/image";
-import { SAMPLE_PROPERTIES, WORKED_EXAMPLE_SLUG } from "@/data/properties";
 import { MARKET_HUBS } from "@/data/markets";
 import { ARTICLES } from "@/content/articles";
 import type {
@@ -26,11 +30,15 @@ import type {
   PropertyCardData,
 } from "@/lib/types";
 
-export { WORKED_EXAMPLE_SLUG };
-
-/** True when the site is serving the bundled sample dataset. */
-export function isSampleData(): boolean {
-  return !sanityConfigured();
+let warnedUnconfigured = false;
+function warnUnconfiguredOnce() {
+  if (!warnedUnconfigured) {
+    warnedUnconfigured = true;
+    console.warn(
+      "[content] NEXT_PUBLIC_SANITY_PROJECT_ID is not set — no auction lots can be loaded. " +
+        "Set the Sanity environment variables to publish listings."
+    );
+  }
 }
 
 /* ---------- Sanity → normalised Property ---------- */
@@ -202,67 +210,98 @@ export async function getProperties(
 }
 
 async function getAllProperties(): Promise<Property[]> {
-  if (sanityConfigured()) {
-    try {
-      const raw = await getSanity().fetch(ALL_PROPERTIES, { market: "all" });
-      const normalised = (raw as Record<string, unknown>[])
-        .map(normaliseProperty)
-        .filter((p): p is Property => Boolean(p));
-      if (normalised.length > 0) return sortProperties(normalised);
-    } catch {
-      /* fall through to sample data */
-    }
+  if (!sanityConfigured()) {
+    warnUnconfiguredOnce();
+    return [];
   }
-  return sortProperties(SAMPLE_PROPERTIES);
+  try {
+    const raw = await getSanity().fetch(ALL_PROPERTIES, { market: "all" });
+    const normalised = (raw as Record<string, unknown>[])
+      .map(normaliseProperty)
+      .filter((p): p is Property => Boolean(p));
+    return sortProperties(normalised);
+  } catch (err) {
+    console.error("[content] Sanity fetch failed (ALL_PROPERTIES):", err);
+    return [];
+  }
 }
 
 export async function getPropertyBySlug(
   slug: string
 ): Promise<Property | null> {
-  if (sanityConfigured()) {
-    try {
-      const raw = await getSanity().fetch(PROPERTY_BY_SLUG, { slug });
-      const property = normaliseProperty(raw as Record<string, unknown>);
-      if (property && property.slug) return property;
-    } catch {
-      /* fall through to sample data */
-    }
+  if (!sanityConfigured()) {
+    warnUnconfiguredOnce();
+    return null;
   }
-  return SAMPLE_PROPERTIES.find((p) => p.slug === slug) ?? null;
+  try {
+    const raw = await getSanity().fetch(PROPERTY_BY_SLUG, { slug });
+    const property = normaliseProperty(raw as Record<string, unknown>);
+    return property && property.slug ? property : null;
+  } catch (err) {
+    console.error("[content] Sanity fetch failed (PROPERTY_BY_SLUG):", err);
+    return null;
+  }
 }
 
 export async function getRelatedProperties(property: Property): Promise<PropertyCardData[]> {
-  if (sanityConfigured()) {
-    try {
-      const raw = await getSanity().fetch(RELATED_PROPERTIES, {
-        market: property.market,
-        assetType: property.assetType,
-        slug: property.slug,
-      });
-      const normalised = (raw as Record<string, unknown>[])
-        .map(normaliseProperty)
-        .filter((p): p is Property => Boolean(p));
-      if (normalised.length > 0) return normalised.map(toCard);
-    } catch {
-      /* fall through */
-    }
+  if (!sanityConfigured()) {
+    warnUnconfiguredOnce();
+    return [];
   }
-  const sameMarketType = SAMPLE_PROPERTIES.filter(
-    (p) =>
-      p.slug !== property.slug &&
-      p.market === property.market &&
-      p.assetType === property.assetType
-  );
-  const sameMarket = SAMPLE_PROPERTIES.filter(
-    (p) => p.slug !== property.slug && p.market === property.market
-  );
-  const chosen = sameMarketType.length >= 3 ? sameMarketType : [...sameMarketType, ...sameMarket.filter(p => !sameMarketType.includes(p))];
-  return chosen.slice(0, 3).map(toCard);
+  try {
+    const raw = await getSanity().fetch(RELATED_PROPERTIES, {
+      market: property.market,
+      assetType: property.assetType,
+      slug: property.slug,
+    });
+    const normalised = (raw as Record<string, unknown>[])
+      .map(normaliseProperty)
+      .filter((p): p is Property => Boolean(p));
+    return normalised.map(toCard);
+  } catch (err) {
+    console.error("[content] Sanity fetch failed (RELATED_PROPERTIES):", err);
+    return [];
+  }
 }
 
 export async function getAllSlugs(): Promise<string[]> {
   const all = await getAllProperties();
   return all.map((p) => p.slug);
+}
+
+/** Featured auctions for the homepage showcase — Sanity documents
+    with featured == true, ordered by auction/publish date. Returns
+    an empty list when none are flagged or Sanity is unavailable. */
+export async function getFeaturedProperties(
+  count = 6
+): Promise<PropertyCardData[]> {
+  if (!sanityConfigured()) {
+    warnUnconfiguredOnce();
+    return [];
+  }
+  try {
+    const raw = await getSanity().fetch(FEATURED_PROPERTIES, { count });
+    const normalised = (raw as Record<string, unknown>[])
+      .map(normaliseProperty)
+      .filter((p): p is Property => Boolean(p));
+    return normalised.map(toCard);
+  } catch (err) {
+    console.error("[content] Sanity fetch failed (FEATURED_PROPERTIES):", err);
+    return [];
+  }
+}
+
+/** The lot used in the calculator worked examples. Pin a specific
+    lot with the WORKED_EXAMPLE_SLUG environment variable;
+    otherwise the first published lot with a price is used.
+    Returns null when no lots are published — the worked example
+    section is omitted. */
+export async function getWorkedExampleProperty(): Promise<Property | null> {
+  const pinned = process.env.WORKED_EXAMPLE_SLUG;
+  if (pinned) return getPropertyBySlug(pinned);
+  const lots = await getProperties({ market: "all" });
+  const withPrice = lots.find((l) => l.factsPrice != null);
+  return withPrice ? getPropertyBySlug(withPrice.slug) : null;
 }
 
 /* ---------- Articles ---------- */

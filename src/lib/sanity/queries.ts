@@ -39,6 +39,22 @@ export const RELATED_PROPERTIES = /* groq */ `
   }
 `;
 
+/** Featured lots for the homepage showcase (featured == true). */
+export const FEATURED_PROPERTIES = /* groq */ `
+  *[_type == "auctionProperty" && featured == true]
+  | order(coalesce(auctionDate, publishedAt) asc)[0...$count] {
+    ${PROPERTY_CARD_FIELDS}
+  }
+`;
+
+/** Minimal status projection used by the bid API to gate
+    submissions — sold and under-offer lots accept no bids. */
+export const PROPERTY_STATUS_BY_SLUG = /* groq */ `
+  *[_type == "auctionProperty" && slug.current == $slug][0] {
+    _id, "slug": slug.current, status
+  }
+`;
+
 export const LATEST_ARTICLES = /* groq */ `
   *[_type == "auctionArticle"] | order(publishedAt desc)[0...3] {
     _id, title, "slug": slug.current, excerpt, publishedAt, market,
