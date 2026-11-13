@@ -24,6 +24,6 @@ export const SITE = {
   linkedin: "https://www.linkedin.com/company/murivest-group-ltd",
   officeEmail: "office@murivest.com",
   officePhone: "+254 115 277 610",
-  nairobiOffice: "14th Floor, The Lofts, Riverside Drive, Westlands, Nairobi",
+  nairobiOffice: "4th Avenue Parklands, Diamond Plaza",
   londonOffice: "12 Berkeley Square, Mayfair, London W1J",
 } as const;
