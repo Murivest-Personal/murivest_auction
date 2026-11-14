@@ -21,7 +21,7 @@ export const metadata = buildMetadata({
   description:
     "Discover verified commercial and residential property auctions across Kenya and the UK. Bank sales, receiver sales and investment lots, with discreet buyer representation from Murivest Group Ltd. Discover. Evaluate. Acquire.",
   path: "/",
-  ogImage: "/images/hero-home.webp",
+  ogImage: "/images/home.webp",
 });
 
 const VERIFICATION_STAGES = [
@@ -62,50 +62,65 @@ export default async function HomePage() {
       <JsonLd data={websiteJsonLd()} />
 
       {/* Hero — full-bleed image, deep green overlay (§5.11) */}
-      <section className="relative min-h-[80vh] flex items-end">
+      
+
+      <section className="relative flex min-h-[85vh] flex-col justify-end overflow-hidden bg-[#081522]">
+
+        {/* Background image */}
         <div className="absolute inset-0">
           <Image
-            src="/images/hero-home.webp"
-            alt="Nairobi skyline at dusk, photographed from an elevated position"
+            src="/images/home.webp"
+            alt="Commercial property offered at public auction"
             fill
             priority
             sizes="100vw"
-            className="object-cover"
+            className="object-cover object-center"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-green/10 via-green/40 to-green/75" />
+
+          {/* Subtle cinematic overlays */}
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#081522]/15 to-[#081522]/75" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#081522]/75 via-transparent to-transparent" />
         </div>
-        <div className="relative z-10 max-w-[1400px] mx-auto px-6 md:px-12 lg:px-16 pb-20 md:pb-24 w-full">
-          <div className="max-w-[42rem]">
-            <Reveal hero>
-              <span className="block font-display text-[0.6rem] tracking-[0.3em] uppercase text-[color:var(--mv-on-dark-faint)] mb-6">
-                Verified auction intelligence · Kenya &amp; United Kingdom
-              </span>
-              <h1 className="font-serif font-light text-cream leading-[1.1] text-[clamp(2.8rem,5vw,5rem)] mb-8">
-                Commercial property auctions. Kenya. United Kingdom.
-              </h1>
-              <p className="text-[1.1rem] leading-[1.9] text-[color:var(--mv-on-dark)] mb-10 max-w-[36rem]">
-                Murivest Group Ltd aggregates verified commercial auction
-                opportunities across two markets and routes qualified buyers to
-                the sale. Each listing states the auction mechanism and the
-                legal pack position; the selling party and sale authority are
-                disclosed as the auction notice and conditions of sale
-                require, with full documentation released to qualified buyers
-                on request under appropriate confidentiality and mandate
-                arrangements.
-              </p>
-              <div className="flex flex-wrap gap-4">
-                <ButtonLink href="/auctions">Browse current lots</ButtonLink>
-                <Link
-                  href="/how-auctions-work"
-                  className="inline-flex items-center justify-center px-8 py-3 text-[0.65rem] tracking-[0.22em] uppercase font-body text-cream border border-cream hover:bg-cream hover:text-green transition-colors"
-                >
-                  How auctions work
-                </Link>
+
+        {/* Minimal content */}
+        <div className="relative z-10 mx-auto w-full max-w-[1400px] px-6 pb-24 pt-40 md:px-12 md:pb-28 lg:px-16">
+
+          <Reveal hero>
+            <div className="ml-auto max-w-[38rem]">
+
+              <div className="mb-6 flex items-center gap-4">
+                <span className="h-px w-9 bg-[#D6B77A]" />
+                <span className="font-display text-[0.6rem] uppercase tracking-[0.3em] text-white/75">
+                  Public Property Auctions · Kenya &amp; United Kingdom
+                </span>
               </div>
-            </Reveal>
-          </div>
+
+              <h1 className="mb-7 font-serif text-[clamp(3.2rem,6vw,5.5rem)] font-light leading-[1.02] tracking-tight text-[#FAF9F6]">
+                Exceptional Properties.
+                <br />
+                <em className="text-[#D6B77A]">
+                  By Auction.
+                </em>
+              </h1>
+
+              <p className="mb-9 max-w-[25rem] text-[0.95rem] leading-[1.8] text-white/75">
+                Auction opportunities are subject to the applicable auction
+                terms, conditions of sale and legal documentation. Buyers are
+                encouraged to undertake independent due diligence before
+                submitting bids.
+              </p>
+
+              <ButtonLink href="/auctions">
+                Explore Auctions
+              </ButtonLink>
+
+            </div>
+          </Reveal>
         </div>
+
       </section>
+
+
 
       {/* Market selector — two panels */}
       <section className="py-20 md:py-28">

@@ -9,7 +9,7 @@ export const metadata: Metadata = buildMetadata({
   description:
     "Verified commercial property auctions across Kenya — Nairobi, Mombasa, Kisumu, Nakuru. Bank sales, receiver sales and private treaty lots. Guide prices, auction dates and legal pack status.",
   path: "/kenya",
-  ogImage: "/images/hero-kenya.webp",
+  ogImage: "/images/kenya.webp",
 });
 
 export default async function KenyaHubPage({
@@ -21,7 +21,7 @@ export default async function KenyaHubPage({
     <MarketHubPage
       market="kenya"
       searchParams={searchParams}
-      heroImage="/images/hero-kenya.webp"
+      heroImage="/images/kenya.webp"
       heroAlt="Nairobi skyline with the Kenyatta International Convention Centre at dusk"
     />
   );

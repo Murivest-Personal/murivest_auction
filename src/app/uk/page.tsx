@@ -9,7 +9,7 @@ export const metadata: Metadata = buildMetadata({
   description:
     "Commercial investment property auctions across the UK. London and regional lots, guide prices, auction dates and legal pack status. Verified listings from Murivest Group Ltd.",
   path: "/uk",
-  ogImage: "/images/hero-uk.webp",
+  ogImage: "/images/uk.webp",
 });
 
 export default async function UKHubPage({
@@ -21,7 +21,7 @@ export default async function UKHubPage({
     <MarketHubPage
       market="uk"
       searchParams={searchParams}
-      heroImage="/images/hero-uk.webp"
+      heroImage="/images/uk.webp"
       heroAlt="London skyline with the City of London office towers at dusk"
     />
   );
