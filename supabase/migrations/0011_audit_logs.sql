@@ -46,10 +46,10 @@ for each row execute function public.tg_audit_logs_immutable();
 
 -- Structured logging helper for admin actions.
 create or replace function public.log_admin_action(
-  p_actor_user_id uuid default null,
-  p_actor_email   text default null,
   p_action        text,
   p_entity_type   text,
+  p_actor_user_id uuid default null,
+  p_actor_email   text default null,
   p_entity_id     text default null,
   p_old_data      jsonb default null,
   p_new_data      jsonb default null
@@ -74,9 +74,9 @@ begin
   return v_id;
 end $$;
 
-revoke all on function public.log_admin_action(uuid, text, text, text, text, jsonb, jsonb)
+revoke all on function public.log_admin_action(text, text, uuid, text, text, jsonb, jsonb)
   from public, anon, authenticated;
-grant execute on function public.log_admin_action(uuid, text, text, text, text, jsonb, jsonb)
+grant execute on function public.log_admin_action(text, text, uuid, text, text, jsonb, jsonb)
   to service_role;
 
 -- Auto-audit status changes on inquiries and bids.

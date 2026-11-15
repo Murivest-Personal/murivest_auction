@@ -6,11 +6,18 @@
 -- statements are IF NOT EXISTS and safe to re-run.
 -- ============================================================
 
+-- IMMUTABLE wrapper for date_trunc('day', timestamptz) -> date
+create or replace function public.date_trunc_day(p_ts timestamptz)
+returns date
+language sql
+immutable
+as $$ select date_trunc('day', p_ts)::date $$;
+
 -- Bids: pipeline views
 create index if not exists rpt_bids_pending_by_market
   on public.auction_bids (property_market, status, created_at desc);
 create index if not exists rpt_bids_created_day
-  on public.auction_bids (date_trunc('day', created_at), property_market);
+  on public.auction_bids (public.date_trunc_day(created_at), property_market);
 
 -- Bids: consent reporting (fee consent audit)
 create index if not exists rpt_bids_fee_consent_version
@@ -23,7 +30,7 @@ create index if not exists rpt_inquiries_by_status
 create index if not exists rpt_inquiries_by_type
   on public.auction_inquiries (inquiry_type, created_at desc);
 create index if not exists rpt_inquiries_created_day
-  on public.auction_inquiries (date_trunc('day', created_at));
+  on public.auction_inquiries (public.date_trunc_day(created_at));
 
 -- Engagements & brokerage: revenue reporting
 create index if not exists rpt_engagements_by_status

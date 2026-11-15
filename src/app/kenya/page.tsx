@@ -7,7 +7,7 @@ export const revalidate = 300;
 export const metadata: Metadata = buildMetadata({
   title: "Kenya Commercial Property Auctions | Bank Sales & Receiver Sales | Murivest",
   description:
-    "Verified commercial property auctions across Kenya — Nairobi, Mombasa, Kisumu, Nakuru. Bank sales, receiver sales and private treaty lots. Guide prices, auction dates and legal pack status.",
+    "Bid on verified auction properties, bank sales, distress sales and private treaty listings auctions across Kenya — Nairobi, Mombasa, Kisumu, Nakuru. Bank sales, receiver sales and private treaty lots. Guide prices, auction dates and legal pack status.",
   path: "/kenya",
   ogImage: "/images/kenya.webp",
 });

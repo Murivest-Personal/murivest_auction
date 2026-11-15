@@ -73,11 +73,11 @@ alter table public.auction_inquiries enable row level security;
 
 -- 6) Public submit RPC (called with the service role from /api/inquiries)
 create or replace function public.submit_auction_inquiry(
+  p_full_name          text,
+  p_email              text,
   p_property_sanity_id text default null,
   p_property_slug      text default null,
   p_property_title     text default null,
-  p_full_name          text,
-  p_email              text,
   p_phone              text default null,
   p_country            text default null,
   p_buyer_type         text default null,

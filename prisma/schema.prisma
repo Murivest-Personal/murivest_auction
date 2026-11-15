@@ -91,6 +91,7 @@ model PropertyComment {
 /// OUTSIDE public/ (lib/private-store) and are only ever streamed
 /// through authenticated routes.
 model BuyerRegistration {
+  @@map("buyer_registrations")
   id                String   @id @default(uuid())
   /// Sha-256 of the access code shown once at registration. The
   /// client signs in with email + access code.
@@ -204,4 +205,109 @@ model AuditLog {
 
   @@index([createdAt])
   @@index([buyerId, createdAt])
+}
+
+/// NDA acceptances — one per buyer per property, timestamped.
+model NdaAcceptance {
+  id            String   @id @default(uuid())
+  buyerId       String
+  propertySlug  String
+  termsVersion  String
+  acceptedAt    DateTime @default(now())
+  ipHash        String?
+  userAgent     String?
+
+  @@unique([buyerId, propertySlug])
+  @@index([propertySlug, acceptedAt])
+
+  @@map("nda_acceptances")
+}
+
+/// Data room documents (metadata).
+model VaultDocument {
+  id            String   @id @default(uuid())
+  propertySlug  String
+  title         String
+  category      String
+  allowDownload Boolean  @default(true)
+  notes         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([propertySlug])
+
+  @@map("vault_documents")
+}
+
+/// Immutable document versions. File bytes live in the PRIVATE storage bucket.
+model VaultDocumentVersion {
+  id           String   @id @default(uuid())
+  documentId   String
+  version      Int
+  fileName     String
+  storagePath  String
+  fileSize     Int
+  mimeType     String   @default("application/pdf")
+  sha256       String?
+  uploadedBy   String
+  uploadedAt   DateTime @default(now())
+  notes        String?
+  expiresAt    DateTime?
+  supersededAt DateTime?
+
+  @@unique([documentId, version])
+  @@index([documentId, version])
+
+  @@map("vault_document_versions")
+}
+
+/// Per-property access grants.
+model VaultAccessGrant {
+  id            String   @id @default(uuid())
+  buyerId       String
+  propertySlug  String
+  grantedAt     DateTime @default(now())
+  grantedBy     String
+  expiresAt     DateTime?
+  revokedAt     DateTime?
+  revokedReason String?
+
+  @@index([propertySlug, grantedAt])
+  @@index([buyerId, grantedAt])
+
+  @@map("vault_access_grants")
+}
+
+/// Buyer notifications for data room updates.
+model VaultNotification {
+  id           String   @id @default(uuid())
+  buyerId      String
+  propertySlug String
+  documentId   String?
+  title        String
+  message      String
+  createdAt    DateTime @default(now())
+  readAt       DateTime?
+
+  @@index([buyerId, createdAt])
+
+  @@map("vault_notifications")
+}
+
+/// Audit log for data room access.
+model VaultAccessLog {
+  id           String   @id @default(uuid())
+  buyerId      String?
+  propertySlug String?
+  documentId   String?
+  versionId    String?
+  action       String
+  details      String?
+  ipHash       String?
+  createdAt    DateTime @default(now())
+
+  @@index([propertySlug, createdAt])
+  @@index([buyerId, createdAt])
+
+  @@map("vault_access_logs")
 }

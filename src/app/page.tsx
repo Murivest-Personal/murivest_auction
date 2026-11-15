@@ -64,7 +64,7 @@ export default async function HomePage() {
       {/* Hero — full-bleed image, deep green overlay (§5.11) */}
       
 
-      <section className="relative flex min-h-[85vh] flex-col justify-end overflow-hidden bg-[#081522]">
+      <section className="relative flex min-h-[45vh] flex-col justify-end overflow-hidden bg-[#081522]">
 
         {/* Background image */}
         <div className="absolute inset-0">

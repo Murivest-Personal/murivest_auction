@@ -11,6 +11,6 @@
     "esModuleInterop": true,
     "isolatedModules": true
   },
-  "include": ["**/*.ts", "**/*.tsx"],
+  "include": ["**/*.ts", "**/*.tsx", "../src/sanity/schemaTypes/siteSettings.ts", "../src/sanity/schemaTypes/index.ts"],
   "exclude": ["node_modules", "dist"]
 }

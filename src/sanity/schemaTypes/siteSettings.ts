@@ -1,5 +1,5 @@
 import { defineField, defineType } from "sanity";
-import { AUCTION_DISCLOSURE } from "../../src/lib/legal";
+import { AUCTION_DISCLOSURE } from "../../lib/legal";
 
 export const siteSettings = defineType({
   name: "siteSettings",
