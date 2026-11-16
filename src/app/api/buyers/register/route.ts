@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createHash } from "crypto";
+import { createHash, randomUUID } from "crypto";
 import { db } from "@/lib/db";
 import {
   ACQUISITION_TIMELINES,
@@ -7,10 +7,12 @@ import {
   BUDGET_CURRENCIES,
   BUYER_TERMS_TEXT,
   BUYER_TERMS_VERSION,
+  BUYER_TYPES,
   CORPORATE_BUYER_TYPES,
   FUNDING_PREFERENCES,
   ID_TYPES,
   POF_TYPES,
+  PREFERRED_COUNTRIES,
 } from "@/lib/buyer/constants";
 import { DEFAULT_CLASSIFICATION } from "@/lib/buyer/qualification";
 import {
@@ -41,6 +43,35 @@ function inOptionList(
   list: readonly { value: string }[]
 ): boolean {
   return list.some((o) => o.value === value);
+}
+
+/**
+ * Best-effort delete of an orphaned POF file. Tries the common helper
+ * names a private-store module typically exports; logs a warning if
+ * neither is found (so ops can clean up manually).
+ */
+async function cleanupPofFile(storedPath: string) {
+  try {
+    const store = (await import("@/lib/private-store")) as unknown as {
+      deletePrivateFile?: (key: string) => Promise<void> | void;
+      removePrivateFile?: (key: string) => Promise<void> | void;
+    };
+    const fn = store.deletePrivateFile ?? store.removePrivateFile;
+    if (typeof fn === "function") {
+      await fn(storedPath);
+    } else {
+      console.warn(
+        "[buyers/register] No delete helper in @/lib/private-store; orphaned POF file:",
+        storedPath
+      );
+    }
+  } catch (cleanupErr) {
+    console.error(
+      "[buyers/register] Failed to clean up orphaned POF file:",
+      storedPath,
+      cleanupErr
+    );
+  }
 }
 
 interface BeneficialOwner {
@@ -117,8 +148,11 @@ export async function POST(req: NextRequest) {
     const consentTerms = form.get("consent_terms") === "true";
 
     /* ---------- Validation ---------- */
-    if (!inList(buyerType, ["individual", "company", "family_office", "institutional"]))
-      return NextResponse.json({ error: "Select whether you are an individual or corporate buyer." }, { status: 400 });
+    if (!inOptionList(buyerType, BUYER_TYPES))
+      return NextResponse.json(
+        { error: "Select whether you are an individual or corporate buyer." },
+        { status: 400 }
+      );
     if (fullName.length < 2 || fullName.length > 120)
       return NextResponse.json({ error: "Please provide your full name." }, { status: 400 });
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
@@ -151,7 +185,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "The maximum budget cannot be below the minimum." }, { status: 400 });
     if (!inList(budgetCurrency, BUDGET_CURRENCIES))
       return NextResponse.json({ error: "Select a budget currency." }, { status: 400 });
-    if (!inList(preferredCountry, ["kenya", "uk", "both"]))
+    if (!inOptionList(preferredCountry, PREFERRED_COUNTRIES))
       return NextResponse.json({ error: "Select a preferred market." }, { status: 400 });
     if (assetClassesRaw.length === 0 || !assetClassesRaw.every((a) => inList(a, ASSET_CLASSES)))
       return NextResponse.json({ error: "Select at least one asset class of interest." }, { status: 400 });
@@ -186,7 +220,10 @@ export async function POST(req: NextRequest) {
         );
     }
 
-    /* ---------- Duplicate registration ---------- */
+    /* ---------- Duplicate registration (fast path) ----------
+       The authoritative check is the unique constraint + P2002
+       handling below; this pre-check just avoids a wasted file
+       write for the common case. */
     const existing = await db.buyerRegistration.findFirst({
       where: { email },
       select: { id: true },
@@ -202,7 +239,7 @@ export async function POST(req: NextRequest) {
 
     /* ---------- Persist ---------- */
     const accessCode = generateAccessCode();
-    const id = crypto.randomUUID();
+    const id = randomUUID();
 
     if (pof instanceof File && pof.size > 0) {
       const bytes = Buffer.from(await pof.arrayBuffer());
@@ -223,46 +260,71 @@ export async function POST(req: NextRequest) {
       null;
     const ipHash = ip ? createHash("sha256").update(ip).digest("hex") : null;
 
-    const buyer = await db.buyerRegistration.create({
-      data: {
-        id,
-        accessCodeHash: hashCode(accessCode),
-        buyerType,
-        fullName,
-        email,
-        phone,
-        countryOfResidence,
-        taxJurisdiction,
-        idType,
-        idNumber,
-        purchasingEntityName: purchasingEntityName || null,
-        purchasingEntityJurisdiction: purchasingEntityJurisdiction || null,
-        beneficialOwners: owners ? JSON.stringify(owners) : null,
-        budgetMin,
-        budgetMax,
-        budgetCurrency,
-        preferredCountry,
-        preferredLocations: preferredLocations || null,
-        assetClasses: JSON.stringify(assetClassesRaw),
-        fundingPreference,
-        pofType: pofType || null,
-        pofFileName: pofMeta?.fileName ?? null,
-        pofStoredPath: pofMeta?.storedPath ?? null,
-        pofFileSize: pofMeta?.fileSize ?? null,
-        pofMimeType: pofMeta?.mimeType ?? null,
-        pofSha256: pofMeta?.sha256 ?? null,
-        pofUploadedAt: pofMeta ? new Date() : null,
-        lenderName: lenderName || null,
-        acquisitionTimeline,
-        classification: DEFAULT_CLASSIFICATION,
-        consentTerms: true,
-        consentAt: new Date(),
-        termsVersion: BUYER_TERMS_VERSION,
-        ipHash,
-        userAgent: req.headers.get("user-agent") ?? null,
-      },
-      select: { id: true, classification: true },
-    });
+    /* Wrap create so we can (a) delete the orphaned POF file if
+       the insert fails, and (b) surface a clean 409 on a duplicate
+       email race (P2002 — requires @unique on email). */
+    const buyer = await (async () => {
+      try {
+        return await db.buyerRegistration.create({
+          data: {
+            id,
+            accessCodeHash: hashCode(accessCode),
+            buyerType,
+            fullName,
+            email,
+            phone,
+            countryOfResidence,
+            taxJurisdiction,
+            idType,
+            idNumber,
+            purchasingEntityName: purchasingEntityName || null,
+            purchasingEntityJurisdiction: purchasingEntityJurisdiction || null,
+            beneficialOwners: owners ? JSON.stringify(owners) : null,
+            budgetMin,
+            budgetMax,
+            budgetCurrency,
+            preferredCountry,
+            preferredLocations: preferredLocations || null,
+            assetClasses: JSON.stringify(assetClassesRaw),
+            fundingPreference,
+            pofType: pofType || null,
+            pofFileName: pofMeta?.fileName ?? null,
+            pofStoredPath: pofMeta?.storedPath ?? null,
+            pofFileSize: pofMeta?.fileSize ?? null,
+            pofMimeType: pofMeta?.mimeType ?? null,
+            pofSha256: pofMeta?.sha256 ?? null,
+            pofUploadedAt: pofMeta ? new Date() : null,
+            lenderName: lenderName || null,
+            acquisitionTimeline,
+            classification: DEFAULT_CLASSIFICATION,
+            consentTerms: true,
+            consentAt: new Date(),
+            termsVersion: BUYER_TERMS_VERSION,
+            ipHash,
+            userAgent: req.headers.get("user-agent") ?? null,
+          },
+          select: { id: true, classification: true },
+        });
+      } catch (createErr) {
+        if (pofMeta?.storedPath) {
+          await cleanupPofFile(pofMeta.storedPath);
+        }
+        if ((createErr as { code?: string })?.code === "P2002") {
+          return null;
+        }
+        throw createErr;
+      }
+    })();
+
+    if (buyer === null) {
+      return NextResponse.json(
+        {
+          error:
+            "This email address is already registered. Sign in with your access code, or contact office@murivest.com if you have lost it.",
+        },
+        { status: 409 }
+      );
+    }
 
     await setBuyerSession(buyer.id);
 

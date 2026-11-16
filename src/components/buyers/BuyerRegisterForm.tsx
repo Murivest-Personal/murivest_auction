@@ -116,6 +116,30 @@ export function BuyerRegisterForm() {
     if (step === 1) {
       if (corporate && form.purchasing_entity_name.trim().length < 2)
         return "Corporate buyers must provide the purchasing entity name.";
+
+      // Validate beneficial owners up-front so the user doesn't
+      // only discover a bad row after pressing Submit on step 4.
+      if (corporate) {
+        for (const o of owners) {
+          const hasName = o.name.trim().length > 0;
+          const hasShare = o.share.trim() !== "";
+          if (hasName !== hasShare)
+            return "Each beneficial owner needs both a name and a percentage.";
+          if (hasName && o.name.trim().length < 2)
+            return "Beneficial owner names must be at least 2 characters.";
+          if (hasShare) {
+            const share = Number(o.share);
+            if (!Number.isFinite(share) || share < 0 || share > 100)
+              return "Ownership percentages must be between 0 and 100.";
+          }
+        }
+        const total = owners
+          .filter((o) => o.name.trim().length >= 2 && o.share.trim() !== "")
+          .reduce((s, o) => s + Number(o.share), 0);
+        if (total > 100.5)
+          return "Total beneficial ownership cannot exceed 100%.";
+      }
+
       const min = Number(form.budget_min);
       const max = Number(form.budget_max);
       if (!Number.isFinite(min) || min <= 0) return "Provide a minimum budget.";
