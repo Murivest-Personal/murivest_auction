@@ -3,8 +3,10 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+type Tone = "default" | "inverse";
+
 /** Signs the buyer out (clears the httpOnly session cookie). */
-export function SignOutButton() {
+export function SignOutButton({ tone = "default" }: { tone?: Tone }) {
   const router = useRouter();
   const [busy, setBusy] = useState(false);
   return (
@@ -21,7 +23,7 @@ export function SignOutButton() {
           setBusy(false);
         }
       }}
-      className="font-display text-[0.6rem] tracking-[0.22em] uppercase text-green border border-hairline px-5 py-2.5 hover:border-green transition-colors disabled:opacity-40"
+      className={`btn ${tone === "inverse" ? "btn-inverse" : "btn-quiet"} disabled:opacity-100`}
     >
       {busy ? "Signing out" : "Sign out"}
     </button>

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { db } from "@/lib/db";
+import { updateBuyerSettings } from "@/lib/supabase/records";
 import { getBuyerSessionId } from "@/lib/buyer/session";
 import { logAuditAction } from "@/lib/audit";
 
@@ -28,15 +28,7 @@ export async function PATCH(req: NextRequest) {
         { status: 400 }
       );
     }
-    const buyer = await db.buyerRegistration.update({
-      where: { id: buyerId },
-      data,
-      select: {
-        notifyNewLots: true,
-        notifyOffMarket: true,
-        notifyBidUpdates: true,
-      },
-    });
+    const buyer = await updateBuyerSettings(buyerId, data);
     await logAuditAction({
       buyerId,
       action: "account_setting_changed",

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { db } from "@/lib/db";
+import { getBuyerById, updateBuyerClassification } from "@/lib/supabase/records";
 import { isAdminAuthenticated } from "@/lib/buyer/session";
 import { classificationLabel, isValidClassification } from "@/lib/buyer/qualification";
 import { logAuditAction } from "@/lib/audit";
@@ -25,18 +25,12 @@ export async function PATCH(
       return NextResponse.json({ error: "Invalid classification." }, { status: 400 });
     }
 
-    const buyer = await db.buyerRegistration.findUnique({
-      where: { id },
-      select: { id: true, classification: true, fullName: true },
-    });
+    const buyer = await getBuyerById(id);
     if (!buyer) {
       return NextResponse.json({ error: "Buyer not found." }, { status: 404 });
     }
 
-    await db.buyerRegistration.update({
-      where: { id },
-      data: { classification, classificationNote: note },
-    });
+    await updateBuyerClassification(id, classification, note);
 
     await logAuditAction({
       buyerId: id,

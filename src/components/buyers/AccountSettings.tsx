@@ -16,6 +16,7 @@ export function AccountSettings({
   };
 }) {
   const [settings, setSettings] = useState(initial);
+  const [savedSnapshot, setSavedSnapshot] = useState(initial);
   const [busy, setBusy] = useState(false);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState("");
@@ -60,7 +61,10 @@ export function AccountSettings({
         setError(data.error ?? "Unable to save your settings.");
         return;
       }
-      if (data.settings) setSettings(data.settings);
+      if (data.settings) {
+        setSettings(data.settings);
+        setSavedSnapshot(data.settings);
+      }
       setSaved(true);
     } catch {
       setError("Unable to save your settings.");
@@ -69,7 +73,13 @@ export function AccountSettings({
     }
   }
 
-  const dirty = TOGGLES.some((t) => settings[t.key] !== initial[t.key]);
+  const dirty = TOGGLES.some((t) => settings[t.key] !== savedSnapshot[t.key]);
+
+  function handleToggle(key: keyof typeof settings) {
+    setSettings((s) => ({ ...s, [key]: !s[key] }));
+    setSaved(false);
+    setError("");
+  }
 
   return (
     <div className="border border-hairline bg-white">
@@ -93,10 +103,8 @@ export function AccountSettings({
               aria-checked={settings[t.key]}
               aria-label={t.label}
               disabled={busy}
-              onClick={() =>
-                setSettings((s) => ({ ...s, [t.key]: !s[t.key] }))
-              }
-              className={`flex-shrink-0 w-12 h-6 border transition-colors relative disabled:opacity-50 ${
+              onClick={() => handleToggle(t.key)}
+              className={`flex-shrink-0 w-12 h-6 border transition-colors relative disabled:opacity-100 disabled:cursor-not-allowed ${
                 settings[t.key]
                   ? "bg-green border-green"
                   : "bg-white border-sand"
@@ -114,12 +122,12 @@ export function AccountSettings({
           </li>
         ))}
       </ul>
-      <div className="flex items-center gap-4 p-5 border-t border-hairline">
+      <div className="flex items-center gap-4 p-5 border-t border-hairline" aria-live="polite">
         <button
           type="button"
           onClick={save}
           disabled={busy || !dirty}
-          className="font-display text-[0.6rem] tracking-[0.22em] uppercase text-green border border-green px-6 py-2.5 hover:bg-green hover:text-cream transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+          className="btn btn-secondary disabled:opacity-100"
         >
           {busy ? "Saving" : "Save settings"}
         </button>

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { db } from "@/lib/db";
+import { getBuyerCredentials } from "@/lib/supabase/records";
 import { hashCode, setBuyerSession } from "@/lib/buyer/session";
 
 export const runtime = "nodejs";
@@ -36,10 +36,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const buyer = await db.buyerRegistration.findFirst({
-      where: { email },
-      select: { id: true, accessCodeHash: true },
-    });
+    const buyer = await getBuyerCredentials(email);
     if (!buyer || buyer.accessCodeHash !== hashCode(accessCode)) {
       attempts.push({ email, at: Date.now() });
       return NextResponse.json(

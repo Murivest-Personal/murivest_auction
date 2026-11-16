@@ -278,7 +278,7 @@ export function InquiryForm({
         <button
           type="submit"
           disabled={status === "submitting"}
-          className="w-full mt-8 px-8 py-4 text-[0.65rem] tracking-[0.25em] uppercase font-display bg-green text-cream hover:bg-gold transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+          className="btn btn-primary w-full mt-8 disabled:opacity-100"
         >
           {status === "submitting" ? "Submitting" : "Submit inquiry"}
         </button>

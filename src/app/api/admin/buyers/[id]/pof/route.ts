@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createHash } from "crypto";
-import { db } from "@/lib/db";
+import { getBuyerPof } from "@/lib/supabase/records";
 import { isAdminAuthenticated } from "@/lib/buyer/session";
 import { logAuditAction } from "@/lib/audit";
 import { readPrivateFile } from "@/lib/private-store";
@@ -20,10 +20,7 @@ export async function GET(
   }
   try {
     const { id } = await params;
-    const buyer = await db.buyerRegistration.findUnique({
-      where: { id },
-      select: { fullName: true, pofStoredPath: true, pofFileName: true, pofMimeType: true },
-    });
+    const buyer = await getBuyerPof(id);
     if (!buyer || !buyer.pofStoredPath) {
       return NextResponse.json(
         { error: "No proof of funds on file for this buyer." },

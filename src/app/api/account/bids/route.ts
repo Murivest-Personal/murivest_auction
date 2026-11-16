@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createHash, randomUUID } from "crypto";
-import { db } from "@/lib/db";
+import { createBuyerBid, getBuyerById } from "@/lib/supabase/records";
 import { getBuyerSessionId } from "@/lib/buyer/session";
 import { getPropertyBySlug } from "@/lib/content";
 import { logAuditAction } from "@/lib/audit";
@@ -39,10 +39,7 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const buyer = await db.buyerRegistration.findUnique({
-      where: { id: buyerId },
-      select: { id: true, fullName: true },
-    });
+    const buyer = await getBuyerById(buyerId);
     if (!buyer) {
       return NextResponse.json(
         { error: "Sign in to your account to submit a bid." },
@@ -112,30 +109,27 @@ export async function POST(req: NextRequest) {
       req.headers.get("x-real-ip") ??
       null;
 
-    const bid = await db.buyerBid.create({
-      data: {
-        id: randomUUID(),
-        reference: bidReference(),
-        buyerId,
-        propertySanityId: property._id,
-        propertySlug: property.slug,
-        propertyTitle: property.title,
-        propertyMarket: property.market,
-        bidAmount: amount,
-        bidCurrency:
-          property.facts.currency ??
-          (property.market === "kenya" ? "KES" : "GBP"),
-        consentTerms: true,
-        consentFee: true,
-        termsConsentAt: new Date(),
-        feeConsentAt: new Date(),
-        termsVersion: TERMS_CONSENT_VERSION,
-        feeTermsVersion: FEE_CONSENT_VERSION,
-        status: "submitted",
-        ipHash: ip ? createHash("sha256").update(ip).digest("hex") : null,
-        userAgent: req.headers.get("user-agent") ?? null,
-      },
-      select: { reference: true },
+    const bid = await createBuyerBid({
+      id: randomUUID(),
+      reference: bidReference(),
+      buyer_id: buyerId,
+      property_sanity_id: property._id,
+      property_slug: property.slug,
+      property_title: property.title,
+      property_market: property.market,
+      bid_amount: amount,
+      bid_currency:
+        property.facts.currency ??
+        (property.market === "kenya" ? "KES" : "GBP"),
+      consent_terms: true,
+      consent_fee: true,
+      terms_consent_at: new Date().toISOString(),
+      fee_consent_at: new Date().toISOString(),
+      terms_version: TERMS_CONSENT_VERSION,
+      fee_terms_version: FEE_CONSENT_VERSION,
+      status: "submitted",
+      ip_hash: ip ? createHash("sha256").update(ip).digest("hex") : null,
+      user_agent: req.headers.get("user-agent") ?? null,
     });
 
     await logAuditAction({

@@ -130,7 +130,7 @@ export function BidForm({ property }: { property: Property }) {
         ) : null}
         <Link
           href="/account#bids"
-          className="inline-flex items-center justify-center px-8 py-3 text-[0.65rem] tracking-[0.22em] uppercase font-display text-green border border-green hover:bg-green hover:text-cream transition-colors"
+          className="btn btn-secondary"
         >
           View your bids
         </Link>
@@ -154,7 +154,7 @@ export function BidForm({ property }: { property: Property }) {
         </p>
         <Link
           href={`/${property.market}`}
-          className="inline-flex items-center justify-center px-8 py-3 text-[0.65rem] tracking-[0.22em] uppercase font-display bg-green text-cream hover:bg-gold transition-colors"
+          className="btn btn-primary"
         >
           View similar lots
         </Link>
@@ -177,13 +177,13 @@ export function BidForm({ property }: { property: Property }) {
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
           <Link
             href={signInHref}
-            className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-4 text-[0.65rem] tracking-[0.25em] uppercase font-display bg-green text-cream hover:bg-gold transition-colors"
+            className="w-full sm:w-auto btn btn-primary"
           >
             Sign in to bid
           </Link>
           <Link
             href={registerHref}
-            className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-4 text-[0.65rem] tracking-[0.25em] uppercase font-display text-green border border-green hover:bg-green hover:text-cream transition-colors"
+            className="w-full sm:w-auto btn btn-secondary"
           >
             Create your account
           </Link>
@@ -231,7 +231,7 @@ export function BidForm({ property }: { property: Property }) {
 
         {property.guidePrice ? (
           <p className="mb-6 text-[0.6rem] tracking-[0.25em] uppercase text-charcoal font-display">
-            Guide price: <span className="text-green">{property.guidePrice}</span>
+            Guide price: <span className="text-green price">{property.guidePrice}</span>
           </p>
         ) : null}
 
@@ -250,7 +250,7 @@ export function BidForm({ property }: { property: Property }) {
             step={1000}
             inputMode="numeric"
             disabled={status === "submitting" || !session?.signedIn}
-            className="w-full bg-transparent border-0 border-b border-sand focus:border-green outline-none py-3 text-base text-green placeholder:text-charcoal/50 transition-colors disabled:opacity-50"
+            className="w-full bg-transparent border-0 border-b border-sand focus:border-green outline-none py-3 text-base text-green placeholder:text-charcoal/50 transition-colors disabled:bg-transparent disabled:text-charcoal disabled:border-sand disabled:cursor-not-allowed disabled:opacity-100"
           />
         </label>
 
@@ -314,7 +314,7 @@ export function BidForm({ property }: { property: Property }) {
         <button
           type="submit"
           disabled={status === "submitting" || !session?.signedIn}
-          className="w-full mt-8 px-8 py-4 text-[0.65rem] tracking-[0.25em] uppercase font-display bg-green text-cream hover:bg-gold transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+          className="btn btn-primary w-full mt-8 disabled:opacity-100"
         >
           {status === "submitting" ? "Submitting" : "Submit bid"}
         </button>

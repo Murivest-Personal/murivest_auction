@@ -12,7 +12,7 @@
 
 import { createHash } from "crypto";
 import { randomUUID } from "crypto";
-import { mkdir, readFile, writeFile } from "fs/promises";
+import { mkdir, readFile, writeFile, unlink } from "fs/promises";
 import path from "path";
 
 function baseDir(): string {
@@ -73,4 +73,38 @@ export function isAllowedPofMime(mime: string): boolean {
     "image/jpeg",
     "image/webp",
   ].includes(mime);
+}
+
+/* ============================================================
+   Selling submission file helpers
+   Layout:
+     selling/<submissionId>/images/<uuid>-<name>.<ext>
+     selling/<submissionId>/documents/<uuid>-<name>.pdf
+   ============================================================ */
+
+export function privateFileKeyForSelling(
+  submissionId: string,
+  category: "images" | "documents",
+  fileName: string
+): string {
+  return `selling/${sanitizeComponent(submissionId)}/${category}/${randomUUID()}-${sanitizeComponent(fileName)}`;
+}
+
+export function isAllowedSellingImageMime(mime: string): boolean {
+  return ["image/png", "image/jpeg", "image/webp"].includes(mime);
+}
+
+export function isAllowedSellingDocumentMime(mime: string): boolean {
+  return mime === "application/pdf";
+}
+
+export async function deletePrivateFile(key: string): Promise<void> {
+  try {
+    const full = resolvePrivateKey(key);
+    await unlink(full);
+  } catch (err) {
+    if ((err as NodeJS.ErrnoException).code !== "ENOENT") {
+      throw err;
+    }
+  }
 }

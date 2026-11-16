@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { db } from "@/lib/db";
+import { getBuyerName } from "@/lib/supabase/records";
 import { getBuyerSessionId } from "@/lib/buyer/session";
 
 export const runtime = "nodejs";
@@ -13,15 +13,12 @@ export async function GET() {
   if (!buyerId) {
     return NextResponse.json({ signedIn: false });
   }
-  const buyer = await db.buyerRegistration.findUnique({
-    where: { id: buyerId },
-    select: { fullName: true },
-  });
-  if (!buyer) {
+  const name = await getBuyerName(buyerId);
+  if (!name) {
     return NextResponse.json({ signedIn: false });
   }
   return NextResponse.json({
     signedIn: true,
-    name: buyer.fullName,
+    name,
   });
 }

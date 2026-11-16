@@ -1,31 +1,26 @@
 import { cn } from "@/lib/utils";
 
-type Variant = "primary" | "ghost";
+type Variant = "primary" | "secondary" | "inverse" | "quiet";
 
 type CommonProps = {
   children: React.ReactNode;
   className?: string;
   variant?: Variant;
-};
-
-const base =
-  "inline-flex items-center justify-center px-8 py-3 text-[0.65rem] tracking-[0.22em] uppercase font-body transition-colors";
-
-const variants: Record<Variant, string> = {
-  primary: "bg-green text-cream hover:bg-gold",
-  ghost: "text-green border border-green hover:bg-green hover:text-cream",
+  disabled?: boolean;
 };
 
 export function PrimaryButton({
   children,
   className,
+  disabled,
   ...rest
 }: CommonProps &
   Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "className">) {
   return (
     <button
       type="button"
-      className={cn(base, variants.primary, className)}
+      disabled={disabled}
+      className={cn("btn btn-primary", className, disabled && "opacity-100")}
       {...rest}
     >
       {children}
@@ -36,13 +31,15 @@ export function PrimaryButton({
 export function GhostButton({
   children,
   className,
+  disabled,
   ...rest
 }: CommonProps &
   Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "className">) {
   return (
     <button
       type="button"
-      className={cn(base, variants.ghost, className)}
+      disabled={disabled}
+      className={cn("btn btn-secondary", className, disabled && "opacity-100")}
       {...rest}
     >
       {children}
@@ -50,22 +47,30 @@ export function GhostButton({
   );
 }
 
-/** Anchor styled as a button (primary or ghost). */
+/** Anchor styled as a button (primary, secondary, inverse, or quiet). */
 export function ButtonLink({
   children,
   className,
   variant = "primary",
   href,
   external,
+  disabled,
   ...rest
 }: CommonProps & {
   href: string;
   external?: boolean;
 } & Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, "className" | "href">) {
+  const variantMap: Record<Variant, string> = {
+    primary: "btn-primary",
+    secondary: "btn-secondary",
+    inverse: "btn-inverse",
+    quiet: "btn-quiet",
+  };
   return (
     <a
-      href={href}
-      className={cn(base, variants[variant], className)}
+      href={disabled ? "#" : href}
+      className={cn("btn", variantMap[variant], className, disabled && "opacity-100 pointer-events-none")}
+      aria-disabled={disabled}
       {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
       {...rest}
     >

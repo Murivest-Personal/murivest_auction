@@ -2,12 +2,20 @@
 
 export function formatCurrency(
   value: number | null | undefined,
-  currency: "USD" | "GBP" | "KES" | string = "USD",
+  currency: "USD" | "GBP" | "KES" | "EUR" | string = "USD",
   opts: { compact?: boolean } = {}
 ): string {
   if (value == null || !Number.isFinite(value)) return "—";
   const symbol =
-    currency === "GBP" ? "£" : currency === "KES" ? "KES " : currency === "USD" ? "$" : "";
+    currency === "GBP"
+      ? "£"
+      : currency === "KES"
+      ? "KES "
+      : currency === "EUR"
+      ? "€"
+      : currency === "USD"
+      ? "$"
+      : "";
   if (opts.compact && Math.abs(value) >= 1_000_000) {
     return `${symbol}${trimZeros((value / 1_000_000).toFixed(2))}m`;
   }

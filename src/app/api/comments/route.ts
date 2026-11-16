@@ -1,20 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
 import { createHash } from "crypto";
-import { db } from "@/lib/db";
+import { getSupabaseService } from "@/lib/supabase/server";
 
 export const runtime = "nodejs";
 
-/* Public property comments — same pattern as /api/bids: honeypot,
-   timing check, IP hash with BID_IP_SALT, service-role RPC, mapped
-   errors, friendly messages only (addendum §4.4). */
-
-function getClient() {
-  const url = process.env.SUPABASE_URL;
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  if (!url || !key) return null;
-  return createClient(url, key, { auth: { persistSession: false } });
-}
+/* Public property comments — honeypot, timing check, IP hash with
+   BID_IP_SALT, service-role RPC, mapped errors, friendly messages
+   only (addendum §4.4). */
 
 const IP_SALT = process.env.BID_IP_SALT ?? "change-me";
 
@@ -35,47 +27,12 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Rejected" }, { status: 400 });
     }
 
-    const supabase = getClient();
     const ip =
       req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
       req.headers.get("x-real-ip") ??
       null;
 
-    if (!supabase) {
-      // Local demo store — moderated comments persist locally.
-      const email = String(body.author_email ?? "").trim().toLowerCase();
-      const name = String(body.author_name ?? "").trim();
-      const text = String(body.body ?? "").trim();
-      if (name.length < 2 || name.length > 80)
-        return NextResponse.json(
-          { error: "Please provide your name (2–80 characters)." },
-          { status: 400 }
-        );
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
-        return NextResponse.json(
-          { error: "Please provide a valid email address." },
-          { status: 400 }
-        );
-      if (text.length < 10 || text.length > 2000)
-        return NextResponse.json(
-          { error: "Comments must be between 10 and 2000 characters." },
-          { status: 400 }
-        );
-      const comment = await db.propertyComment.create({
-        data: {
-          propertySanityId: String(body.property_sanity_id ?? ""),
-          propertySlug: String(body.property_slug ?? ""),
-          authorName: name,
-          authorEmail: email,
-          body: text,
-          moderationStatus: "pending",
-          isPublic: false,
-          ipHash: hashIp(ip),
-        },
-      });
-      return NextResponse.json({ ok: true, comment_id: comment.id });
-    }
-
+    const supabase = getSupabaseService();
     const { data, error } = await supabase.rpc("submit_property_comment", {
       p_property_sanity_id: body.property_sanity_id,
       p_property_slug: body.property_slug,

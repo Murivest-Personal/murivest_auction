@@ -109,10 +109,12 @@ export function OutputRow({
   label,
   value,
   emphasis,
+  price,
 }: {
   label: string;
   value: string;
   emphasis?: boolean;
+  price?: boolean;
 }) {
   return (
     <div className="flex items-baseline justify-between gap-4 py-3 border-b border-hairline">
@@ -124,7 +126,8 @@ export function OutputRow({
           "font-body text-right",
           emphasis
             ? "font-serif text-2xl text-green"
-            : "text-[0.95rem] text-green"
+            : "text-[0.95rem] text-green",
+          price ? "price" : ""
         )}
       >
         {value}

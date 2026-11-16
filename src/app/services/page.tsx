@@ -105,6 +105,19 @@ export default function ServicesPage() {
 
       <section className="border-t border-hairline py-14 md:py-20">
         <Container>
+          <div className="max-w-[42rem]">
+            <p className="text-[1rem] leading-[1.9] text-ink mb-6">
+              Owners and sponsors considering a disposal can present the
+              property directly to Murivest's acquisitions team through the
+              dedicated selling journey.
+            </p>
+            <ArrowLink href="/selling">Sell your commercial property</ArrowLink>
+          </div>
+        </Container>
+      </section>
+
+      <section className="border-t border-hairline py-14 md:py-20">
+        <Container>
           <ArrowLink href="/contact">Discuss a mandate</ArrowLink>
         </Container>
       </section>

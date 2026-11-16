@@ -59,7 +59,7 @@ export function SiteFooter() {
       <Container className="py-16 md:py-20">
         <div className="grid gap-12 lg:grid-cols-[1.2fr_2fr] mb-16">
           <div>
-            <p className="font-display text-lg tracking-[0.3em] text-cream mb-4">
+            <p className="font-brand text-lg tracking-[0.3em] text-cream mb-4">
               MURIVEST
             </p>
             <p className="font-display text-[0.55rem] tracking-[0.3em] uppercase text-[color:var(--mv-on-dark-faint)] mb-6">

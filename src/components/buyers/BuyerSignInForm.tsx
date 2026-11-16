@@ -3,6 +3,7 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import Link from "next/link";
+import { ButtonLink } from "@/components/ui/Buttons";
 
 const inputCls =
   "w-full bg-transparent border-0 border-b border-sand focus:border-green outline-none py-3 text-base text-green placeholder:text-charcoal/50 transition-colors";
@@ -58,61 +59,71 @@ export function BuyerSignInForm() {
 
   return (
     <form onSubmit={onSubmit} noValidate aria-label="Account sign-in" className="max-w-md">
-      <div className="border border-hairline bg-white p-6 md:p-10">
-        <h2 className="font-serif text-2xl font-light text-green mb-3">
-          Sign in to your account
-        </h2>
-        <p className="text-[0.85rem] leading-[1.8] text-ink mb-8">
-          Use the email address you registered with and the access code issued
-          when you created your account. Your profile shows your verification
-          status, saved lots, bids and alert settings.
-        </p>
+      <h2 className="font-serif text-2xl font-light text-green mb-3">
+        Sign in to your account
+      </h2>
+      <p className="text-[0.85rem] leading-[1.8] text-ink mb-8">
+        Use the email address you registered with and the access code issued
+        when you created your account. Your profile shows your verification
+        status, saved lots, bids and alert settings.
+      </p>
 
-        <div className="space-y-8">
-          <label className="block">
-            <span className={labelCls}>Email address</span>
-            <input
-              type="email"
-              value={form.email}
-              onChange={set("email")}
-              required
-              autoComplete="email"
-              className={inputCls}
-            />
-          </label>
-          <label className="block">
-            <span className={labelCls}>Access code</span>
-            <input
-              type="text"
-              value={form.access_code}
-              onChange={set("access_code")}
-              required
-              autoComplete="off"
-              placeholder="e.g. K7QM-4XZD-9PRT"
-              className={`${inputCls} font-display tracking-[0.15em] uppercase`}
-            />
-          </label>
-        </div>
+      <div className="space-y-8">
+        <label className="block">
+          <span className={labelCls}>Email address</span>
+          <input
+            type="email"
+            value={form.email}
+            onChange={set("email")}
+            required
+            autoComplete="email"
+            className={inputCls}
+          />
+        </label>
+        <label className="block">
+          <span className={labelCls}>Access code</span>
+          <input
+            type="text"
+            value={form.access_code}
+            onChange={set("access_code")}
+            required
+            autoComplete="off"
+            autoCapitalize="characters"
+            spellCheck={false}
+            inputMode="text"
+            placeholder="e.g. K7QM-4XZD-9PRT"
+            className={`${inputCls} font-display tracking-[0.15em] uppercase`}
+          />
+        </label>
+      </div>
 
-        {status === "error" && error ? (
-          <p
-            role="alert"
-            className="mt-6 text-[0.85rem] leading-[1.7]"
-            style={{ color: "var(--mv-status-error)" }}
-          >
-            {error}
-          </p>
-        ) : null}
-
-        <button
-          type="submit"
-          disabled={status === "submitting"}
-          className="w-full mt-8 px-8 py-4 text-[0.65rem] tracking-[0.25em] uppercase font-display bg-green text-cream hover:bg-gold transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+      {status === "error" && error ? (
+        <p
+          role="alert"
+          className="mt-6 text-[0.85rem] leading-[1.7]"
+          style={{ color: "var(--mv-status-error)" }}
         >
-          {status === "submitting" ? "Signing in" : "Sign in"}
-        </button>
+          {error}
+        </p>
+      ) : null}
 
-        <p className="text-[0.75rem] leading-[1.7] text-charcoal mt-6">
+      <button
+        type="submit"
+        disabled={status === "submitting"}
+        className="btn btn-primary w-full mt-8 disabled:opacity-100"
+      >
+        {status === "submitting" ? "Signing in" : "Sign in"}
+      </button>
+
+      <div className="mt-8 space-y-4">
+        <ButtonLink
+          href="/register"
+          variant="secondary"
+          className="w-full text-center"
+        >
+          Create your account
+        </ButtonLink>
+        <p className="text-[0.75rem] leading-[1.7] text-charcoal text-center">
           Lost your access code? Contact{" "}
           <a
             href="mailto:office@murivest.com"
@@ -120,13 +131,6 @@ export function BuyerSignInForm() {
           >
             office@murivest.com
           </a>
-          . No account yet?{" "}
-          <Link
-            href="/register"
-            className="text-green underline underline-offset-4 hover:text-gold transition-colors"
-          >
-            Create your account
-          </Link>
           .
         </p>
       </div>

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { ButtonLink } from "@/components/ui/Buttons";
 import {
   ACQUISITION_TIMELINES,
   ASSET_CLASSES,
@@ -53,6 +54,7 @@ export function BuyerRegisterForm() {
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
   const [error, setError] = useState("");
   const [accessCode, setAccessCode] = useState("");
+  const [emailSent, setEmailSent] = useState<boolean | null>(null);
   const [pofFile, setPofFile] = useState<File | null>(null);
   const [owners, setOwners] = useState<Owner[]>([{ name: "", share: "" }]);
   const [assetClasses, setAssetClasses] = useState<string[]>([]);
@@ -210,6 +212,7 @@ export function BuyerRegisterForm() {
         return;
       }
       setAccessCode(data.accessCode ?? "");
+      setEmailSent(Boolean(data.emailSent));
       setStatus("success");
     } catch {
       setError("Registration failed. Please try again.");
@@ -235,30 +238,34 @@ export function BuyerRegisterForm() {
         </p>
         <div className="border border-green bg-cream p-6 mb-8">
           <span className="block font-display text-[0.55rem] tracking-[0.3em] uppercase text-gold mb-3">
-            Your access code — shown once, keep it safe
+            Your access code — keep it safe
           </span>
           <p className="font-display text-2xl tracking-[0.2em] text-green select-all">
             {accessCode}
           </p>
           <p className="text-[0.75rem] leading-[1.7] text-charcoal mt-3">
             You will need this code together with your email address to sign in
-            to your account on this website. In production this code is
-            delivered by email; in this environment it is shown here once only.
+            to your account on this website.
           </p>
         </div>
+        <p className="text-[0.85rem] leading-[1.7] text-charcoal mb-8">
+          {emailSent
+            ? "A copy of your details and access code has been emailed to you."
+            : "Email delivery is not available right now. Use the access code above."}
+        </p>
         <div className="flex flex-wrap gap-4">
           <Link
             href="/account"
-            className="inline-flex items-center justify-center px-8 py-3 text-[0.65rem] tracking-[0.22em] uppercase font-display bg-green text-cream hover:bg-gold transition-colors"
+            className="btn btn-primary"
           >
             Open your account
           </Link>
-          <Link
-            href="/auctions"
-            className="inline-flex items-center justify-center px-8 py-3 text-[0.65rem] tracking-[0.22em] uppercase font-display text-green border border-green hover:bg-green hover:text-cream transition-colors"
+          <ButtonLink
+            href="/sign-in"
+            variant="secondary"
           >
-            Browse auctions
-          </Link>
+            Sign in
+          </ButtonLink>
         </div>
       </div>
     );
@@ -276,8 +283,8 @@ export function BuyerRegisterForm() {
               i === step
                 ? "bg-green text-cream"
                 : i < step
-                  ? "bg-white text-green"
-                  : "bg-white text-charcoal/50"
+                ? "bg-white text-green"
+                : "bg-white text-charcoal/70"
             }`}
           >
             <span className="block font-display text-[0.55rem] tracking-[0.3em] uppercase mb-1">
@@ -509,7 +516,7 @@ export function BuyerRegisterForm() {
                 <button
                   type="button"
                   onClick={() => setOwners((list) => [...list, { name: "", share: "" }])}
-                  className="mt-4 font-display text-[0.6rem] tracking-[0.25em] uppercase text-green border border-green px-5 py-2 hover:bg-green hover:text-cream transition-colors"
+                  className="mt-4 btn btn-secondary"
                 >
                   + Add owner
                 </button>
@@ -838,7 +845,7 @@ export function BuyerRegisterForm() {
               setError("");
               setStep((s) => s - 1);
             }}
-            className="px-6 py-3 text-[0.65rem] tracking-[0.22em] uppercase font-display text-green border border-hairline hover:border-green transition-colors"
+            className="btn btn-secondary"
           >
             Back
           </button>
@@ -847,7 +854,7 @@ export function BuyerRegisterForm() {
           <button
             type="button"
             onClick={next}
-            className="px-8 py-3 text-[0.65rem] tracking-[0.22em] uppercase font-display bg-green text-cream hover:bg-gold transition-colors"
+            className="btn btn-primary"
           >
             Continue
           </button>
@@ -855,7 +862,7 @@ export function BuyerRegisterForm() {
           <button
             type="submit"
             disabled={status === "submitting"}
-            className="px-8 py-3 text-[0.65rem] tracking-[0.22em] uppercase font-display bg-green text-cream hover:bg-gold transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+            className="btn btn-primary disabled:opacity-100"
           >
             {status === "submitting" ? "Submitting" : "Submit registration"}
           </button>

@@ -1,17 +1,15 @@
-// Prisma schema — LOCAL development/demo store for
-// auctions.murivest.com. Mirrors the Supabase tables in
-// /supabase/migrations. In production with SUPABASE_URL +
-// SUPABASE_SERVICE_ROLE_KEY configured, the API routes call the
-// Postgres RPCs instead and this store is bypassed.
+// Legacy local Prisma schema. The application no longer uses
+// Prisma: every database read/write goes through the server-side
+// Supabase client (src/lib/supabase). This file is retained only as
+// a reference for the demo store and is not used at runtime.
 
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")      // runtime → pooler:6543
-  directUrl = env("DIRECT_URL")        // migrate/db push → session:5432
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model User {

@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Cinzel, Cormorant_Garamond } from "next/font/google";
+import { Cinzel, Cormorant_Garamond, Montserrat } from "next/font/google";
 import "./globals.css";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
@@ -9,11 +9,11 @@ import { organizationJsonLd } from "@/lib/jsonld";
 import { SITE } from "@/lib/brand";
 
 /* Luxury gallery typographic trio:
-   - Cinzel (Roman capitals) — wordmark, navigation, eyebrows,
-     museum-label reference numbers, buttons.
+   - Cinzel (Roman capitals) — wordmark, access code.
    - Times New Roman — body text, the reading voice.
    - Cormorant Garamond — oversized editorial statements and
-     display headlines. */
+     display headlines.
+   - Montserrat — uppercase labels and buttons. */
 const cinzel = Cinzel({
   subsets: ["latin"],
   weight: ["400", "500", "600"],
@@ -26,6 +26,13 @@ const cormorant = Cormorant_Garamond({
   weight: ["300", "400", "500"],
   style: ["normal", "italic"],
   variable: "--font-cormorant",
+  display: "swap",
+});
+
+const montserrat = Montserrat({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  variable: "--font-montserrat",
   display: "swap",
 });
 
@@ -53,9 +60,9 @@ export default function RootLayout({
   return (
     <html
       lang="en-GB"
-      className={`${cinzel.variable} ${cormorant.variable}`}
+      className={`${cinzel.variable} ${cormorant.variable} ${montserrat.variable}`}
     >
-      <body className="bg-cream text-green font-body antialiased min-h-screen flex flex-col">
+      <body className="bg-cream text-green font-body antialiased min-h-screen flex flex-col lg:pl-[248px]">
         <JsonLd data={organizationJsonLd()} />
         <SiteHeader />
         <main className="relative flex-1">{children}</main>

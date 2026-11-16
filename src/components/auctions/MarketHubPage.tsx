@@ -236,7 +236,7 @@ export async function MarketHubPage({
             <div className="flex flex-col sm:flex-row gap-4 flex-shrink-0">
               <a
                 href="/contact"
-                className="inline-flex items-center justify-center px-8 py-3 text-[0.65rem] tracking-[0.22em] uppercase font-body bg-cream text-green hover:bg-gold hover:text-cream transition-colors"
+                className="btn btn-inverse"
               >
                 Contact the deal team
               </a>

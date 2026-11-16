@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { db } from "@/lib/db";
+import { getSavedLotKinds, toggleSavedLot } from "@/lib/supabase/records";
 import { getBuyerSessionId } from "@/lib/buyer/session";
 
 export const runtime = "nodejs";
@@ -25,13 +25,10 @@ export async function GET(req: NextRequest) {
   if (!buyerId || !slug) {
     return NextResponse.json({ saved: false, liked: false });
   }
-  const rows = await db.savedLot.findMany({
-    where: { buyerId, propertySlug: slug },
-    select: { kind: true },
-  });
+  const kinds = await getSavedLotKinds(buyerId, slug);
   return NextResponse.json({
-    saved: rows.some((r) => r.kind === "save"),
-    liked: rows.some((r) => r.kind === "like"),
+    saved: kinds.includes("save"),
+    liked: kinds.includes("like"),
   });
 }
 
@@ -53,20 +50,8 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
-    const existing = await db.savedLot.findUnique({
-      where: {
-        buyerId_propertySlug_kind: { buyerId, propertySlug, kind },
-      },
-      select: { id: true },
-    });
-    if (existing) {
-      await db.savedLot.delete({ where: { id: existing.id } });
-      return NextResponse.json({ ok: true, active: false, kind });
-    }
-    await db.savedLot.create({
-      data: { buyerId, propertySlug, kind },
-    });
-    return NextResponse.json({ ok: true, active: true, kind });
+    const active = await toggleSavedLot(buyerId, propertySlug, kind);
+    return NextResponse.json({ ok: true, active, kind });
   } catch (err) {
     console.error("[account/saved-lots] POST failed:", err);
     return NextResponse.json(

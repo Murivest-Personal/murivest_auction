@@ -29,6 +29,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${SITE.url}/tools/loan-repayment-calculator`, changeFrequency: "monthly", priority: 0.8 },
     { url: `${SITE.url}/about`, changeFrequency: "monthly", priority: 0.6 },
     { url: `${SITE.url}/services`, changeFrequency: "monthly", priority: 0.6 },
+    { url: `${SITE.url}/selling`, changeFrequency: "monthly", priority: 0.85 },
     { url: `${SITE.url}/contact`, changeFrequency: "monthly", priority: 0.6 },
     { url: `${SITE.url}/terms`, changeFrequency: "yearly", priority: 0.3 },
     { url: `${SITE.url}/privacy`, changeFrequency: "yearly", priority: 0.3 },

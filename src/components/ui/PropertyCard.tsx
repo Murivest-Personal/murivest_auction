@@ -62,7 +62,7 @@ export function PropertyCard({
             <dt className="text-[0.55rem] tracking-[0.25em] uppercase text-gold mb-1">
               Guide
             </dt>
-            <dd className="text-[0.9rem] text-green font-body">{p.guidePrice ?? "—"}</dd>
+            <dd className="text-[0.9rem] text-green font-body price">{p.guidePrice ?? "—"}</dd>
           </div>
           <div>
             <dt className="text-[0.55rem] tracking-[0.25em] uppercase text-gold mb-1">

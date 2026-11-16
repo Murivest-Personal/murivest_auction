@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { db } from "@/lib/db";
+import { getBuyerBidById, updateBuyerBidStatus } from "@/lib/supabase/records";
 import { isAdminAuthenticated } from "@/lib/buyer/session";
 import { logAuditAction } from "@/lib/audit";
 
@@ -33,18 +33,12 @@ export async function PATCH(
       return NextResponse.json({ error: "Invalid status." }, { status: 400 });
     }
 
-    const bid = await db.buyerBid.findUnique({
-      where: { id },
-      select: { id: true, reference: true, status: true, propertyTitle: true },
-    });
+    const bid = await getBuyerBidById(id);
     if (!bid) {
       return NextResponse.json({ error: "Bid not found." }, { status: 404 });
     }
 
-    await db.buyerBid.update({
-      where: { id },
-      data: { status, statusNote: note },
-    });
+    await updateBuyerBidStatus(id, status, note);
 
     await logAuditAction({
       buyerId: null,

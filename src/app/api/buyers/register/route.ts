@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createHash, randomUUID } from "crypto";
-import { db } from "@/lib/db";
+import { createBuyer, findBuyerIdByEmail } from "@/lib/supabase/records";
 import {
   ACQUISITION_TIMELINES,
   ASSET_CLASSES,
@@ -20,6 +20,10 @@ import {
   hashCode,
   setBuyerSession,
 } from "@/lib/buyer/session";
+import {
+  encryptAccessCode,
+} from "@/lib/buyer/access-code";
+import { sendBuyerWelcomeNotification } from "@/lib/buyer/notifications";
 import {
   isAllowedPofMime,
   privateFileKeyForPof,
@@ -221,13 +225,9 @@ export async function POST(req: NextRequest) {
     }
 
     /* ---------- Duplicate registration (fast path) ----------
-       The authoritative check is the unique constraint + P2002
-       handling below; this pre-check just avoids a wasted file
-       write for the common case. */
-    const existing = await db.buyerRegistration.findFirst({
-      where: { email },
-      select: { id: true },
-    });
+       This pre-check avoids a wasted file write for the common
+       case; a duplicate-email race is still caught on insert. */
+    const existing = await findBuyerIdByEmail(email);
     if (existing)
       return NextResponse.json(
         {
@@ -239,6 +239,7 @@ export async function POST(req: NextRequest) {
 
     /* ---------- Persist ---------- */
     const accessCode = generateAccessCode();
+    const accessCodeEncrypted = encryptAccessCode(accessCode);
     const id = randomUUID();
 
     if (pof instanceof File && pof.size > 0) {
@@ -262,54 +263,54 @@ export async function POST(req: NextRequest) {
 
     /* Wrap create so we can (a) delete the orphaned POF file if
        the insert fails, and (b) surface a clean 409 on a duplicate
-       email race (P2002 — requires @unique on email). */
+       email race (Postgres 23505). */
     const buyer = await (async () => {
       try {
-        return await db.buyerRegistration.create({
-          data: {
+return await createBuyer({
             id,
-            accessCodeHash: hashCode(accessCode),
-            buyerType,
-            fullName,
+            access_code_hash: hashCode(accessCode),
+            access_code_encrypted: accessCodeEncrypted,
+            buyer_type: buyerType,
+            full_name: fullName,
             email,
             phone,
-            countryOfResidence,
-            taxJurisdiction,
-            idType,
-            idNumber,
-            purchasingEntityName: purchasingEntityName || null,
-            purchasingEntityJurisdiction: purchasingEntityJurisdiction || null,
-            beneficialOwners: owners ? JSON.stringify(owners) : null,
-            budgetMin,
-            budgetMax,
-            budgetCurrency,
-            preferredCountry,
-            preferredLocations: preferredLocations || null,
-            assetClasses: JSON.stringify(assetClassesRaw),
-            fundingPreference,
-            pofType: pofType || null,
-            pofFileName: pofMeta?.fileName ?? null,
-            pofStoredPath: pofMeta?.storedPath ?? null,
-            pofFileSize: pofMeta?.fileSize ?? null,
-            pofMimeType: pofMeta?.mimeType ?? null,
-            pofSha256: pofMeta?.sha256 ?? null,
-            pofUploadedAt: pofMeta ? new Date() : null,
-            lenderName: lenderName || null,
-            acquisitionTimeline,
+            country_of_residence: countryOfResidence,
+            tax_jurisdiction: taxJurisdiction,
+            id_type: idType,
+            id_number: idNumber,
+            purchasing_entity_name: purchasingEntityName || null,
+            purchasing_entity_jurisdiction:
+              purchasingEntityJurisdiction || null,
+            beneficial_owners: owners,
+            budget_min: budgetMin,
+            budget_max: budgetMax,
+            budget_currency: budgetCurrency,
+            preferred_country: preferredCountry,
+            preferred_locations: preferredLocations || null,
+            asset_classes: assetClassesRaw,
+            funding_preference: fundingPreference,
+            pof_type: pofType || null,
+            pof_file_name: pofMeta?.fileName ?? null,
+            pof_storage_path: pofMeta?.storedPath ?? null,
+            pof_file_size: pofMeta?.fileSize ?? null,
+            pof_mime_type: pofMeta?.mimeType ?? null,
+            pof_sha256: pofMeta?.sha256 ?? null,
+            pof_uploaded_at: pofMeta ? new Date().toISOString() : null,
+            lender_name: lenderName || null,
+            acquisition_timeline: acquisitionTimeline,
             classification: DEFAULT_CLASSIFICATION,
-            consentTerms: true,
-            consentAt: new Date(),
-            termsVersion: BUYER_TERMS_VERSION,
-            ipHash,
-            userAgent: req.headers.get("user-agent") ?? null,
-          },
-          select: { id: true, classification: true },
-        });
+            consent_terms: true,
+            consent_at: new Date().toISOString(),
+            terms_version: BUYER_TERMS_VERSION,
+            ip_hash: ipHash,
+            user_agent: req.headers.get("user-agent") ?? null,
+          });
       } catch (createErr) {
         if (pofMeta?.storedPath) {
           await cleanupPofFile(pofMeta.storedPath);
         }
-        if ((createErr as { code?: string })?.code === "P2002") {
+        // 23505 = unique_violation (duplicate email race).
+        if ((createErr as { code?: string })?.code === "23505") {
           return null;
         }
         throw createErr;
@@ -326,6 +327,12 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Send welcome email with access code
+    const emailResult = await sendBuyerWelcomeNotification(buyer.id).catch((err) => {
+      console.error("[buyers/register] Welcome email failed:", err);
+      return { ok: false, error: "Email sending failed" };
+    });
+
     await setBuyerSession(buyer.id);
 
     return NextResponse.json({
@@ -335,6 +342,8 @@ export async function POST(req: NextRequest) {
       classification: buyer.classification,
       termsText: BUYER_TERMS_TEXT,
       termsVersion: BUYER_TERMS_VERSION,
+      emailSent: emailResult.ok,
+      emailError: emailResult.error,
     });
   } catch (err) {
     console.error("[buyers/register] Failed:", err);

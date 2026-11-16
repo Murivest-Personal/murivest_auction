@@ -64,7 +64,7 @@ export function AdminGate() {
         <button
           type="submit"
           disabled={busy}
-          className="w-full px-8 py-3.5 text-[0.65rem] tracking-[0.25em] uppercase font-display bg-green text-cream hover:bg-gold transition-colors disabled:opacity-40"
+          className="btn btn-primary w-full disabled:opacity-100"
         >
           {busy ? "Checking" : "Enter"}
         </button>
@@ -90,7 +90,7 @@ export function AdminSignOutButton() {
           setBusy(false);
         }
       }}
-      className="font-display text-[0.6rem] tracking-[0.22em] uppercase text-green border border-hairline px-5 py-2.5 hover:border-green transition-colors disabled:opacity-40"
+      className="btn btn-quiet disabled:opacity-100"
     >
       {busy ? "Signing out" : "Sign out"}
     </button>

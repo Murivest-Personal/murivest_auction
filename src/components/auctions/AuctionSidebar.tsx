@@ -15,15 +15,15 @@ export function AuctionSidebar({ property }: { property: Property }) {
       <div className="border border-hairline bg-white p-8">
         <dl className="space-y-5">
           <div>
-            <dt className="text-[0.55rem] tracking-[0.25em] uppercase text-gold mb-1">
+            <dt className="font-display text-[0.55rem] tracking-[0.25em] uppercase text-gold mb-1">
               Guide price
             </dt>
-            <dd className="font-serif text-3xl font-light text-green">
+            <dd className="font-serif text-3xl font-light text-green price">
               {property.guidePrice ?? "—"}
             </dd>
           </div>
           <div>
-            <dt className="text-[0.55rem] tracking-[0.25em] uppercase text-gold mb-1">
+            <dt className="font-display text-[0.55rem] tracking-[0.25em] uppercase text-gold mb-1">
               Auction date
             </dt>
             <dd className="font-body text-[0.95rem] text-green">
@@ -39,16 +39,16 @@ export function AuctionSidebar({ property }: { property: Property }) {
           </div>
           {property.reservePrice ? (
             <div>
-              <dt className="text-[0.55rem] tracking-[0.25em] uppercase text-gold mb-1">
+              <dt className="font-display text-[0.55rem] tracking-[0.25em] uppercase text-gold mb-1">
                 Reserve price
               </dt>
-              <dd className="font-body text-[0.95rem] text-green">
+              <dd className="font-body text-[0.95rem] text-green price">
                 {property.reservePrice}
               </dd>
             </div>
           ) : null}
           <div>
-            <dt className="text-[0.55rem] tracking-[0.25em] uppercase text-gold mb-1">
+            <dt className="font-display text-[0.55rem] tracking-[0.25em] uppercase text-gold mb-1">
               Selling party
             </dt>
             <dd className="font-body text-[0.95rem] text-green">
@@ -61,14 +61,14 @@ export function AuctionSidebar({ property }: { property: Property }) {
           {property.status === "sold" ? (
             <a
               href={`/${property.market}`}
-              className="block text-center px-8 py-4 text-[0.65rem] tracking-[0.25em] uppercase font-display bg-green text-cream hover:bg-gold transition-colors"
+              className="btn btn-primary block text-center"
             >
               View similar lots
             </a>
           ) : (
             <a
               href={property.status === "under-offer" ? "#selling-party" : "#submit-a-bid"}
-              className="block text-center px-8 py-4 text-[0.65rem] tracking-[0.25em] uppercase font-display bg-green text-cream hover:bg-gold transition-colors"
+              className="btn btn-primary block text-center"
             >
               {property.status === "under-offer"
                 ? "Request notification"
@@ -79,7 +79,7 @@ export function AuctionSidebar({ property }: { property: Property }) {
             href={`mailto:${SITE.officeEmail}?subject=${encodeURIComponent(
               `Legal pack — ${property.referenceCode ?? property.title}`
             )}`}
-            className="block text-center px-8 py-4 text-[0.65rem] tracking-[0.25em] uppercase font-body text-green border border-green hover:bg-green hover:text-cream transition-colors"
+            className="btn btn-secondary block text-center"
           >
             Request legal pack
           </a>

@@ -84,7 +84,7 @@ export function BidStatusControls({
           type="button"
           onClick={save}
           disabled={busy || !dirty}
-          className="font-display text-[0.55rem] tracking-[0.22em] uppercase text-green border border-green px-4 py-1.5 hover:bg-green hover:text-cream transition-colors disabled:opacity-40"
+          className="btn btn-primary disabled:opacity-100"
         >
           {busy ? "Saving" : "Apply"}
         </button>
