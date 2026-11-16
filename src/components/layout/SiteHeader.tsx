@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -14,6 +14,7 @@ import {
   ShieldCheck,
   Building2,
   Mail,
+  LayoutGrid,
   type LucideIcon,
 } from "lucide-react";
 
@@ -36,74 +37,72 @@ const NAV_GROUPS: NavGroup[] = [
     label: "Marketplace",
     items: [
       {
-        label: "Auctions",
+        label: "Browse auctions",
         href: "/auctions",
         icon: Gavel,
         children: [
           { label: "All lots", href: "/auctions" },
-          { label: "Kenya auctions", href: "/kenya" },
-          { label: "UK auctions", href: "/uk" },
+          { label: "Kenya market", href: "/kenya" },
+          { label: "UK market", href: "/uk" },
           { label: "Auction calendar", href: "/calendar" },
-          { label: "Nairobi submarkets", href: "/kenya" },
-        ],
-      },
-    ],
-  },
-  {
-    label: "Intelligence",
-    items: [
-      {
-        label: "Research",
-        href: "/intelligence",
-        icon: BarChart3,
-        children: [
-          { label: "All research", href: "/intelligence" },
-          { label: "Auction defence & borrowers", href: "/intelligence" },
-          { label: "Trusts & asset structuring", href: "/intelligence" },
-          { label: "Buying at auction", href: "/intelligence" },
-          { label: "FAQs", href: "/faqs" },
         ],
       },
       {
-        label: "How auctions work",
-        href: "/how-auctions-work",
-        icon: Compass,
-        children: [
-          { label: "Overview", href: "/how-auctions-work" },
-          { label: "Buying at auction", href: "/how-auctions-work/buying" },
-          { label: "Selling at auction", href: "/how-auctions-work/selling" },
-          { label: "Legal pack & due diligence", href: "/how-auctions-work/legal-pack" },
-          { label: "Auction glossary", href: "/how-auctions-work/glossary" },
-        ],
-      },
-    ],
-  },
-  {
-    label: "Services",
-    items: [
-      {
-        label: "Buyer services",
-        href: "/buyer-fees",
-        icon: ShieldCheck,
-        children: [
-          { label: "Buyer representation & 2% fee", href: "/buyer-fees" },
-          { label: "Registration & qualification", href: "/buyers" },
-          { label: "Create your account", href: "/register" },
-          { label: "Sign in", href: "/sign-in" },
-          { label: "Tools & calculators", href: "/tools" },
-        ],
-      },
-      {
-        label: "Selling",
+        label: "Sell a property",
         href: "/selling",
         icon: Building2,
       },
     ],
   },
   {
-    label: "Firm",
+    label: "Buyers & sellers",
     items: [
-      { label: "About", href: "/about", icon: Building2 },
+      {
+        label: "Buyer access",
+        href: "/buyers",
+        icon: ShieldCheck,
+        children: [
+          { label: "How to participate", href: "/buyers" },
+          { label: "Create account", href: "/register" },
+          { label: "Sign in", href: "/sign-in" },
+          { label: "My account", href: "/account" },
+          { label: "Fees & terms", href: "/buyer-fees" },
+        ],
+      },
+      {
+        label: "How it works",
+        href: "/how-auctions-work",
+        icon: Compass,
+        children: [
+          { label: "Overview", href: "/how-auctions-work" },
+          { label: "Buying", href: "/how-auctions-work/buying" },
+          { label: "Selling", href: "/how-auctions-work/selling" },
+          { label: "Legal pack & diligence", href: "/how-auctions-work/legal-pack" },
+          { label: "Glossary", href: "/how-auctions-work/glossary" },
+        ],
+      },
+    ],
+  },
+  {
+    label: "Resources",
+    items: [
+      {
+        label: "Research & insights",
+        href: "/intelligence",
+        icon: BarChart3,
+        children: [
+          { label: "All research", href: "/intelligence" },
+          { label: "FAQs", href: "/faqs" },
+          { label: "Tools & calculators", href: "/tools" },
+        ],
+      },
+    ],
+  },
+  {
+    label: "Company",
+    items: [
+      { label: "About", href: "/about", icon: LayoutGrid },
+      { label: "Services", href: "/services", icon: Building2 },
       { label: "Contact", href: "/contact", icon: Mail },
     ],
   },
@@ -171,7 +170,7 @@ function Wordmark({ variant = "full" }: { variant?: "full" | "compact" }) {
       </span>
       {!isCompact && (
         <span className="mt-1 font-display text-[0.45rem] tracking-[0.22em] uppercase text-charcoal/70">
-          Private client marketplace
+          Curated auction marketplace
         </span>
       )}
     </div>
@@ -212,10 +211,10 @@ function AccountCard() {
           </span>
           <span className="flex-1 min-w-0">
             <span className="block font-body text-[0.8rem] text-green leading-tight">
-              Login
+              Sign in
             </span>
             <span className="block font-display text-[0.45rem] tracking-[0.22em] uppercase text-charcoal mt-0.5">
-              Account
+              Buyer & seller account
             </span>
           </span>
           <span className="text-green group-hover:text-gold transition-colors text-[0.7rem]">
@@ -247,13 +246,13 @@ function AccountCard() {
               {state.name ?? "Account"}
             </span>
             <span className="block font-display text-[0.45rem] tracking-[0.22em] uppercase text-charcoal mt-0.5">
-              Account
+              Dashboard
             </span>
           </div>
         </div>
         <div className="mt-2.5 pt-2.5 border-t border-hairline flex items-center justify-between">
           <span className="font-display text-[0.5rem] tracking-[0.22em] uppercase text-charcoal group-hover:text-green transition-colors">
-            View account
+            Open dashboard
           </span>
           <span className="text-green group-hover:text-gold transition-colors text-[0.7rem]">
             →
@@ -274,7 +273,7 @@ function CompactAccount() {
     ? "Account"
     : state.signedIn
     ? state.name ?? "Account"
-    : "Login";
+    : "Sign in";
 
   const href = isLoading || state.signedIn ? "/account" : "/sign-in";
 
@@ -467,16 +466,24 @@ function SidebarContent({
 
       <NavAccordion pathname={pathname} onCloseMobile={onCloseMobile} />
 
-      <div className="border-t border-hairline px-4 py-4 flex-shrink-0">
-        <a
-          href="mailto:office@murivest.com"
-          className="block font-body text-[0.78rem] text-green hover:text-gold transition-colors truncate"
+      <div className="border-t border-hairline px-4 py-4 flex-shrink-0 space-y-3">
+        <Link
+          href="/selling"
+          className="block text-center px-3 py-2.5 text-[0.55rem] tracking-[0.22em] uppercase font-display bg-green text-cream hover:bg-gold transition-colors"
         >
-          office@murivest.com
-        </a>
-        <span className="block mt-1 font-display text-[0.45rem] tracking-[0.22em] uppercase text-charcoal/70">
-          Kenya · United Kingdom
-        </span>
+          List a property
+        </Link>
+        <div>
+          <a
+            href="mailto:office@murivest.com"
+            className="block font-body text-[0.78rem] text-green hover:text-gold transition-colors truncate"
+          >
+            office@murivest.com
+          </a>
+          <span className="block mt-1 font-display text-[0.45rem] tracking-[0.22em] uppercase text-charcoal/70">
+            Kenya · United Kingdom
+          </span>
+        </div>
       </div>
     </div>
   );

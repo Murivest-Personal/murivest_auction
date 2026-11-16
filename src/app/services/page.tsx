@@ -6,41 +6,41 @@ import { SectionHeader } from "@/components/ui/SectionHeader";
 import { ArrowLink } from "@/components/ui/ArrowLink";
 
 export const metadata = buildMetadata({
-  title: "Commercial Real Estate Services — Brokerage, Asset Management, Investment | Murivest",
+  title: "Marketplace Services — Listing, Buyer Access & Auction Support | Murivest",
   description:
-    "Brokerage, property and asset management, and investment property services from Murivest Group Ltd. Mandate-only, non-pooled, KYC/AML-verified, fiduciary standards.",
+    "Services supporting the Murivest commercial property auction marketplace: curated listing review, buyer access and qualification support, and auction preparation across Kenya and the UK.",
   path: "/services",
 });
 
 const SERVICES = [
   {
-    title: "Brokerage",
+    title: "Listing review & marketplace preparation",
     intro:
-      "Brokerage at Murivest is the disciplined execution of disposals and acquisitions under mandate. The firm acts for owners, investors and occupiers across office, industrial, retail, hospitality, mixed-use and land, in both markets the auction website covers.",
+      "Murivest supports sellers, advisers, and appointed selling parties with a curated intake process for commercial property auction opportunities.",
     points: [
-      "Dispositions and acquisitions under exclusive mandate, with institutional reporting throughout.",
-      "Auction intelligence and auction-route advisory — sourcing, screening and bid strategy for buyers, and reserve and pack preparation for sellers.",
-      "Chargee and receiver engagement on statutory sales, connecting enforced inventory with qualified buyers.",
+      "Property submission review for suitability, completeness, and marketplace fit.",
+      "Coordination of key listing information, dates, guide details, and available documentation status.",
+      "Publication of reviewed opportunities to qualified marketplace audiences in Kenya and the UK.",
     ],
   },
   {
-    title: "Property and asset management",
+    title: "Buyer access & participation support",
     intro:
-      "Management at Murivest treats an income property as a governed asset: documented tenancies, controlled outgoings, and reporting an institutional owner can rely on.",
+      "The marketplace provides tools and workflows that help buyers discover lots, organise interest, and prepare for participation through the authorised process.",
     points: [
-      "Tenancy administration, rent collection and arrears management under Kenyan and UK practice.",
-      "Asset plans that schedule maintenance, capex and re-letting against the income profile.",
-      "Statutory compliance coordination — rates, licences and consents — so the asset is saleable when the owner chooses to exit.",
+      "Account registration, saved lots, watchlists, and submission tracking.",
+      "Qualification and verification steps where required by the lot or selling party.",
+      "Guidance on auction steps, required documents, and participation routes.",
     ],
   },
   {
-    title: "Investment property services",
+    title: "Auction coordination & market support",
     intro:
-      "For investors, Murivest provides the full acquisition and holding discipline: sourcing, screening, transaction management and the analytical tooling this website publishes.",
+      "Murivest works alongside owners, advisers, auctioneers, and selling parties to keep marketplace activity clear, timely, and commercially focused.",
     points: [
-      "Sourcing and screening against mandate criteria, including the underwriting gates used on this website.",
-      "Transaction management through legal pack review, funding coordination and completion.",
-      "Portfolio reporting on yield, coverage and exit assumptions, on the same definitions this site publishes.",
+      "Market-specific discovery across Kenya and the UK commercial auction landscape.",
+      "Enquiry routing and communication support between interested parties where appropriate.",
+      "Advisory support on auction readiness, process, and next steps, subject to the applicable mandate or engagement.",
     ],
   },
 ];
@@ -59,14 +59,15 @@ export default function ServicesPage() {
         <Container>
           <SectionHeader
             numeral="—"
-            eyebrow="What the firm does"
-            title="Commercial real estate services."
+            eyebrow="Marketplace support"
+            title="Services for buyers and sellers."
           />
           <p className="max-w-[42rem] text-[1.05rem] leading-[1.9] text-ink">
-            Murivest Group Ltd provides commercial real estate services across
-            East Africa, the United Kingdom and international markets. All
-            engagements are by mandate only, non-pooled, and subject to
-            KYC/AML verification, conducted to fiduciary standards.
+            Murivest Auctions combines curated marketplace access with
+            practical support for listing, discovery, and participation.
+            Services are provided subject to the applicable engagement, and
+            transaction-specific authority remains with the appointed
+            auctioneer or selling party where relevant.
           </p>
         </Container>
       </section>
@@ -107,18 +108,18 @@ export default function ServicesPage() {
         <Container>
           <div className="max-w-[42rem]">
             <p className="text-[1rem] leading-[1.9] text-ink mb-6">
-              Owners and sponsors considering a disposal can present the
-              property directly to Murivest's acquisitions team through the
-              dedicated selling journey.
+              Preparing to bring a commercial property to auction? Submit the
+              opportunity for marketplace review and our team will advise on
+              next steps.
             </p>
-            <ArrowLink href="/selling">Sell your commercial property</ArrowLink>
+            <ArrowLink href="/selling">Submit a property for review</ArrowLink>
           </div>
         </Container>
       </section>
 
       <section className="border-t border-hairline py-14 md:py-20">
         <Container>
-          <ArrowLink href="/contact">Discuss a mandate</ArrowLink>
+          <ArrowLink href="/contact">Contact the marketplace team</ArrowLink>
         </Container>
       </section>
     </>

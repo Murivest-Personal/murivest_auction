@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getBuyerCredentials } from "@/lib/supabase/records";
 import { hashCode, setBuyerSession } from "@/lib/buyer/session";
+import { sendNewSigninNotification } from "@/lib/buyer/notifications";
 
 export const runtime = "nodejs";
 
@@ -46,6 +47,11 @@ export async function POST(req: NextRequest) {
     }
 
     await setBuyerSession(buyer.id);
+
+    await sendNewSigninNotification(buyer.id).catch((err) => {
+      console.error("[buyers/sign-in] New signin notification failed:", err);
+    });
+
     return NextResponse.json({ ok: true });
   } catch {
     return NextResponse.json({ error: "Invalid request." }, { status: 400 });

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createHash, randomUUID } from "crypto";
 import { getSupabaseService } from "@/lib/supabase/server";
+import { sendNewSellingSubmissionNotification } from "@/lib/buyer/notifications";
 import {
   evaluateSellingEligibility,
   type SellingEligibilityInput,
@@ -403,6 +404,14 @@ export async function POST(req: NextRequest) {
         { status: 500 }
       );
     }
+
+    await sendNewSellingSubmissionNotification(
+      String(payload.sellerEmail),
+      String(payload.sellerName),
+      reference
+    ).catch((err) => {
+      console.error("[api/selling] New submission notification failed:", err);
+    });
 
     return NextResponse.json({
       ok: true,

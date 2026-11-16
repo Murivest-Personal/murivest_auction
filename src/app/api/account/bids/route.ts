@@ -4,6 +4,7 @@ import { createBuyerBid, getBuyerById } from "@/lib/supabase/records";
 import { getBuyerSessionId } from "@/lib/buyer/session";
 import { getPropertyBySlug } from "@/lib/content";
 import { logAuditAction } from "@/lib/audit";
+import { sendNewBidNotification } from "@/lib/buyer/notifications";
 import {
   FEE_CONSENT_TEXT,
   FEE_CONSENT_VERSION,
@@ -109,6 +110,10 @@ export async function POST(req: NextRequest) {
       req.headers.get("x-real-ip") ??
       null;
 
+    const bidCurrency =
+      property.facts.currency ??
+      (property.market === "kenya" ? "KES" : "GBP");
+
     const bid = await createBuyerBid({
       id: randomUUID(),
       reference: bidReference(),
@@ -118,9 +123,7 @@ export async function POST(req: NextRequest) {
       property_title: property.title,
       property_market: property.market,
       bid_amount: amount,
-      bid_currency:
-        property.facts.currency ??
-        (property.market === "kenya" ? "KES" : "GBP"),
+      bid_currency: bidCurrency,
       consent_terms: true,
       consent_fee: true,
       terms_consent_at: new Date().toISOString(),
@@ -139,6 +142,19 @@ export async function POST(req: NextRequest) {
       action: "bid_submitted",
       details: `${buyer.fullName} — ${property.title} — ${amount}`,
       ipHash: ip ? createHash("sha256").update(ip).digest("hex") : null,
+    });
+
+    await sendNewBidNotification(
+      { id: buyer.id, fullName: buyer.fullName, email: buyer.email },
+      {
+        reference: bid.reference,
+        propertyTitle: property.title,
+        propertySlug: property.slug,
+        bidAmount: amount,
+        bidCurrency,
+      }
+    ).catch((err) => {
+      console.error("[account/bids] New bid notification failed:", err);
     });
 
     return NextResponse.json({

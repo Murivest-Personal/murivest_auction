@@ -8,9 +8,9 @@ import { SITE } from "@/lib/brand";
 import { AUCTION_DISCLOSURE } from "@/lib/legal";
 
 export const metadata = buildMetadata({
-  title: "Contact the Murivest Deal Team | Murivest Group Ltd",
+  title: "Contact Murivest Auctions | Buyers, Sellers & Enquiries",
   description:
-    "Contact Murivest Group Ltd in Nairobi or London. Buyer mandates, seller mandates, legal pack requests and auction enquiries. Engagements by mandate only, subject to KYC/AML verification.",
+    "Contact Murivest Auctions in Nairobi or London for buyer access, seller submissions, listing enquiries, and marketplace support across Kenya and the UK.",
   path: "/contact",
 });
 
@@ -29,13 +29,13 @@ export default function ContactPage() {
           <SectionHeader
             numeral="—"
             eyebrow="Nairobi · London"
-            title="Contact the deal team."
+            title="Contact the marketplace team."
           />
           <p className="max-w-[42rem] text-[1.05rem] leading-[1.9] text-ink">
-            Murivest engages with buyers and sellers by mandate only. Whether
-            you are registering a buying mandate, listing a property for
-            auction, or requesting a legal pack, the first step is a
-            conversation with the team.
+            Use the marketplace team for buyer access, seller submissions,
+            listing enquiries, document requests, and support. Where a lot is
+            handled by an appointed auctioneer or selling party, the relevant
+            authorised contact and conditions of sale will apply.
           </p>
         </Container>
       </section>
@@ -54,7 +54,7 @@ export default function ContactPage() {
                 {SITE.officeEmail}
               </a>
               <p className="mt-4 text-[0.85rem] leading-[1.7] text-charcoal">
-                Buyer mandates, seller mandates, legal pack requests and press.
+                Buyer access, seller submissions, listing enquiries and support.
               </p>
             </div>
             <div className="bg-cream p-8">
@@ -84,38 +84,26 @@ export default function ContactPage() {
           <div className="mt-14 grid gap-12 lg:grid-cols-2">
             <div>
               <h2 className="font-serif text-2xl font-light text-green mb-4">
-                Buyer mandates
+                Buyer access
               </h2>
               <p className="text-[0.95rem] leading-[1.8] text-ink mb-4">
-                Register a buying mandate to receive verified lots that match
-                your criteria before they are published, with access to the
-                deal team through diligence and bidding. Mandates are
-                non-pooled and subject to KYC/AML verification.
+                Create an account to save lots, submit enquiries or bids where
+                available, and complete verification steps required for
+                participation. Access and eligibility depend on the lot and the
+                selling party&apos;s process.
               </p>
-              <ArrowLink
-                href={`mailto:${SITE.officeEmail}?subject=${encodeURIComponent(
-                  "Buyer mandate enquiry"
-                )}`}
-              >
-                Register a buyer mandate
-              </ArrowLink>
+              <ArrowLink href="/register">Create a buyer account</ArrowLink>
             </div>
             <div>
               <h2 className="font-serif text-2xl font-light text-green mb-4">
-                Listing a property for auction
+                List a property
               </h2>
               <p className="text-[0.95rem] leading-[1.8] text-ink mb-4">
-                Murivest lists properties for auction by mandate —
-                verification, particulars, legal pack coordination and
-                publication to qualified buyers across both markets.
+                Submit commercial property details for marketplace review.
+                Murivest can help prepare listing information and route
+                suitable opportunities through the curated auction process.
               </p>
-              <ArrowLink
-                href={`mailto:${SITE.officeEmail}?subject=${encodeURIComponent(
-                  "Seller mandate enquiry"
-                )}`}
-              >
-                List a property for auction
-              </ArrowLink>
+              <ArrowLink href="/selling">Submit a property</ArrowLink>
             </div>
           </div>
         </Container>

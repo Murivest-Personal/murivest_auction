@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createHash } from "crypto";
 import { getSupabaseService } from "@/lib/supabase/server";
+import { sendNewInquiryNotification } from "@/lib/buyer/notifications";
 
 export const runtime = "nodejs";
 
@@ -82,10 +83,23 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    const inquiryId = data?.[0]?.inquiry_id;
+    const reference = inquiryId?.slice(0, 8).toUpperCase();
+
+    await sendNewInquiryNotification(
+      body.email,
+      body.full_name,
+      reference ?? "",
+      body.message || null,
+      body.phone || null
+    ).catch((err) => {
+      console.error("[api/inquiries] New inquiry notification failed:", err);
+    });
+
     return NextResponse.json({
       ok: true,
-      inquiry_id: data?.[0]?.inquiry_id,
-      reference: data?.[0]?.inquiry_id?.slice(0, 8).toUpperCase(),
+      inquiry_id: inquiryId,
+      reference,
     });
   } catch {
     return NextResponse.json({ error: "Invalid request." }, { status: 400 });

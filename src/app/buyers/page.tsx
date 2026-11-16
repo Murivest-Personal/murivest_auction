@@ -1,19 +1,15 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { buildMetadata } from "@/lib/seo";
 import { Container } from "@/components/ui/Container";
 import { ClassificationLadder } from "@/components/buyers/ClassificationLadder";
 
 export const metadata = buildMetadata({
-  title: "Buyer registration & qualification | Murivest Group Ltd",
+  title: "Buyer Access & Participation | Murivest Auction Marketplace",
   description:
-    "Create a Murivest account. Qualification covers identity and beneficial ownership (KYC) and funding verification. Save lots, submit bids from property pages and follow your verification status on your profile. Buyer-side representation for commercial property auctions in Kenya and the UK.",
+    "Create a Murivest account to participate in the auction marketplace. Complete identity and funding verification, save lots, submit bids or expressions of interest, and track your status.",
   path: "/buyers",
 });
 
-/* Landing page for the account registration & qualification
-   system. Explains the ladder and what is captured; the account
-   itself — saved lots, bids, verification, settings — lives on
-   this website at /account. */
 export default function BuyersLandingPage() {
   return (
     <>
@@ -21,33 +17,36 @@ export default function BuyersLandingPage() {
         <Container>
           <div className="max-w-3xl">
             <span className="block font-display text-[0.6rem] tracking-[0.3em] uppercase text-gold mb-6">
-              Buyer qualification system
+              Buyer access
             </span>
             <h1 className="font-serif text-4xl md:text-5xl font-light text-green leading-[1.15] mb-6">
-              Qualified buyers enter the room prepared.
+              Participate in the marketplace with a verified account.
             </h1>
             <p className="text-[1.05rem] leading-[1.9] text-ink mb-10">
-              Murivest qualifies buyers before introducing them to auction
-              opportunities. Your account captures who is buying, where they
-              are tax-resident, what they are buying, and whether the capital
-              is real. Once qualified, detailed transaction documentation is
-              released to you on a lot, under appropriate confidentiality and
-              mandate arrangements. This is how unqualified bidders are kept
-              out of the process, and how serious buyers stop losing auctions
-              they could not fund.
+              Create a Murivest account to save lots, receive alerts, submit
+              bids or expressions of interest on eligible opportunities, and
+              track your verification and activity in one place. Qualification
+              helps ensure participants are prepared and that sensitive lot
+              information is shared appropriately.
             </p>
             <div className="flex flex-wrap gap-4">
               <Link
                 href="/register"
                 className="inline-flex items-center justify-center px-8 py-3.5 text-[0.65rem] tracking-[0.22em] uppercase font-display bg-green text-cream hover:bg-gold transition-colors"
               >
-                Create your account
+                Create account
               </Link>
               <Link
                 href="/sign-in"
                 className="inline-flex items-center justify-center px-8 py-3.5 text-[0.65rem] tracking-[0.22em] uppercase font-display text-green border border-green hover:bg-green hover:text-cream transition-colors"
               >
                 Sign in
+              </Link>
+              <Link
+                href="/auctions"
+                className="inline-flex items-center justify-center px-8 py-3.5 text-[0.65rem] tracking-[0.22em] uppercase font-display text-green hover:text-gold transition-colors"
+              >
+                Browse lots →
               </Link>
             </div>
           </div>
@@ -56,26 +55,21 @@ export default function BuyersLandingPage() {
 
       <Container className="py-16 md:py-24">
         <div className="grid gap-16 lg:grid-cols-2 max-w-[72rem] mx-auto">
-          {/* What is captured */}
           <div>
             <span className="block font-display text-[0.6rem] tracking-[0.3em] uppercase text-gold mb-4">
-              The registration file
+              What your account enables
             </span>
             <h2 className="font-serif text-2xl md:text-3xl font-light text-green mb-8">
-              Ten points, captured once.
+              One account for marketplace activity.
             </h2>
-            <ol className="border-t border-hairline">
+            <ul className="border-t border-hairline">
               {[
-                "Individual or corporate buyer",
-                "Country of residence and tax jurisdiction",
-                "Contact and identification information",
-                "Purchasing entity and beneficial ownership",
-                "Investment budget",
-                "Preferred country and location",
-                "Asset classes of interest",
-                "Cash or financing preference",
-                "Proof of funds or lender evidence",
-                "Expected acquisition timeline",
+                "Save and watch lots across Kenya and UK markets",
+                "Receive auction alerts and relevant updates",
+                "Submit bids or expressions of interest on eligible lots",
+                "Track bid status and account activity",
+                "Follow identity and funding verification progress",
+                "Access lot information released under applicable terms",
               ].map((item, i) => (
                 <li
                   key={i}
@@ -87,60 +81,61 @@ export default function BuyersLandingPage() {
                   <span>{item}</span>
                 </li>
               ))}
-            </ol>
+            </ul>
             <div className="border border-hairline bg-cream p-6 mt-8 text-[0.8rem] leading-[1.8] text-charcoal">
-              Proof of funds and lender evidence are uploaded to Murivest&apos;s
-              private, access-controlled document store. They are never
-              displayed publicly, never stored in a public directory, and every
-              internal view is logged.
+              Submissions through this website may be expressions of intent or
+              bids depending on the lot and sale channel. Binding sale terms,
+              deposits and completion obligations are governed by the applicable
+              auction conditions and sale documentation.
             </div>
           </div>
 
-          {/* The ladder */}
           <div>
             <span className="block font-display text-[0.6rem] tracking-[0.3em] uppercase text-gold mb-4">
-              The qualification ladder
+              Qualification
             </span>
             <h2 className="font-serif text-2xl md:text-3xl font-light text-green mb-8">
-              From registration to transaction.
+              From registration to participation.
             </h2>
             <ClassificationLadder />
             <div className="border border-green bg-cream p-6 mt-8">
               <p className="text-[0.85rem] leading-[1.8] text-ink">
                 <span className="font-display text-[0.55rem] tracking-[0.3em] uppercase text-gold block mb-3">
-                  Your account on this website
+                  Your dashboard
                 </span>
-                Your account is part of this website — there is no separate
-                portal. Save and like lots, submit bids from property pages,
-                follow your verification status and set your auction alerts,
-                all from your profile.
+                Manage watchlists, bids, profile details and notifications from
+                your account dashboard. Supporting information is handled
+                confidentially in line with platform terms and privacy policy.
               </p>
             </div>
           </div>
         </div>
       </Container>
 
-      {/* Cross-border note */}
       <section className="border-t border-hairline bg-white py-16 md:py-20">
         <Container>
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="font-serif text-2xl md:text-3xl font-light text-green mb-6">
-              Built for cross-border capital.
+              Ready to explore opportunities?
             </h2>
             <p className="text-[0.95rem] leading-[1.9] text-ink mb-8">
-              A Kenyan investor assessing a UK auction lot — or a UK fund
-              looking at Nairobi — faces different deposit rules, completion
-              timetables, tax treatment and funding mechanics. Your
-              account records your jurisdiction and funding position so
-              Murivest can underwrite the acquisition properly before you are
-              in a competitive auction room.
+              Browse current lots across Kenya and the UK, then create an
+              account to save opportunities and participate when you are ready.
             </p>
-            <Link
-              href="/register"
-              className="inline-flex items-center justify-center px-8 py-3.5 text-[0.65rem] tracking-[0.22em] uppercase font-display bg-green text-cream hover:bg-gold transition-colors"
-            >
-              Start your registration
-            </Link>
+            <div className="flex flex-wrap justify-center gap-4">
+              <Link
+                href="/auctions"
+                className="inline-flex items-center justify-center px-8 py-3.5 text-[0.65rem] tracking-[0.22em] uppercase font-display bg-green text-cream hover:bg-gold transition-colors"
+              >
+                Browse auctions
+              </Link>
+              <Link
+                href="/register"
+                className="inline-flex items-center justify-center px-8 py-3.5 text-[0.65rem] tracking-[0.22em] uppercase font-display text-green border border-green hover:bg-green hover:text-cream transition-colors"
+              >
+                Create account
+              </Link>
+            </div>
           </div>
         </Container>
       </section>

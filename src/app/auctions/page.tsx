@@ -1,4 +1,4 @@
-import { buildMetadata } from "@/lib/seo";
+﻿import { buildMetadata } from "@/lib/seo";
 import { JsonLd } from "@/components/ui/JsonLd";
 import { breadcrumbJsonLd, collectionPageJsonLd } from "@/lib/jsonld";
 import { Container } from "@/components/ui/Container";
@@ -10,9 +10,9 @@ import { getProperties } from "@/lib/content";
 export const revalidate = 300;
 
 export const metadata = buildMetadata({
-  title: "All Auction Lots — Kenya & UK | Murivest Group Ltd",
+  title: "Browse Auction Lots | Kenya & UK Commercial Property Marketplace | Murivest",
   description:
-    "Browse every verified commercial property auction lot across Kenya and the UK. Filter by market, region, asset type, status and price. Guide prices, auction dates and legal pack status.",
+    "Browse verified commercial property auction lots across Kenya and the UK. Filter by market, region, asset type, status and price. View guide prices, auction dates, conditions and documentation status.",
   path: "/auctions",
 });
 
@@ -45,19 +45,17 @@ export default async function AllLotsPage({
       <JsonLd
         data={[
           collectionPageJsonLd(
-            "All auction lots — Kenya and UK",
-            "Every verified commercial property auction lot across Kenya and the UK, filterable by market, region, asset type, status and price.",
+            "Browse auction lots — Kenya and UK",
+            "Verified commercial property auction lots across Kenya and the UK, filterable by market, region, asset type, status and price.",
             "/auctions"
           ),
           breadcrumbJsonLd([
             { name: "Home", url: "/" },
-            { name: "All lots", url: "/auctions" },
+            { name: "Browse auctions", url: "/auctions" },
           ]),
         ]}
       />
 
-      {/* Search filter bar — top of page, below the site header;
-          scrolls away with the page (not fixed) */}
       <LotsFilterBar
         market="all"
         regions={regions}
@@ -75,16 +73,15 @@ export default async function AllLotsPage({
         <Container>
           <SectionHeader
             numeral="—"
-            eyebrow="Verified auction intelligence"
-            title="All lots across both markets."
+            eyebrow="Marketplace catalog"
+            title="Browse auction lots."
           />
           <p className="max-w-[42rem] text-[1.05rem] leading-[1.9] text-ink">
-            Each listing states the auction mechanism and the legal pack
-            position; the selling party and sale authority are disclosed as
-            the auction notice and conditions of sale require, with full
-            documentation released to qualified buyers on request under
-            appropriate confidentiality and mandate arrangements. {lots.length}{" "}
-            {lots.length === 1 ? "lot" : "lots"} currently listed.
+            Explore verified commercial property auction opportunities across
+            Kenya and the UK. Each lot includes guide information, status,
+            conditions and available documentation details as provided for the
+            sale. {lots.length} {lots.length === 1 ? "lot" : "lots"} currently
+            shown.
           </p>
         </Container>
       </section>
@@ -92,11 +89,16 @@ export default async function AllLotsPage({
       <section className="py-12 md:py-16">
         <Container>
           {lots.length === 0 ? (
-            <div className="border-t border-sand pt-8">
-              <p className="text-[0.95rem] text-charcoal">
+            <div className="border border-hairline bg-cream p-8 md:p-10 max-w-[42rem]">
+              <p className="text-[1rem] leading-[1.8] text-ink mb-3">
                 {allLots.length === 0
-                  ? "No lots are currently published. Verified lots are published here as they clear the Murivest four-check standard — create your account for auction alerts."
-                  : "No lots match the current filters. Clear the filters or browse the market hubs below."}
+                  ? "No lots are currently published."
+                  : "No lots match the current filters."}
+              </p>
+              <p className="text-[0.95rem] leading-[1.8] text-charcoal">
+                {allLots.length === 0
+                  ? "Create an account to receive alerts when new lots are published, or submit a property for marketplace review."
+                  : "Try clearing filters, searching by location, or browsing market pages for Kenya and the UK."}
               </p>
             </div>
           ) : (

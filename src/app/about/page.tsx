@@ -8,9 +8,9 @@ import { ArrowLink } from "@/components/ui/ArrowLink";
 import { SITE } from "@/lib/brand";
 
 export const metadata = buildMetadata({
-  title: "About Murivest Group Ltd — Commercial Real Estate Services | Murivest",
+  title: "About Murivest Auctions Marketplace | Murivest Group Ltd",
   description:
-    "Murivest Group Ltd provides commercial real estate services — brokerage, property and asset management, and investment property services — across East Africa, the United Kingdom and international markets.",
+    "Murivest Auctions is a curated commercial property auction marketplace for Kenya and the UK, operated by Murivest Group Ltd to connect qualified buyers, sellers, and appointed selling parties.",
   path: "/about",
 });
 
@@ -28,25 +28,26 @@ export default function AboutPage() {
         <Container>
           <SectionHeader
             numeral="—"
-            eyebrow="The firm"
-            title="About Murivest Group Ltd."
+            eyebrow="The marketplace"
+            title="About Murivest Auctions."
           />
           <div className="max-w-[42rem] space-y-5">
             <p className="text-[1.1rem] leading-[1.9] text-ink">
-              Murivest Group Ltd is a commercial real estate services firm
-              operating across East Africa, the United Kingdom and
-              international markets. The firm provides brokerage, property and
-              asset management, and investment property services — including
-              this auction intelligence website, which aggregates verified
-              commercial auction listings across Kenya and the UK and routes
-              qualified buyers to the selling party.
+              Murivest Auctions is a curated commercial property auction
+              marketplace operated by Murivest Group Ltd across Kenya and the
+              United Kingdom. The marketplace brings together reviewed auction
+              opportunities, seller submissions, qualified buyer access, and
+              practical guidance so participants can discover lots, prepare
+              documentation, and engage through the appropriate authorised
+              channels.
             </p>
             <p className="text-[1.05rem] leading-[1.9] text-ink">
-              Murivest serves owners, investors and occupiers under a single
-              access model: mandate-only, non-pooled, with every engagement
-              subject to KYC/AML verification and conducted to fiduciary
-              standards. The firm is not an auctioneer, does not receive bids,
-              does not hold deposits, and is never a party to a sale contract.
+              Murivest manages the marketplace experience and listing review
+              process, but is not the auctioneer, does not receive bids, does
+              not hold deposits, and is not a party to a sale contract unless
+              expressly stated for a specific lot. Where live bidding,
+              payments, or settlement are handled by an appointed auctioneer or
+              selling party, those terms govern the transaction.
             </p>
           </div>
         </Container>
@@ -55,8 +56,8 @@ export default function AboutPage() {
       <section className="py-14 md:py-20">
         <Container>
           <blockquote className="font-serif text-2xl md:text-3xl italic font-light text-green border-l-2 border-gold pl-10 max-w-3xl">
-            The gap between institutional standards and East African
-            execution is not permanent. It is the opportunity.
+            A better auction market starts with clearer listings, prepared
+            participants, and disciplined process.
           </blockquote>
         </Container>
       </section>
@@ -64,26 +65,29 @@ export default function AboutPage() {
       <section className="border-t border-hairline py-14 md:py-20">
         <Container>
           <h2 className="font-serif text-2xl md:text-3xl font-light text-green mb-10">
-            Services
+            What the marketplace provides
           </h2>
           <div className="grid gap-px bg-hairline border border-hairline md:grid-cols-3">
             {[
               {
-                title: "Brokerage",
-                body: "Dispositions, acquisitions and auction intelligence across both markets, executed under mandate to fiduciary standards.",
+                title: "Curated auction discovery",
+                body: "Reviewed commercial lots and market-specific discovery across Kenya and the UK, with key dates, guide information, and document status where available.",
+                href: "/auctions",
               },
               {
-                title: "Property and asset management",
-                body: "Institutional reporting, tenancy administration and asset plans for income property owners.",
+                title: "Buyer access & qualification",
+                body: "Account registration, saved lots, submission workflows, and verification steps that help buyers prepare to participate through the authorised sale process.",
+                href: "/buyers",
               },
               {
-                title: "Investment property services",
-                body: "Sourcing, screening and transaction management for investors in commercial property, including auction acquisitions.",
+                title: "Seller listing review",
+                body: "A managed intake path for owners, advisers, and selling parties to submit commercial property for marketplace review and potential auction listing.",
+                href: "/selling",
               },
             ].map((service) => (
               <Link
                 key={service.title}
-                href="/services"
+                href={service.href}
                 className="bg-cream p-8 hover:bg-white transition-colors"
               >
                 <h3 className="font-serif text-xl font-light text-green mb-3">
@@ -123,9 +127,9 @@ export default function AboutPage() {
           </div>
           <div className="mt-12 flex flex-col sm:flex-row gap-6">
             <ArrowLink href={SITE.mainSite} external>
-              The firm — murivest.com
+              Murivest Group Ltd
             </ArrowLink>
-            <ArrowLink href="/contact">Contact the deal team</ArrowLink>
+            <ArrowLink href="/contact">Contact the marketplace team</ArrowLink>
           </div>
         </Container>
       </section>

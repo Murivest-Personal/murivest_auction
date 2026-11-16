@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { AUCTION_DISCLOSURE } from "@/lib/legal";
 import { SITE } from "@/lib/brand";
 import { Container } from "@/components/ui/Container";
@@ -11,37 +11,37 @@ interface FooterLink {
 
 const COLUMNS: { title: string; links: FooterLink[] }[] = [
   {
-    title: "Auctions",
+    title: "Marketplace",
     links: [
-      { label: "All lots", href: "/auctions" },
-      { label: "Kenya auctions", href: "/kenya" },
-      { label: "UK auctions", href: "/uk" },
+      { label: "Browse all lots", href: "/auctions" },
+      { label: "Kenya market", href: "/kenya" },
+      { label: "UK market", href: "/uk" },
       { label: "Auction calendar", href: "/calendar" },
+      { label: "List a property", href: "/selling" },
     ],
   },
   {
-    title: "Buyer services",
+    title: "Buyers",
     links: [
-      { label: "Buyer representation & fees", href: "/buyer-fees" },
-      { label: "Buyer registration & qualification", href: "/buyers" },
-      { label: "Create your account", href: "/register" },
+      { label: "How to participate", href: "/buyers" },
+      { label: "Create account", href: "/register" },
       { label: "Sign in", href: "/sign-in" },
+      { label: "My account", href: "/account" },
+      { label: "Fees & terms", href: "/buyer-fees" },
       { label: "Tools & calculators", href: "/tools" },
-      { label: "FAQs", href: "/faqs" },
     ],
   },
   {
-    title: "Research",
+    title: "Guides & insights",
     links: [
-      { label: "All research", href: "/intelligence" },
-      { label: "Auction defence & borrowers", href: "/intelligence" },
-      { label: "Trusts & asset structuring", href: "/intelligence" },
-      { label: "Buying at auction", href: "/intelligence" },
-      { label: "Guides & glossary", href: "/how-auctions-work" },
+      { label: "How auctions work", href: "/how-auctions-work" },
+      { label: "Research & insights", href: "/intelligence" },
+      { label: "FAQs", href: "/faqs" },
+      { label: "Glossary", href: "/how-auctions-work/glossary" },
     ],
   },
   {
-    title: "The firm",
+    title: "Company & legal",
     links: [
       { label: "About Murivest", href: "/about" },
       { label: "Services", href: "/services" },
@@ -63,12 +63,13 @@ export function SiteFooter() {
               MURIVEST
             </p>
             <p className="font-display text-[0.55rem] tracking-[0.3em] uppercase text-[color:var(--mv-on-dark-faint)] mb-6">
-              Auctions — Kenya · United Kingdom
+              Auction Marketplace · Kenya · United Kingdom
             </p>
             <p className="max-w-[26rem] text-[0.9rem] leading-[1.8] text-[color:var(--mv-on-dark)]">
-              Verified commercial property auction intelligence from Murivest
-              Group Ltd — commercial real estate services across East Africa,
-              the United Kingdom and international markets.
+              A curated commercial property auction marketplace operated by
+              Murivest Group Ltd. Discover verified lots, submit properties for
+              review, and participate through a qualified account with
+              transparent terms.
             </p>
             <div className="mt-8 space-y-1 text-[0.85rem] text-[color:var(--mv-on-dark)]">
               <p>
@@ -119,31 +120,38 @@ export function SiteFooter() {
           </nav>
         </div>
 
-        {/* Auction alerts — account registration CTA (the account
-            lives on this website) */}
         <div className="border border-[color:var(--mv-on-dark-faint)]/40 p-8 mb-16 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
           <div>
             <p className="font-display text-[0.55rem] tracking-[0.3em] uppercase text-[color:var(--mv-on-dark-faint)] mb-3">
-              Auction alerts
+              Marketplace access
             </p>
             <p className="text-[1.05rem] leading-[1.7] text-cream mb-2 font-serif font-light">
-              Be notified of auction and off-market properties.
+              Create an account to watch lots, register interest and track activity.
             </p>
             <p className="text-[0.85rem] leading-[1.7] text-[color:var(--mv-on-dark)] max-w-[38rem]">
-              Account holders receive auction dates, new lots and off-market
-              opportunities — and can save lots, submit bids and follow their
-              verification status — all on this website.
+              Buyers can save lots, submit bids or expressions of interest, and
+              follow verification status. Sellers can submit properties for
+              marketplace review. All participation is subject to applicable
+              terms and verification.
             </p>
           </div>
-          <Link
-            href="/register"
-            className="inline-flex items-center justify-center gap-3 whitespace-nowrap px-8 py-4 text-[0.65rem] tracking-[0.25em] uppercase font-display border border-cream text-cream hover:bg-cream hover:text-green transition-colors"
-          >
-            Create your account
-          </Link>
+          <div className="flex flex-col sm:flex-row gap-3">
+            <Link
+              href="/register"
+              className="inline-flex items-center justify-center gap-3 whitespace-nowrap px-8 py-4 text-[0.65rem] tracking-[0.25em] uppercase font-display border border-cream text-cream hover:bg-cream hover:text-green transition-colors"
+            >
+              Create account
+            </Link>
+            <Link
+              href="/selling"
+              className="inline-flex items-center justify-center gap-3 whitespace-nowrap px-8 py-4 text-[0.65rem] tracking-[0.25em] uppercase font-display bg-cream text-green hover:bg-gold hover:text-cream transition-colors"
+            >
+              List a property
+            </Link>
+          </div>
         </div>
 
-        {/* Auction disclosure — locked copy, verbatim (§5.13) */}
+        {/* Auction disclosure — locked copy, verbatim */}
         <div className="border border-hairline bg-cream p-6 text-[0.75rem] leading-[1.7] text-charcoal">
           {AUCTION_DISCLOSURE}
         </div>
@@ -153,8 +161,7 @@ export function SiteFooter() {
             © {new Date().getFullYear()} Murivest Group Ltd. All rights reserved.
           </p>
           <p className="text-[0.55rem] tracking-[0.25em] uppercase text-[color:var(--mv-on-dark-muted)]">
-            Engagements by mandate only · East Africa · United Kingdom ·
-            International
+            Curated marketplace · Kenya · United Kingdom · International
           </p>
         </div>
       </Container>

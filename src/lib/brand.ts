@@ -1,4 +1,4 @@
-/* Typed export of brand tokens for inline styles where Tailwind
+﻿/* Typed export of brand tokens for inline styles where Tailwind
    can't reach (Mapbox markers, JSON-LD, SVG). Locked values. */
 
 export const brand = {
@@ -18,7 +18,7 @@ export const brand = {
 export const SITE = {
   name: "Murivest Group Ltd",
   shortName: "Murivest",
-  siteName: "Murivest Auctions",
+  siteName: "Murivest Auctions Marketplace",
   url: "https://auctions.murivest.com",
   mainSite: "https://murivest.com",
   linkedin: "https://www.linkedin.com/company/murivest-group-ltd",

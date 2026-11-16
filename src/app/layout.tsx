@@ -1,4 +1,4 @@
-import type { Metadata, Viewport } from "next";
+﻿import type { Metadata, Viewport } from "next";
 import { Cinzel, Cormorant_Garamond, Montserrat } from "next/font/google";
 import "./globals.css";
 import { SiteHeader } from "@/components/layout/SiteHeader";
@@ -40,11 +40,11 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
   title: {
     default:
-      "Property Auctions in Kenya & the UK — Buyer Representation | Murivest",
+      "Commercial Property Auction Marketplace | Kenya & UK | Murivest",
     template: "%s",
   },
   description:
-    "Verified commercial and residential property auctions across Kenya and the UK, with discreet buyer representation from Murivest Group Ltd. Discover. Evaluate. Acquire.",
+    "Discover, evaluate and participate in verified commercial property auctions across Kenya and the UK. A curated auction marketplace operated by Murivest Group Ltd with qualified buyer access, seller submissions and transparent lot information.",
   applicationName: SITE.siteName,
 };
 

@@ -9,7 +9,7 @@ interface BuyerAccessCodeProps {
   hasAccessCode: boolean;
 }
 
-interface ResendResult {
+interface AccessCodeResult {
   ok: boolean;
   accessCode?: string;
   emailSent: boolean;
@@ -51,7 +51,7 @@ export function BuyerAccessCode({ buyerId, buyerEmail, buyerName, hasAccessCode 
       const res = await fetch(`/api/admin/buyers/${buyerId}/access-code`, {
         method: "POST",
       });
-      const data: ResendResult = await res.json();
+      const data: AccessCodeResult = await res.json();
       if (!res.ok && !data.ok) {
         throw new Error(data.error ?? "Failed to resend access code");
       }
