@@ -51,9 +51,21 @@ prompt
 
 *.env
 *.env.
+# Environment files
+.env
+.env.local
+.env.*.local
+.env.development
+.env.production
+.env.test
 
 server.log
 # Skills directory
 /skills/
 # Private confidential store (proof of funds, data room files)
 .private-store/
+
+# Environment files
+.env
+.env.local
+.env.*.local
