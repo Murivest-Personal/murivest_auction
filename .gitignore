@@ -49,6 +49,9 @@ dev.out.log
 test
 prompt
 
+*.env
+*.env.
+
 server.log
 # Skills directory
 /skills/
