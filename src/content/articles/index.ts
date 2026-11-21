@@ -53,6 +53,8 @@ import { article as byTrueCost } from "./cost-of-buying-auction-property-kenya";
 import { article as byTenPercentDeposit } from "./auction-deposit-10-percent-kenya-what-happens-if-you-fail";
 import { article as byOccupied } from "./occupied-auction-properties-tenants-possession-kenya";
 import { article as byVsPrivateTreaty } from "./auction-vs-private-treaty-kenya-buyer-comparison";
+import { article as byForcedSale } from "./stanbic-bank-approval-sell-jubilee-party-building-emani-192-million";
+import { article as byCommercialAuction } from "./emani-business-centre-auction-kenya-distressed-commercial-sale";
 
 /* --- Finance & due diligence --- */
 import { article as fiFinancing } from "./financing-an-auction-purchase-kenya";
@@ -121,6 +123,8 @@ export const ARTICLES: Article[] = [
   byTenPercentDeposit,
   byOccupied,
   byVsPrivateTreaty,
+  byForcedSale,
+  byCommercialAuction,
   // Finance & due diligence
   fiFinancing,
   fiDueDiligence,
